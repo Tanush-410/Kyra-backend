@@ -173,7 +173,7 @@ with `?sessionId=` when it starts a session and fills any gap from `GET /api/v2/
 | `session.gesture` / `gesture` | `gesture` (`thumb_up`, `thumb_down`, `victory`, …) and the `action` taken (`like`, `next`, `keep`) |
 | `budget.warning` | spend passed `BUDGET_WARN_FRACTION` of the cap |
 | `session.kept` | `url`, `expiresAt`, `qrDataUrl` |
-| `session.ended` | `reason`: `visitor_left`, `visitor_replaced` (a nearer person took over), `ended_by_visitor`, `timeout` or `replaced` |
+| `session.ended` | `reason`: `visitor_left`, `ended_by_visitor`, `timeout` or `replaced` (a new session started) |
 
 ### `POST /api/v2/sessions`
 
