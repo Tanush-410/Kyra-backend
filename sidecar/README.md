@@ -72,12 +72,14 @@ money or leaves the machine. The Node backend is its only client.
 ## Setup
 
 ```bash
-cd sidecar
-python3.12 -m venv .venv            # or: uv venv .venv --python 3.12
-.venv/bin/pip install -r requirements.txt
-.venv/bin/python scripts/download_models.py
-.venv/bin/python -m kyra_sidecar     # http://127.0.0.1:8765
+./setup.sh                           # from the repo root: Python 3.12 environment, packages, models
+sidecar/.venv/bin/python -m kyra_sidecar   # only to run the sidecar on its own: http://127.0.0.1:8765
 ```
+
+Needs Python 3.12 (3.11 works); macOS's built-in 3.9 is too old for the AI packages. `setup.sh` finds a
+suitable Python or gets one with `uv`. Building it by hand: `uv venv --python 3.12 sidecar/.venv`, then
+`uv pip install --python sidecar/.venv/bin/python -r sidecar/requirements.txt` (a `uv` environment has no
+`pip`), then `sidecar/.venv/bin/python sidecar/scripts/download_models.py`.
 
 When `sidecar/.venv` exists, the backend starts the sidecar itself (`SIDECAR_SPAWN=auto`). On macOS, the
 app that launches it (Terminal, VS Code or the Tauri app) needs camera permission.

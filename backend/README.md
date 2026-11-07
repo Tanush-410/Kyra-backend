@@ -21,30 +21,31 @@ every step as a live event.
 ## Run
 
 ```bash
-# once
-cp .env.example .env                      # set OPENAI_API_KEY
-npm install
-cd ../sidecar && python3.12 -m venv .venv && .venv/bin/pip install -r requirements.txt \
-  && .venv/bin/python scripts/download_models.py && cd ../backend
+# once, from the repo root: Node packages, Python 3.12 environment, models, backend/.env
+../setup.sh                # ../setup.sh --check (or npm run doctor) diagnoses a broken setup
+# set OPENAI_API_KEY in backend/.env
 
 npm start      # starts the backend and the sidecar it finds in ../sidecar/.venv
+npm run links  # console and dashboard links with your tokens
 npm test       # offline tests; OpenAI and the sidecar are mocked
 ```
 
-Open the console for testing: `cd dev && python3 -m http.server 8080`, then go to
-`http://localhost:8080/mirror.html`. It has consent, the live preview, guidance (with optional
+Setup problems: see [Troubleshooting](../INTEGRATION.md#10-troubleshooting).
+
+Open the console for testing: the backend serves it at `http://localhost:3000/console/` (any `PORT`), and
+`npm run links` prints links with your access tokens filled in. It has consent, the live preview, guidance (with optional
 voice), options, draft and final images, likes and dislikes, profile correction, QR code,
 calibration and metrics. `dashboard.html` is the operations view: spend, camera, queue, timings,
 ratings and profile corrections, with alerts. The older single-shot page is `style-me.html`.
 
-**Rehearse for free:** run `npm run mock-openai` in one terminal, then
-`OPENAI_BASE_URL=http://127.0.0.1:4010/v1 npm start`. The mock returns three fixed outfits and tints
-the visitor's clothes, so the whole flow runs without spending credit.
+**Rehearse for free:** `npm run rehearse` starts a mock OpenAI and the backend pointed at it. The mock returns
+three fixed outfits and tints the visitor's clothes, so the whole flow runs without a key or spending credit.
 
 **Load test:** `npm run loadtest -- 20 0.05 2` runs 20 simultaneous visitors at 1/20 speed with 2 render
 slots, against the real orchestration with OpenAI and the sidecar faked.
 
-All settings are in [.env.example](.env.example). Values in `.env` override shell variables.
+All settings are in [.env.example](.env.example). A value given on the command line (`PORT=3100 npm start`)
+wins over `.env` for that run.
 
 ## Pipeline details
 
@@ -264,7 +265,7 @@ Visitor-facing error text is always plain (`VISITOR_MESSAGES` in `lib/mirror.js`
 - **Before the event:** `npm run check` runs both test suites. `npm run soak -- 30` runs 30 minutes of
   visitor waves with injected image failures and fails if sessions or memory are not released.
   Measured: 300 visitors in 2 min, heap +1.1 MB, 0 sessions left. Rehearse the whole flow with the real
-  camera and `npm run mock-openai` as well. CI (`.github/workflows/test.yml`) runs both suites and the
+  camera and `npm run rehearse` as well. CI (`.github/workflows/test.yml`) runs both suites and the
   npm and pip audits.
 
 ## Layout

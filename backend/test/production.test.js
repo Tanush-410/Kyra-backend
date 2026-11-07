@@ -387,3 +387,36 @@ test('renders default to medium quality with high input fidelity, and drop fidel
   assert.equal(sent.at(-1).fidelity, null, 'once rejected, fidelity is not sent again');
   await app.close();
 });
+
+// ---- easier setup (7 Nov 2026: teammates got stuck setting up) -----------------------------------
+
+test('the backend serves the test consoles itself, on whatever port it runs', async () => {
+  const { app } = await mirrorApp({ openai: openaiFake(), sidecar: fakeSidecar({ bundle: () => bundleFor() }) });
+  assert.equal((await app.inject('/console')).headers.location, '/console/');
+  const page = await app.inject('/console/');
+  assert.equal(page.statusCode, 200);
+  assert.match(page.body, /location\.pathname\.startsWith\('\/console'\) \? location\.origin/);
+  assert.match(page.headers['content-security-policy'], /script-src 'self' 'unsafe-inline'.*connect-src 'self'/);
+  assert.equal((await app.inject('/console/dashboard.html')).statusCode, 200);
+  assert.equal((await app.inject('/console/../.env')).statusCode, 404);
+  assert.equal((await app.inject('/console/secrets.json')).statusCode, 404);
+  await app.close();
+});
+
+test('the .env.example placeholder key counts as no key, so /ready says so', async () => {
+  const { app } = await mirrorApp({ openai: openaiFake(), sidecar: fakeSidecar({ bundle: () => bundleFor() }), env: { OPENAI_API_KEY: 'your_openai_api_key_here' } });
+  assert.ok((await app.inject('/ready')).json().problems.includes('openai_not_configured'));
+  await app.close();
+});
+
+test('a setting given on the command line wins over backend/.env; .env fills in the rest', async () => {
+  const { loadLocalEnv } = await import('../src/config.js');
+  const file = path.join(tempDir(), '.env');
+  writeFileSync(file, 'KYRA_TEST_PORT=3000\nKYRA_TEST_ONLY_IN_FILE=from-file\n');
+  process.env.KYRA_TEST_PORT = '3100';
+  loadLocalEnv(file);
+  assert.equal(process.env.KYRA_TEST_PORT, '3100');
+  assert.equal(process.env.KYRA_TEST_ONLY_IN_FILE, 'from-file');
+  delete process.env.KYRA_TEST_PORT;
+  delete process.env.KYRA_TEST_ONLY_IN_FILE;
+});

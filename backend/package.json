@@ -12,7 +12,10 @@
     "tune-thresholds": "node scripts/tune-thresholds.mjs",
     "check": "npm test && cd ../sidecar && .venv/bin/python -m pytest -q tests",
     "soak": "node --expose-gc scripts/soak.mjs",
-    "compare": "node scripts/compare-pipelines.mjs"
+    "compare": "node scripts/compare-pipelines.mjs",
+    "links": "node scripts/links.mjs",
+    "rehearse": "node scripts/rehearse.mjs",
+    "doctor": "bash ../setup.sh --check"
   },
   "dependencies": {
     "@fastify/cors": "^10.0.1",

@@ -3,14 +3,57 @@
 This repo holds the KYRA mirror backend and the camera sidecar. This guide is for the engineers who connect
 it to the team's mirror frontend (the Tauri app) and to the backend the team built before. It covers:
 
+- getting it running on your machine (**start here**);
 - what this repo is;
 - which integration path to take;
 - what changed for code that calls the old endpoints;
 - how a frontend drives the new mirror flow;
-- how to run it on the mirror machine.
+- running it on the mirror machine;
+- troubleshooting, by the exact message you see.
 
 API details live in [backend/README.md](backend/README.md#api-v2-mirror), and camera and calibration details
 in [sidecar/README.md](sidecar/README.md). This guide links to them rather than repeating them.
+
+## Quick start: run it on your machine (about 10 minutes)
+
+You need a Mac (Linux works the same way; on Windows, use WSL), **Node 22 or newer**, and an internet
+connection. Don't install Python yourself: the setup script handles it.
+
+**1. Set up** (safe to run again at any time):
+
+```bash
+git clone https://github.com/Tanush-410/Kyra-backend.git
+cd Kyra-backend
+./setup.sh
+```
+
+It installs the Node packages, a private Python 3.12 environment for the camera sidecar and the AI models,
+and creates `backend/.env`. When something is missing it says exactly what to do. The usual case: **"Python 3.12
+is not installed"**. Run the one-line `uv` install it prints, open a new terminal, and run `./setup.sh` again.
+
+**2. Add the OpenAI key** to `backend/.env` (`OPENAI_API_KEY=sk-...`), or pass it during setup:
+`OPENAI_API_KEY=sk-... ./setup.sh`. You can skip this step if you only use the rehearsal in step 3.
+
+**3. Start it:**
+
+```bash
+cd backend
+npm start           # the real thing (uses the OpenAI key)
+npm run rehearse    # or: everything with a fake OpenAI, free, no key needed
+```
+
+On the first start, macOS asks to let your terminal app (Terminal, iTerm or VS Code) use the camera: allow it,
+then stop (Ctrl+C) and start again. The camera takes up to **30 seconds** to come up the first time.
+
+**4. Open the console.** In a second terminal, run `cd backend && npm run links` and open the **Mirror console**
+link it prints. It should show **connected** and **camera running**. The link includes your access token, so
+there's nothing to paste.
+
+**Something wrong?** Run `./setup.sh --check` (or `npm run doctor` in `backend/`). It checks every piece and
+prints the fix. Then see [Troubleshooting](#10-troubleshooting).
+
+**No webcam, or a Windows machine?** Start with `CAMERA=false npm start`. Everything works except the live
+camera; use "Upload photo" in the console with a full-body picture.
 
 ## 1. What is in this repo
 
@@ -31,7 +74,8 @@ in [sidecar/README.md](sidecar/README.md). This guide links to them rather than 
 | Folder | What it is |
 |---|---|
 | `backend/` | The API the frontend talks to: the **v2 mirror pipeline** (`/api/v2/*`) plus the **old v1 endpoints**, kept at the same paths. |
-| `backend/dev/` | `mirror.html` (a complete working frontend for the v2 flow: use it as the reference implementation), `dashboard.html` (operations). |
+| `backend/dev/` | `mirror.html` (a complete working frontend for the v2 flow: use it as the reference implementation), `dashboard.html` (operations). The backend serves both at `http://localhost:3000/console/`. |
+| `setup.sh` | One-command setup, and `--check` diagnostics. |
 | `sidecar/` | Camera and on-device perception. Started by the backend, so nothing else needs to launch it. |
 | `backend/reports/`, `sidecar/reports/` | Test evidence: token comparison, undertone benchmark workbook, security audit. |
 | `.github/workflows/test.yml` | CI: both test suites and dependency audits on every push. |
@@ -178,8 +222,9 @@ Useful if the frontend should keep a single base URL:
 
 ## 6. Configuration that matters for integration
 
-All settings are in [backend/.env.example](backend/.env.example), and `.env` values override shell variables.
-Never commit `.env`; `.gitignore` already excludes it, along with `.runtime/`.
+All settings are in [backend/.env.example](backend/.env.example). `backend/.env` holds your values. A setting
+given on the command line wins for that run (`PORT=3100 npm start`). Restart after editing `.env`. Never commit
+`.env`; `.gitignore` already excludes it, along with `.runtime/`.
 
 ### 6.1 Tokens
 
@@ -207,30 +252,26 @@ Never commit `.env`; `.gitignore` already excludes it, along with `.runtime/`.
 
 ## 7. Running it on the mirror machine
 
-```bash
-git clone https://github.com/Tanush-410/Kyra-backend.git && cd Kyra-backend
-cd backend && cp .env.example .env            # set OPENAI_API_KEY (and API_TOKEN / OPERATOR_TOKEN if fixed)
-npm install
-cd ../sidecar && python3.12 -m venv .venv && .venv/bin/pip install -r requirements.txt \
-  && .venv/bin/python scripts/download_models.py
-cd ../backend && npm start                     # starts the sidecar too; allow camera access when macOS asks
-curl -s http://127.0.0.1:3000/ready            # {"ready":true,"problems":[]}
-```
+Install exactly as in the [Quick start](#quick-start-run-it-on-your-machine-about-10-minutes) (`./setup.sh`, the key in
+`backend/.env`, `npm start`). Check `./setup.sh --check` ends with **Ready**, and that
+`curl -s http://127.0.0.1:3000/ready` returns `{"ready":true,"problems":[]}`. Then:
 
-Then:
-
-- **Run it permanently:** `backend/deploy/launchd.sh install` (starts at login, restarts within seconds if it exits).
+- **Fix the tokens** the frontend will use: set `API_TOKEN` and `OPERATOR_TOKEN` in `backend/.env` (see 6.1)
+  and restart.
+- **Run it permanently:** `backend/deploy/launchd.sh install` (starts at login, restarts within seconds if it
+  exits). Allow camera access for `node` when macOS asks.
 - **Calibrate once on site:**
   - height: one person of known height;
   - grey card: a matte card kept in view, which makes undertone reliable (299 of 300 right in the benchmark);
   - later, `npm run tune-thresholds` once visitors have confirmed or corrected their undertone.
 
   See [sidecar/README.md](sidecar/README.md#calibration-once-per-installation).
-- **Operations screen:** `backend/dev/dashboard.html` with the operator token. Logs are in
-  `backend/.runtime/logs/`.
+- **Operations screen:** the Operations dashboard link from `npm run links` (`/console/dashboard.html`). Logs
+  are in `backend/.runtime/logs/`.
 
 ## 8. Checklist for the integration
 
+- [ ] Every developer machine: `./setup.sh --check` ends with **Ready**, and the console from `npm run links` shows connected.
 - [ ] Confirm what the team's current backend and frontend contain beyond the 5 November `openday-develop`
       snapshot. This repo can't know.
 - [ ] Choose path A or B (section 2).
@@ -240,7 +281,7 @@ Then:
 - [ ] If `/api/outfit-suggestion` is still used: provide the `wardrobe/` images and set `WARDROBE_DIR`.
 - [ ] Set tokens, `CORS_ORIGINS` and `ALLOWED_HOSTS` for your setup; set up TLS if phones will scan QR codes.
 - [ ] Run `npm run check` (both test suites) and `npm run soak -- 30` (long run with failures injected).
-- [ ] Rehearse end to end with real visitors and `npm run mock-openai` (free).
+- [ ] Rehearse end to end with real visitors and `npm run rehearse` (free).
 - [ ] Calibrate on site (height, grey card), install the supervisor, set `ALERT_WEBHOOK_URL`.
 
 ## 9. Known limits
@@ -252,3 +293,26 @@ Then:
   visitors yet.
 - **Security:** the audit (`backend/reports/security-audit-2026-11-07.md`) lists every fix. Still open: a Python
   dependency audit (it runs in CI) and a review of the Tauri app.
+
+## 10. Troubleshooting
+
+Run `./setup.sh --check` first: it checks every piece below and prints the fix. Find the exact message you
+see in the left column.
+
+| You see | Why | Fix |
+|---|---|---|
+| `python3.12: command not found` | macOS doesn't include Python 3.12. | `./setup.sh` gets it for you via `uv`. If it says "Python 3.12 is not installed", run the `uv` install line it prints, open a new terminal, and run `./setup.sh` again. |
+| `No matching distribution found for numpy==2.5.4` (or for `mediapipe`) | The environment was built with macOS's Python 3.9, which is too old. | `./setup.sh`: it sets the old `sidecar/.venv` aside and builds a 3.12 one. |
+| `.venv/bin/pip: No such file or directory` | The environment was made by `uv`, which leaves out `pip`. | `./setup.sh` installs with `uv` in that case. |
+| `/ready` shows `sidecar_unavailable` | On the first start the sidecar loads its AI models (up to 30 s). Or the sidecar failed to start. | Wait 30 s. If it stays, run `./setup.sh --check`, and read `backend/.runtime/logs/` for lines from the sidecar. |
+| Console says **camera error**, or the preview stays black | macOS hasn't allowed the camera, or another app is using it. | System Settings → Privacy & Security → Camera: allow your terminal app (or `node` under launchd). Quit Zoom, FaceTime, Photo Booth, or a frontend that opens the webcam itself. Restart `npm start`. |
+| Console says **token needed** or **wrong token**; API calls return **401** | Every `/api` call needs the access token. | Open the console from `npm run links`. In your own frontend, send `Authorization: Bearer <apiToken>` (or `?token=` for `EventSource` and `<img>`). Tokens: `backend/.runtime/secrets.json`, or the values you set in `.env`. |
+| Metrics or calibration say they need the **operator token** | Staff-only routes. | Use the Operations dashboard link from `npm run links`. |
+| `EADDRINUSE` / "port 3000 is used by another program" | Something else (often the old backend or a frontend dev server) is on port 3000. | Stop it, or `PORT=3100 npm start` (or put `PORT=3100` in `.env`). The console and `npm run links` follow the port. Point your frontend at the new port. |
+| **403** "Host not allowed" | The backend was reached by a name that isn't localhost (a LAN IP, a `.local` name, a proxy). | Add that name to `ALLOWED_HOSTS` in `.env`, or make the proxy send `Host: 127.0.0.1:3000`. |
+| Browser console shows a **CORS** error | The frontend's origin isn't allowed. | Add it to `CORS_ORIGINS`, for example `CORS_ORIGINS=http://localhost:5173,tauri://localhost`. Localhost on any port and Tauri are allowed by default. |
+| `OPENAI_API_KEY is not set`, or `/ready` shows `openai_not_configured` | `.env` still has the example placeholder. | Put your key in `backend/.env` and restart. For a free run, use `npm run rehearse`. |
+| Renders fail with an OpenAI **401/403** | The key is wrong, or its organisation can't use the image model (OpenAI has required organisation verification for its image models). | Check the key, and the organisation's verification and model access, in the OpenAI dashboard. |
+| A change in `.env` has no effect | The backend reads `.env` only at start, and a value given on the command line wins. | Restart. Check you aren't also setting it on the command line or in your shell profile. |
+| `npm ci` fails, or Node says a feature is missing | Node is older than 22. | Install Node 24 LTS (`nvm install 24`, or nodejs.org). |
+| The visitor's look disappears | They were out of view (no body and no face) for 12 s, or pressed done. | Expected. Raise `ABSENT_AFTER_MS` (sidecar setting) for a slower kiosk flow. |

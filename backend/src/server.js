@@ -18,6 +18,13 @@ if (!config.apiToken) {
 if (config.apiToken && !config.operatorToken) {
   app.log.warn('OPERATOR_TOKEN=off: the kiosk token can also recalibrate the camera and read metrics.');
 }
+if (!config.openaiApiKey) {
+  app.log.warn('OPENAI_API_KEY is not set (or is still the example placeholder): put your key in backend/.env and restart.');
+}
+app.addHook('onListen', async () => {
+  const base = `http://localhost:${config.port}`;
+  app.log.info(`Console: ${base}/console/ · Dashboard: ${base}/console/dashboard.html · Run "npm run links" for links with your tokens. The camera takes up to 30 s to start the first time.`);
+});
 
 // Never hang on the way out: a stuck close still exits, so the supervisor can start a fresh process.
 function exitAfter(ms, code) {

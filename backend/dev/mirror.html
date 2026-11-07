@@ -127,7 +127,8 @@
 <div id="toast" class="toast"></div>
 
 <script>
-  const API = 'http://localhost:3000';
+  // Served by the backend at /console/: talk to that backend, whatever its port. Opened another way: port 3000.
+  const API = location.pathname.startsWith('/console') ? location.origin : 'http://localhost:3000';
   const STYLES = ['Casual', 'Smart casual', 'Formal', 'Party', 'Wedding guest', 'Office', 'Date night'];
   const $ = (id) => document.getElementById(id);
   let picked = 'Smart casual';

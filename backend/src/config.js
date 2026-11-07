@@ -25,8 +25,11 @@ export function loadLocalEnv(envPath = path.join(backendRoot, '.env')) {
     const key = line.slice(0, separatorIndex).trim();
     const value = line.slice(separatorIndex + 1).trim().replace(/^["']|["']$/g, '');
 
-    // Prefer local .env values for this app, even if shell already has vars set.
-    process.env[key] = value;
+    // A setting given on the command line (PORT=3100 npm start) wins over .env, as with every dotenv tool;
+    // .env fills in everything else. (Until 7 Nov 2026 .env won, which silently ignored one-off overrides.)
+    if (process.env[key] === undefined) {
+      process.env[key] = value;
+    }
   }
 }
 
@@ -80,7 +83,8 @@ export function loadConfig(env = process.env) {
     rateLimitMax: numberFrom(env.RATE_LIMIT_MAX, 10),
     rateLimitWindowMs: numberFrom(env.RATE_LIMIT_WINDOW_MS, 60_000),
 
-    openaiApiKey: env.OPENAI_API_KEY || '',
+    // The .env.example placeholder counts as no key, so /ready says so instead of the first render failing.
+    openaiApiKey: /^(your_|sk-\.\.\.|changeme)/i.test(env.OPENAI_API_KEY || '') ? '' : env.OPENAI_API_KEY || '',
     openaiModel: env.OPENAI_MODEL || 'gpt-5.2',
     openaiImageModel: env.OPENAI_IMAGE_MODEL || 'gpt-image-1.5',
     openaiTimeoutMs: numberFrom(env.OPENAI_TIMEOUT_MS, 120_000),

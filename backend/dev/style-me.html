@@ -128,7 +128,8 @@
 </main>
 
 <script>
-  const API = 'http://localhost:3000';
+  // Served by the backend at /console/: talk to that backend, whatever its port. Opened another way: port 3000.
+  const API = location.pathname.startsWith('/console') ? location.origin : 'http://localhost:3000';
   const STYLES = ['Casual', 'Smart casual', 'Formal', 'Party', 'Wedding guest', 'Date night', 'Office', 'Ethnic / traditional'];
 
   const $ = (id) => document.getElementById(id);

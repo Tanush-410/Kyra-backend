@@ -19,6 +19,7 @@ import { createLimiter } from './lib/queue.js';
 import { createSessionStore } from './lib/sessions.js';
 import { createSidecar, maybeSpawnSidecar } from './lib/sidecar.js';
 import { createStorage } from './lib/storage.js';
+import { backendRoot } from './config.js';
 import { createUsageLog, DEFAULT_PRICES } from './lib/usage.js';
 import handheldRoutes from './routes/handheld.js';
 import jobRoutes from './routes/jobs.js';
@@ -36,6 +37,8 @@ const ANY_ADDRESS = ['0.0.0.0', '::', ''];
 // Sent with every response. The share page gets a strict content policy: its own image, inline styles.
 const SECURITY_HEADERS = { 'x-content-type-options': 'nosniff', 'referrer-policy': 'no-referrer', 'x-frame-options': 'DENY' };
 const HTML_POLICY = "default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'";
+// The consoles are single files with inline script, talking only to this backend.
+const CONSOLE_POLICY = "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'";
 
 // "127.0.0.1:3000" -> "127.0.0.1", "[::1]:3000" -> "::1".
 export function hostName(header) {
@@ -158,7 +161,7 @@ export async function buildApp(config, { logger = true, fetchImpl, sidecarFetch,
       return reply.code(503).header('retry-after', '30').send({ error: 'The mirror is restarting. Please try again in a moment.', code: 'draining' });
     }
     if (request.method === 'POST' && !openai.isConfigured && !request.url.startsWith('/api/v2/calibrate')) {
-      return reply.code(500).send({ error: 'OPENAI_API_KEY is missing on backend environment.' });
+      return reply.code(500).send({ error: 'OPENAI_API_KEY is not set: put your key in backend/.env and restart.', code: 'openai_not_configured' });
     }
   });
 
@@ -169,11 +172,28 @@ export async function buildApp(config, { logger = true, fetchImpl, sidecarFetch,
     if (!reply.hasHeader('cache-control')) {
       reply.header('cache-control', 'no-store'); // responses carry visitors' photos and measurements
     }
-    if (String(reply.getHeader('content-type') || '').startsWith('text/html')) {
+    if (String(reply.getHeader('content-type') || '').startsWith('text/html') && !reply.hasHeader('content-security-policy')) {
       reply.header('content-security-policy', HTML_POLICY);
     }
     return payload;
   });
+
+  // The test consoles (backend/dev), served by the backend itself: no second web server, and they talk to
+  // this backend whatever PORT it runs on. Open http://localhost:<PORT>/console/ (npm run links adds the token).
+  const consoleFiles = { '': 'mirror.html', 'mirror.html': 'mirror.html', 'dashboard.html': 'dashboard.html', 'style-me.html': 'style-me.html' };
+  const serveConsole = async (request, reply) => {
+    const file = consoleFiles[request.params.file || ''];
+    if (!file) {
+      return reply.code(404).type('text/plain').send('Not found. Try /console/, /console/dashboard.html or /console/style-me.html');
+    }
+    return reply
+      .type('text/html; charset=utf-8')
+      .header('content-security-policy', CONSOLE_POLICY)
+      .send(readFileSync(path.join(backendRoot, 'dev', file)));
+  };
+  app.get('/console', async (request, reply) => reply.redirect('/console/'));
+  app.get('/console/', serveConsole);
+  app.get('/console/:file', serveConsole);
 
   app.get('/health', async () => {
     const sidecarHealth = await sidecar.health().catch(() => null);

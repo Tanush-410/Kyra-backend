@@ -55,7 +55,8 @@
 </main>
 
 <script>
-  const API = 'http://localhost:3000';
+  // Served by the backend at /console/: talk to that backend, whatever its port. Opened another way: port 3000.
+  const API = location.pathname.startsWith('/console') ? location.origin : 'http://localhost:3000';
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const auth = () => ($('token').value ? { Authorization: `Bearer ${$('token').value.trim()}` } : {});

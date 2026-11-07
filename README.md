@@ -10,13 +10,15 @@ their real face kept.
 | [backend/README.md](backend/README.md) | The API (v2 mirror flow and the old v1 endpoints), settings, pipeline details, operations |
 | [sidecar/README.md](sidecar/README.md) | Camera, skin tone and lighting, height calibration, sidecar API |
 
-Quick start on the mirror machine (macOS, Node 24, Python 3.12):
+Quick start (macOS or Linux, Node 22+; the script gets Python 3.12 for you):
 
 ```bash
-cd backend && cp .env.example .env && npm install       # set OPENAI_API_KEY in .env
-cd ../sidecar && python3.12 -m venv .venv && .venv/bin/pip install -r requirements.txt \
-  && .venv/bin/python scripts/download_models.py
-cd ../backend && npm start                               # starts the camera sidecar too
+./setup.sh                    # installs everything; says exactly what to do if something is missing
+cd backend && npm start       # or: npm run rehearse (fake OpenAI, free, no key needed)
+cd backend && npm run links   # in a second terminal: console and dashboard links, tokens included
 ```
+
+Put your OpenAI key in `backend/.env` first (or run `OPENAI_API_KEY=sk-... ./setup.sh`). If anything goes wrong,
+run `./setup.sh --check` and see [Troubleshooting](INTEGRATION.md#10-troubleshooting).
 
 Tests: `cd backend && npm run check` runs both suites.
