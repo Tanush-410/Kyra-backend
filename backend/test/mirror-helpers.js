@@ -138,6 +138,12 @@ export function fakeSidecar({
     if (pathname === '/segment') {
       return json({ personFound: true, maskDataUrl: (await renderAssets()).personMaskDataUrl });
     }
+    if (pathname === '/face/best') {
+      return json({ imageDataUrl: (await renderAssets()).keepMaskDataUrl, score: 0.9, facePx: 240 });
+    }
+    if (pathname === '/face/transfer') {
+      return json({ applied: true, imageDataUrl: 'data:image/png;base64,Q0xFQVJGQUNF', report: { applied: true, reason: 'transferred' } });
+    }
     if (pathname === '/arm' || pathname === '/disarm') {
       return json({ armed: body?.sessionId || null });
     }

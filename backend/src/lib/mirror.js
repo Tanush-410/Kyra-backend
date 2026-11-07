@@ -477,11 +477,10 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
       return `- ${promptText(item.category, 20)}: ${name}, ${colour}${hex}${fit ? `, ${fit}` : ''}${material ? `, ${material}` : ''}`;
     });
     return [
-      config.renderMask ? 'Virtual try-on. Edit only the transparent mask area: dress this person in:' : 'Virtual try-on. Dress this person in:',
+      config.renderMask ? 'Edit only the transparent mask area. Dress this person in:' : 'Dress this person in:',
       ...lines,
-      'Keep their exact pose, position, scale, body shape and framing. Keep face, hair and skin tone unchanged.',
       withFaceReference ? 'Image 2 is a close-up of the same face: keep that identity exactly.' : '',
-      'Realistic fit and folds. Nothing else added, no logos or text. Pure black background.'
+      'Keep pose, framing, body shape, face, hair and skin tone exactly. Realistic fit and folds; no logos or text; plain black background.'
     ]
       .filter(Boolean)
       .join('\n');
@@ -562,10 +561,10 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
       return;
     }
     const render = session.capture.render;
-    // A soft (small, enlarged) camera face is not pasted back; a sharp close-up from earlier in the visit
-    // goes to the model as a second image so its rendered face is the visitor's.
+    // The face is taken from the visit's clearest close-up after the render (sidecar facetransfer.py), so by
+    // default the model gets no face image. RENDER_FACE_REFERENCE=true sends it (~190 tokens) for soft faces.
     const softFace = (render.upscale ?? 1) >= 1.4 || (render.faceSourcePx ?? Infinity) < 60;
-    const faceReference = softFace && render.faceRefDataUrl ? render.faceRefDataUrl : null;
+    const faceReference = config.renderFaceReference && softFace && render.faceRefDataUrl ? render.faceRefDataUrl : null;
     const prompt = renderPrompt(option, Boolean(faceReference));
     const renderStarted = Date.now();
     const tag = { round: entry.round, option: entry.option };
@@ -624,7 +623,7 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
       metrics.count('drafts_skipped_for_token_budget');
     }
 
-    const attempts = 1 + Math.max(0, config.faceCheck ? config.faceCheckRetries : 0);
+    const attempts = 1 + (config.faceCheck ? config.renderRetries : 0);
     let best = null;
     for (let attempt = 1; attempt <= attempts; attempt += 1) {
       if (attempt > 1 && !fitsLookBudget(lookTokens(), finalKind)) {
@@ -717,7 +716,8 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
           similarity: result.similarity ?? null,
           threshold: result.threshold,
           ...(checked ? { passed: result.samePerson } : {}),
-          alignmentShift: result.alignment?.shift ?? null
+          alignmentShift: result.alignment?.shift ?? null,
+          clearFace: result.clearFace || null
         }
       };
     } catch (error) {
@@ -948,6 +948,42 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
     return VISITOR_MESSAGES.generic;
   }
 
+  // The camera saw a clearly better view of the visitor's face after their photo (usually as they walk up
+  // to the screen): put it onto the looks already shown. Local and free, no new render. Later renders of the
+  // visit use it too. One upgrade at a time per session.
+  async function upgradeFaces() {
+    const targets = [...sessions.values()].filter((s) => s.source === 'camera' && s.capture && !s.upgradingFace);
+    if (!targets.length) {
+      return;
+    }
+    const face = await sidecar.bestFace();
+    for (const session of targets) {
+      session.upgradingFace = true;
+      try {
+        session.capture.render.faceRefDataUrl = face.imageDataUrl;
+        for (const entry of session.renders.values()) {
+          if (entry.status !== 'done' || !sessions.has(session.sessionId)) {
+            continue;
+          }
+          const result = await sidecar.transferFace(entry.imageDataUrl, face.imageDataUrl);
+          if (!result.applied) {
+            continue;
+          }
+          entry.imageDataUrl = result.imageDataUrl;
+          entry.faceCheck = { ...entry.faceCheck, headDecision: 'clearest face from the visit (updated)', clearFace: result.report };
+          metrics.count('face_upgrades');
+          const shown = session.activeKey === entry.key;
+          publish(session, 'session.render.done', {
+            round: entry.round, option: entry.option, imageDataUrl: entry.imageDataUrl, faceCheck: entry.faceCheck,
+            tokens: entry.tokens, prefetch: !shown, upgraded: true
+          });
+        }
+      } finally {
+        session.upgradingFace = false;
+      }
+    }
+  }
+
   // A different, nearer person became the camera's subject while a session waits for its photo: outfits
   // designed early from the previous person's skin must not be used for the new one. A session that already
   // has its photo is never ended here: the look on screen stays until the visitor leaves (presence) or
@@ -1000,6 +1036,8 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
           }
         }
       }
+    } else if (event.type === 'face' && event.better) {
+      upgradeFaces().catch((error) => log.warn({ error: error.message }, 'Face upgrade skipped'));
     } else if (event.type === 'subject') {
       if (event.replaced) {
         onSubjectReplaced();

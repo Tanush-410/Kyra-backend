@@ -325,6 +325,7 @@ test('the sidecar process gets only its own settings, never the OpenAI key or th
     { port: 8765, token: 'fresh' }
   );
   assert.deepEqual(env, { PATH: '/bin', HOME: '/h', CAMERA_INDEX: '1', SKIN_FRAMES: '15', SIDECAR_TOKEN: 'fresh', SIDECAR_PORT: '8765' });
+  assert.equal(sidecarEnv({ COMPOSE_HANDS: 'true' }, { port: 1 }).COMPOSE_HANDS, 'true', 'render-finishing settings reach the sidecar');
 });
 
 test('kept looks need HTTPS when phones reach the backend over the network', async () => {
@@ -365,7 +366,22 @@ test('visitors never see the sidecar\'s internal error text; operators calibrati
 
 // ---- image quality (7 Nov 2026: low-quality renders looked too rough) ---------------------------------
 
-test('renders default to medium quality with high input fidelity, and drop fidelity if the model rejects it', async () => {
+test('renders default to medium quality without input fidelity (it cost 2.5x for webcam faces)', async () => {
+  const sent = [];
+  const fetchImpl = async (url, init) => {
+    if (String(url).endsWith('/images/edits')) {
+      sent.push({ quality: init.body.get('quality'), fidelity: init.body.get('input_fidelity') });
+      return new Response(JSON.stringify({ data: [{ b64_json: await generatedImage() }] }), { status: 200 });
+    }
+    return openaiFake().fetchImpl(url, init);
+  };
+  const { app } = await mirrorApp({ openai: { fetchImpl }, sidecar: fakeSidecar({ bundle: () => bundleFor() }) });
+  await waitForRender(app, (await upload(app)).json().sessionId);
+  assert.deepEqual(sent[0], { quality: 'medium', fidelity: null });
+  await app.close();
+});
+
+test('with OPENAI_INPUT_FIDELITY=high, fidelity is dropped if the model rejects it', async () => {
   const sent = [];
   const fetchImpl = async (url, init) => {
     if (String(url).endsWith('/images/edits')) {
@@ -378,7 +394,7 @@ test('renders default to medium quality with high input fidelity, and drop fidel
     }
     return openaiFake().fetchImpl(url, init);
   };
-  const { app } = await mirrorApp({ openai: { fetchImpl }, sidecar: fakeSidecar({ bundle: () => bundleFor() }) });
+  const { app } = await mirrorApp({ openai: { fetchImpl }, sidecar: fakeSidecar({ bundle: () => bundleFor() }), env: { OPENAI_INPUT_FIDELITY: 'high' } });
   const first = (await upload(app)).json().sessionId;
   assert.equal((await waitForRender(app, first)).render.status, 'done', 'the render still succeeds');
   assert.deepEqual(sent.slice(0, 2), [{ quality: 'medium', fidelity: 'high' }, { quality: 'medium', fidelity: null }]);
@@ -419,4 +435,55 @@ test('a setting given on the command line wins over backend/.env; .env fills in 
   assert.equal(process.env.KYRA_TEST_ONLY_IN_FILE, 'from-file');
   delete process.env.KYRA_TEST_PORT;
   delete process.env.KYRA_TEST_ONLY_IN_FILE;
+});
+
+// ---- clearest face + token savings (7 Nov 2026) ------------------------------------------------------
+
+test('lean defaults: no image previews, no look rendered unasked, no early design, no colour names to write', async () => {
+  const calls = [];
+  const fetchImpl = async (url, init) => {
+    if (String(url).endsWith('/images/edits')) {
+      calls.push({ kind: 'image', stream: init.body.get('stream'), partials: init.body.get('partial_images') });
+      return new Response(JSON.stringify({ data: [{ b64_json: await generatedImage() }] }), { status: 200 });
+    }
+    const body = JSON.parse(init.body);
+    calls.push({ kind: 'text', schema: body.text?.format?.schema });
+    return openaiFake().fetchImpl(url, init);
+  };
+  const { loadConfig } = await import('../src/config.js');
+  const defaults = loadConfig({});
+  assert.equal(defaults.partialImages, 0);
+  assert.equal(defaults.prefetchOptions, 'false');
+  assert.equal(defaults.earlyDesign, false);
+  assert.equal(defaults.renderFaceReference, false);
+  assert.equal(defaults.renderRetries, 0);
+
+  const { app } = await mirrorApp({ openai: { fetchImpl }, sidecar: fakeSidecar({ bundle: () => bundleFor() }), env: { PARTIAL_IMAGES: '0', PREFETCH_OPTIONS: 'false' } });
+  const id = (await upload(app)).json().sessionId;
+  await waitForRender(app, id);
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  assert.equal(calls.filter((c) => c.kind === 'image').length, 1, 'only the look the visitor sees is rendered');
+  assert.equal(calls.find((c) => c.kind === 'image').partials, null, 'no streamed previews');
+  const itemSchema = calls.find((c) => c.kind === 'text').schema.properties.options.items.properties.items.items;
+  assert.ok(!('colorName' in itemSchema.properties) && !itemSchema.required.includes('colorName'));
+  await app.close();
+});
+
+test('a clearer face seen after the photo is put onto the finished look, for free', async (t) => {
+  const sidecar = fakeSidecar({ bundle: () => bundleFor() });
+  const { app } = await mirrorApp({ openai: openaiFake(), sidecar });
+  const { base, seen } = await listenWithEvents(app, t);
+  await waitFor(() => sidecar.connected());
+  const created = await fetch(`${base}/api/v2/sessions`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ style: 'office', consent: true }) });
+  const { sessionId } = await created.json();
+  sidecar.emit({ type: 'capture', sessionId, captureId: 'cap123' });
+  await waitForRender(app, sessionId);
+  const imagesBefore = sidecar.callsTo('/compose').length;
+
+  sidecar.emit({ type: 'face', better: true, score: 0.9 });
+  const upgraded = await waitFor(() => seen.find((e) => e.type === 'session.render.done' && e.upgraded));
+  assert.equal(upgraded.faceCheck.headDecision, 'clearest face from the visit (updated)');
+  const session = (await app.inject(`/api/v2/sessions/${sessionId}`)).json();
+  assert.equal(session.renders[0].imageDataUrl, 'data:image/png;base64,Q0xFQVJGQUNF');
+  assert.equal(sidecar.callsTo('/compose').length, imagesBefore, 'no new render or compose: just the face');
 });

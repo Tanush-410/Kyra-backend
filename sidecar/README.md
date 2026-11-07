@@ -54,7 +54,7 @@ money or leaves the machine. The Node backend is its only client.
 - **Masks:** person and head masks, and a 1024×1536 cut-out of the visitor on black, ready to render. The
   cut-out uses an edge-aware matte (guided filter), so hair edges are clean and the room doesn't leave a halo.
 - **Finishing renders (`/compose`):** warps the render onto the capture's body landmarks, then pastes the
-  visitor's real head back, plus each hand that lines up (skin pixels only). It blacks out the background
+  visitor's real head back (and, with `COMPOSE_HANDS=true`, each hand that lines up). It blacks out the background
   with a feathered matte and checks identity with SFace, all in one call (~0.3 s).
 - **Identity:** a 128-d SFace face embedding (OpenCV Zoo) for the backend's face check.
 - **Gestures:** thumbs up, thumbs down, victory and so on (MediaPipe gesture recognizer), held 0.6 s, with a 2 s cooldown.
@@ -64,10 +64,14 @@ money or leaves the machine. The Node backend is its only client.
   visitor doesn't see flicker and a one-frame blip doesn't reset the capture countdown. "Step a little
   closer" appears only when the visitor fills under half the frame height. Face size never changes the
   instruction, because on a landscape camera a head-to-toe framing leaves the face about 80 px wide.
-- **Best face close-up:** the largest, sharpest, most frontal view of the face seen during the visit
-  (for example, while walking up) is kept as a 384×384 identity reference for the render.
-- **Silhouette matching** (`silhouette.py`, used by `/compose`): makes the render's body outline the
-  visitor's own, from the neck to the ankles.
+- **Clearest face of the visit** (`facetransfer.py`): every frame's face is scored on size, sharpness,
+  facing the mirror, eyes open and light; the best is kept at 512×512 and goes with the capture. `/compose`
+  places it onto the render's face (lined up with the face mesh, colour-matched, blended inside the face only)
+  when the faces line up and the identity check improves. A clearly better face after the capture is announced
+  (`face` event) so a finished look can be updated through `/face/transfer`.
+- **Silhouette matching** (`silhouette.py`, used by `/compose` when `COMPOSE_SILHOUETTE=true`; off by default
+  because it squeezed loose garments on webcam captures): makes the render's body outline the visitor's own,
+  from the neck to the ankles.
 
 ## Setup
 
@@ -137,6 +141,8 @@ are refused. Every response carries `nosniff`, `no-referrer`, `DENY` framing and
 | `GET` / `DELETE /captures/{id}` | Fetch or delete a capture bundle (deleted after 5 min regardless) |
 | `POST /analyze {imageDataUrl}` | Same bundle from a still photo (uploads, tests) |
 | `POST /segment {imageDataUrl}` | Person mask of any image |
+| `GET /face/best` | The clearest face seen so far this visit (512×512 JPEG, score, quality details) |
+| `POST /face/transfer {imageDataUrl, faceDataUrl}` | Places a close-up's face onto a finished look if safe: `{applied, imageDataUrl, report}` |
 | `POST /face/compare {referenceDataUrl, imageDataUrl}` | SFace similarity plus face position shift and scale |
 | `POST /compose {originalDataUrl, generatedDataUrl, keepMaskDataUrl}` | Align the render, paste the real head and hands, black background, identity check. Returns `headPasted`, `handsPasted`, `warp`, `similarity` |
 | `GET` / `DELETE /calibration`, `POST /calibrate/height`, `POST /calibrate/white-balance` | Calibration |

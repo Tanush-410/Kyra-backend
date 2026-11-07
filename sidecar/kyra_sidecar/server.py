@@ -17,9 +17,9 @@ from pydantic import BaseModel
 
 from .calibration import Calibration
 from .camera import CameraLoop
-from .capture import build_bundle, decode_image, encode_png
+from .capture import build_bundle, decode_image, encode_jpeg, encode_png
 from .color import gains_from_reference
-from .compose import SIMILARITY_THRESHOLD, finish_render
+from .compose import SIMILARITY_THRESHOLD, apply_clear_face, finish_render
 from .config import Config
 from . import undertone_adapter
 from .capture import skin_config
@@ -45,6 +45,11 @@ class ComposeBody(BaseModel):
     referenceFaceDataUrl: str | None = None
     faceSourcePx: float | None = None
     upscale: float | None = None
+
+
+class FaceTransferBody(BaseModel):
+    imageDataUrl: str
+    faceDataUrl: str
 
 
 class ArmBody(BaseModel):
@@ -360,9 +365,27 @@ def create_app(config: Config | None = None, perception: Perception | None = Non
             stamp = str(int(time.time() * 1000))
             for name, image in (("original", original), ("generated", generated), ("keep", keep)):
                 cv2.imwrite(os.path.join(debug_dir, f"{stamp}-{name}.png"), image if image.ndim == 2 else cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
-        result = finish_render(state["perception"], original, generated, keep, reference, body.faceSourcePx, body.upscale)
+        result = finish_render(state["perception"], original, generated, keep, reference, body.faceSourcePx, body.upscale,
+                               paste_hands=config.compose_hands, match_body=config.compose_silhouette)
         ok, png = cv2.imencode(".png", cv2.cvtColor(result.pop("image"), cv2.COLOR_RGB2BGR))
         return {"imageDataUrl": "data:image/png;base64," + base64.b64encode(png.tobytes()).decode(), **result}
+
+    @app.get("/face/best")
+    def best_face():
+        """The clearest face seen so far this visit (512 x 512 JPEG), for updating a finished look."""
+        face = camera().best_face()
+        if face is None:
+            raise HTTPException(404, "No face seen yet")
+        return {"imageDataUrl": encode_jpeg(face["image"]), "score": face["score"], "facePx": round(face["facePx"], 1),
+                "quality": face.get("quality")}
+
+    @app.post("/face/transfer")
+    def face_transfer(body: FaceTransferBody):
+        """Puts a close-up's face onto a finished look, if safe (facetransfer.py). Free: no OpenAI call."""
+        image, report = apply_clear_face(state["perception"], _decode(body.imageDataUrl), _decode(body.faceDataUrl))
+        ok, png = cv2.imencode(".png", cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
+        return {"applied": report["applied"], "report": report,
+                "imageDataUrl": "data:image/png;base64," + base64.b64encode(png.tobytes()).decode() if report["applied"] else None}
 
     @app.get("/calibration")
     def get_calibration():

@@ -200,6 +200,10 @@
     on('session.render.draft', mine((e) => { if (!isActive(e) || !e.imageDataUrl) return; session.drafted = true; $('result').src = e.imageDataUrl; $('face').textContent = 'Quick preview — full quality on its way…'; }));
     on('session.render.partial', mine((e) => { if (isActive(e) && !session.drafted && e.imageDataUrl) $('result').src = e.imageDataUrl; }));
     on('session.render.done', mine((e) => {
+      if (e.upgraded) { // a clearer face was placed on a look already shown: just swap the image
+        if (isActive(e) && e.imageDataUrl) { $('result').src = e.imageDataUrl; renderFace(e.faceCheck, e.tokens); toast('Updated with a clearer view of your face'); }
+        return;
+      }
       session.done.add(`${e.round}.${e.option}`);
       if (e.prefetch && !isActive(e)) { renderOptions(e.round); return; }
       session.active = e;

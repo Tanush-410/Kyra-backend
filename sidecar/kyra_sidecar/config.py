@@ -59,6 +59,13 @@ class Config:
     # Watchdog: reopen the camera when frames stop changing at all for this long (a frozen driver).
     freeze_after_s: float = field(default_factory=lambda: _number("FREEZE_AFTER_S", 5))
 
+    # Finishing renders (/compose). Off by default since 7 Nov 2026: on a webcam capture, where the visitor is
+    # small in frame, pasting the real hands left low-resolution skin blocks at the wrists, and matching the
+    # body outline squeezed loose garments (sliced sleeves, stepped trouser edges). Turn on for a sharp,
+    # close camera.
+    compose_hands: bool = field(default_factory=lambda: _flag("COMPOSE_HANDS", False))
+    compose_silhouette: bool = field(default_factory=lambda: _flag("COMPOSE_SILHOUETTE", False))
+
     models_dir: Path = field(default_factory=lambda: Path(os.environ.get("MODELS_DIR", SIDECAR_ROOT / "models")))
     calibration_path: Path = field(
         default_factory=lambda: Path(os.environ.get("CALIBRATION_PATH", SIDECAR_ROOT / "calibration.json"))

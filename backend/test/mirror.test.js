@@ -194,7 +194,7 @@ test('upload session: measured profile → palette → one structured design cal
 
   const image = openai.callsOf('image')[0];
   assert.equal(image.hasMask, false, 'unmasked by default');
-  assert.match(image.prompt, /Keep their exact pose, position, scale, body shape and framing/);
+  assert.match(image.prompt, /Keep pose, framing, body shape, face, hair and skin tone exactly/);
 
   assert.equal(render.status, 'done');
   assert.equal(render.faceCheck.headPasted, true);
@@ -224,13 +224,13 @@ test('RENDER_MASK=true sends the clothing mask and a mask-specific prompt', asyn
   await app.close();
 });
 
-test('a render the sidecar cannot align keeps its own face, and a failed identity check regenerates once', async () => {
+test('a render the sidecar cannot align keeps its own face, and with RENDER_RETRIES=1 a failed identity check regenerates once', async () => {
   const sidecar = fakeSidecar({
     bundle: () => bundleFor(),
     compose: (n) => ({ headPasted: false, handsPasted: [], warp: null, alignment: { shift: 0.2 }, similarity: n === 1 ? 0.2 : 0.8, samePerson: n !== 1, threshold: 0.363 })
   });
   const openai = mirrorOpenAI();
-  const { app } = await mirrorApp({ openai, sidecar });
+  const { app } = await mirrorApp({ openai, sidecar, env: { RENDER_RETRIES: '1' } });
   const created = await startUpload(app, { imageDataUrl: await photo() });
   const { render } = await waitForRender(app, created.json().sessionId);
   assert.equal(openai.callsOf('image').length, 2);

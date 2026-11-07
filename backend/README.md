@@ -64,10 +64,10 @@ Notes from real runs:
 - **The render is unmasked by default.** With `gpt-image-1.5`, a clothing mask made the model copy the
   input and ignore the prompt. So the default edit sends no mask and tells the model to keep the pose and
   framing. `RENDER_MASK=true` brings the mask back for models that respect it.
-- **Image quality (changed 7 Nov 2026):** final images are **medium** quality with `input_fidelity=high`
-  (keeps the visitor's face and features; dropped automatically if the model rejects it), about $0.07 a
-  look. In real use, low-quality renders looked too rough. `FINAL_QUALITY=low` and `LOOK_TOKEN_BUDGET=2600`
-  bring back the cheap setting below.
+- **Image quality (changed 7 Nov 2026):** final images are **medium** quality, about $0.07 a look; in real use,
+  low-quality renders looked too rough. `input_fidelity` is not sent by default: `OPENAI_INPUT_FIDELITY=high`
+  measured ~10,900 input tokens ($0.15 an image instead of ~$0.06), and a webcam face is too small to benefit.
+  `FINAL_QUALITY=low` and `LOOK_TOKEN_BUDGET=2600` bring back the cheap setting below.
 - **Token rule (cheap setting):** every look must use fewer tokens than the original pipeline (2,673 measured on real
   calls). The cheap setting is a low-quality final image, a compressed design prompt and render prompt, and
   `LOOK_TOKEN_BUDGET=2600`. Optional extra calls (drafts, face-check retries, early designs) only run if
@@ -75,12 +75,27 @@ Notes from real runs:
   original, underOriginal }`, and the dashboard shows the median. Measured: **1,857–1,970 tokens and about
   $0.028 per look, against 2,673 tokens and $0.060 for the original**. A sharp face close-up sent as a
   second image adds about 190 tokens.
-- **The visitor's own body (silhouette matching):** after alignment, the render's body outline is
+- **The visitor's own body (silhouette matching, off by default):** `COMPOSE_SILHOUETTE=true` turns it on. On a
+  webcam capture it squeezed loose garments (sliced sleeves, stepped trouser edges), so it is off unless the
+  camera is sharp and close. When on, after alignment, the render's body outline is
   matched to the visitor's, row by row from the neck to the ankles. It works within stretches that show
   the same body parts (arm | torso | arm), with smoothed edges and a fade at each stretch's ends.
   Garments may stay up to 12% wider than the body, never narrower. Measured on a real render: the
   outline went from 5–10% off to 0.4–1.9%. It's free; no regeneration.
-- **Real head and hands** (sidecar `/compose`):
+- **The visitor's clearest face (7 Nov 2026):** the full-body photo decides the body (pose, shape, size,
+  measurements); the face comes from the clearest view the camera saw during the visit (largest, sharpest,
+  facing the mirror, eyes open, well lit: usually while the visitor walks up), kept at 512×512. After the
+  render, the sidecar lines that face up on the render's face with the face mesh, matches it to the render's
+  light and blends it in, inside the face only (hair, ears and neck stay as rendered). It is used only when
+  the faces line up and the identity check says the result is more clearly the visitor; otherwise the steps
+  below decide. If a clearer face is seen after the render (walking up to the screen), the finished look is
+  updated (`session.render.done` again, with `upgraded: true`). All of it is local: no tokens. The model gets
+  no face image by default (`RENDER_FACE_REFERENCE=true` sends it, ~190 tokens), and a weak face never pays
+  for a second image (`RENDER_RETRIES=0`).
+- **Token-saving defaults (7 Nov 2026):** looks render only when the visitor asks (`PREFETCH_OPTIONS=false`),
+  outfits are designed after the photo (`EARLY_DESIGN=false`), no streamed previews (`PARTIAL_IMAGES=0`), and
+  the design call no longer writes colour names (the palette names them). Each can be turned back on.
+- **Real head and hands** (sidecar `/compose`, when the clearest face could not be used):
   1. The render is warped onto the capture using body landmarks (scale, rotation and shift only), because
      image models often redraw the person a few percent larger or offset.
   2. If the face then lines up (within 3% of position and 10% of size), the original face and hair (not
@@ -89,18 +104,19 @@ Notes from real runs:
      it would look blurry on a sharp render. So the render's face is kept if it passes the identity
      check, using the sharpest close-up the camera saw during the visit as the reference. That close-up
      is also sent to the image model as a second image.
-  3. Each hand that lines up (within 2.5%) is pasted back too, skin pixels only, so old sleeves never return.
+  3. Only with `COMPOSE_HANDS=true` (off by default: on a webcam capture it left low-resolution skin blocks at
+     the wrists): each hand that lines up (within 2.5%) is pasted back too, skin pixels only.
   4. The background is blacked out with a feathered matte that never cuts into clothing.
 - **Draft (off by default):** a low-quality draft can run alongside the final render (`RENDER_DRAFT=true`).
   Real runs showed it costs about 30% of a final image to save 2–8 s.
-- **Designed before the photo:** while the visitor is still getting into position, the sidecar sends a
+- **Designed before the photo (`EARLY_DESIGN=true`; off by default):** while the visitor is still getting into position, the sidecar sends a
   stable early profile (8+ skin frames). The backend designs the outfits then, without publishing them.
   If the capture's profile matches (same undertone, depth, height group and build), that round is reused
   and option 1 renders immediately. Otherwise it is discarded and a new round is designed, wasting about
   $0.01. The saving equals however long the visitor took to get ready, up to the ~6 s design time.
 - **Quality A/B test (`FINAL_QUALITY_EXPERIMENT=low,medium`):** visitors alternate between low and medium
   final images. Likes and real cost per quality are on the dashboard. Measured: low ≈ $0.019, medium ≈ $0.06 per image.
-- **Dwell prefetch (`PREFETCH_OPTIONS=dwell`):** the next look renders only after the visitor has looked
+- **Dwell prefetch (`PREFETCH_OPTIONS=dwell`; off by default):** the next look renders only after the visitor has looked
   at the current one for 10 s and is still in front of the mirror, one look ahead at a time.
 - **Colour harmony** (`src/lib/harmony.js`, no tokens): each item first snaps to the nearest palette
   colour by CIEDE2000. Then the outfit's colours are checked against each other:

@@ -147,7 +147,7 @@ Rules that now apply to **every** `/api/*` call:
 | `session.skin` | The undertone, read from the face before the full-body capture. |
 | `session.profile` | The measured profile and palette. Ask "looks right?" when `profile.skinMeasurement.requireConfirmation` is true. |
 | `session.option` / `session.options` | Outfit ideas, as they stream in, then the final order. |
-| `session.render.partial` / `.done` | Preview and final image (`imageDataUrl`). |
+| `session.render.partial` / `.done` | Preview (none by default) and final image (`imageDataUrl`). `.done` can come again for the same look with `upgraded: true` when a clearer face was placed on it: replace the image. |
 | `session.degraded` / `session.recovered` | Text-only mode: images are unavailable for now, or the budget is spent. Show `message`. |
 | `session.error`, `session.render.failed` | `error` is visitor-ready text. |
 | `session.ended` | `reason`: `visitor_left`, `ended_by_visitor`, `timeout` or `replaced`. Return to the start screen. |
@@ -245,7 +245,8 @@ given on the command line wins for that run (`PORT=3100 npm start`). Restart aft
 | `EVENT_STREAM_IMAGES` | `session` | Temporarily `all`, while a frontend can't yet pass `?sessionId=`. |
 | `REQUIRE_CONSENT` | `true` | Keep it on: photos go to OpenAI. |
 | `PUBLIC_BASE_URL`, `TLS_CERT_FILE`, `TLS_KEY_FILE` | — | Phones should open "take it home" QR links. These need HTTPS, and keeping looks is refused over plain HTTP on a network. |
-| `FINAL_QUALITY` | `medium` (about $0.07 a look) | `low` for about $0.03 a look, at visibly lower quality. |
+| `FINAL_QUALITY` | `medium` (about $0.06 a look) | `low` for about $0.03 a look, at visibly lower quality. |
+| `PREFETCH_OPTIONS`, `EARLY_DESIGN`, `PARTIAL_IMAGES` | `false`, `false`, `0` | Token savings. Turn on for speed: ready "next look", first idea ~5 s sooner, previews while rendering, each at a token cost. |
 | `DAILY_BUDGET_USD` | `30` | The expected visitors × cost per look. |
 | `SIDECAR_SPAWN` | `auto` | `false` if the sidecar is started some other way. Then set `SIDECAR_TOKEN` to the same value in both. |
 | `ALERT_WEBHOOK_URL` | — | A Slack-compatible webhook for budget, camera and crash alerts. |

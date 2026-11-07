@@ -168,6 +168,15 @@ class Perception:
                 best = (top.category_name.lower(), float(top.score))
         return best
 
+    def face_mesh(self, rgb: np.ndarray) -> np.ndarray | None:
+        """Face mesh (478, 2), normalized, of the largest face in an image that is mostly face (a close-up)."""
+        with self._face_lock:
+            result = self._face_image.detect(mp.Image(mp.ImageFormat.SRGB, np.ascontiguousarray(rgb)))
+        if not result.face_landmarks:
+            return None
+        faces = [np.array([[lm.x, lm.y] for lm in face]) for face in result.face_landmarks]
+        return max(faces, key=lambda f: float(np.ptp(f[:, 0]) * np.ptp(f[:, 1])))
+
     def face_present(self, rgb: np.ndarray, min_score: float = 0.8) -> bool:
         """Whether any face is in view (YuNet detector only; cheap). Used for presence when the body
         is too close to the camera for the pose model."""

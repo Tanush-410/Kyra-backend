@@ -6,6 +6,7 @@ import numpy as np
 
 from .color import skin_pixel_mask
 from .perception import CHIN, LEFT_ANKLE, LEFT_SHOULDER, RIGHT_ANKLE, RIGHT_SHOULDER, Perception, feathered_mask, hand_regions, refine_mask
+from .facetransfer import transfer_face
 from .silhouette import match_silhouette
 
 # Landmarks used to line the render up with the capture: nose, shoulders, hips, wrists, ankles.
@@ -61,9 +62,39 @@ def align_to_original(original_analysis, generated: np.ndarray, generated_analys
     return warped, {"scale": round(scale, 4), "dx": round(float(matrix[0, 2]) / w, 4), "dy": round(float(matrix[1, 2]) / h, 4)}
 
 
+def apply_clear_face(perception: Perception, image: np.ndarray, reference_face: np.ndarray,
+                     image_points: np.ndarray | None = None) -> tuple[np.ndarray, dict]:
+    """Puts the visit's clearest face (reference_face, a close-up) onto image, if safe. Returns (image, report).
+
+    Kept only when the identity check says the result is the visitor, and at least as clearly as before."""
+    source = perception.face_mesh(reference_face)
+    if source is None:
+        return image, {"applied": False, "reason": "no face found in the close-up"}
+    if image_points is None:
+        image_points = perception.analyze(image).face_landmarks
+    if image_points is None:
+        return image, {"applied": False, "reason": "no face found in the render"}
+    h, w = image.shape[:2]
+    rh, rw = reference_face.shape[:2]
+    placed, report = transfer_face(image, image_points * [w, h], reference_face, source * [rw, rh])
+    if placed is None:
+        return image, {"applied": False, **report}
+    reference = perception.face_identity(reference_face)
+    before, after = perception.face_identity(image), perception.face_identity(placed)
+    if reference is None or after is None:
+        return image, {"applied": False, **report, "reason": "identity check could not find the face"}
+    similarity_after = float(reference["embedding"] @ after["embedding"])
+    similarity_before = float(reference["embedding"] @ before["embedding"]) if before else None
+    report.update({"similarityBefore": None if similarity_before is None else round(similarity_before, 4),
+                   "similarityAfter": round(similarity_after, 4)})
+    if similarity_after < SIMILARITY_THRESHOLD or (similarity_before is not None and similarity_after < similarity_before):
+        return image, {"applied": False, **report, "reason": "identity check did not improve"}
+    return placed, {"applied": True, **report}
+
+
 def finish_render(perception: Perception, original: np.ndarray, generated: np.ndarray, keep_mask: np.ndarray,
                   reference_face: np.ndarray | None = None, face_source_px: float | None = None,
-                  upscale: float | None = None) -> dict:
+                  upscale: float | None = None, paste_hands: bool = True, match_body: bool = True) -> dict:
     """original/generated: RGB uint8 at the same size; keep_mask: uint8 soft face-and-hair mask for the original.
 
     reference_face: a sharp close-up of the visitor, used as the identity reference when given.
@@ -83,7 +114,7 @@ def finish_render(perception: Perception, original: np.ndarray, generated: np.nd
 
     # The visitor's body outline, from the neck down to the feet.
     silhouette = {"applied": False}
-    if original_matte is not None and generated_analysis.person_mask is not None and original_analysis.landmarks is not None:
+    if match_body and original_matte is not None and generated_analysis.person_mask is not None and original_analysis.landmarks is not None:
         lms = original_analysis.landmarks
         if original_analysis.face_landmarks is not None:
             top = int(original_analysis.face_landmarks[CHIN, 1] * h + h * 0.01)
@@ -94,6 +125,11 @@ def finish_render(perception: Perception, original: np.ndarray, generated: np.nd
         generated, silhouette = match_silhouette(generated, generated_analysis.person_mask, original_matte, top, bottom)
         if silhouette.get("applied"):
             generated_analysis = perception.analyze(generated)
+
+    # The face: the clearest view seen during the visit, when it can be placed safely (facetransfer.py).
+    clear_face = {"applied": False, "reason": "no close-up from the visit"}
+    if reference_face is not None:
+        generated, clear_face = apply_clear_face(perception, generated, reference_face, generated_analysis.face_landmarks)
 
     positional = perception.face_identity(original)
     reference = perception.face_identity(reference_face) if reference_face is not None else None
@@ -106,7 +142,9 @@ def finish_render(perception: Perception, original: np.ndarray, generated: np.nd
     low_res = (upscale is not None and upscale >= MAX_FACE_UPSCALE) or (face_source_px is not None and face_source_px < MIN_FACE_SOURCE_PX)
     render_face_ok = render_face_similarity is not None and render_face_similarity >= SIMILARITY_THRESHOLD
     keep = np.zeros((h, w), dtype=np.float32)
-    if alignment.get("aligned") and (not low_res or not render_face_ok):
+    if clear_face["applied"]:
+        head = "clearest face from the visit"
+    elif alignment.get("aligned") and (not low_res or not render_face_ok):
         keep = np.maximum(keep, keep_mask.astype(np.float32) / 255.0)
         head = "pasted" if not low_res else "pasted (render face failed the identity check)"
     elif low_res and render_face_ok:
@@ -116,7 +154,7 @@ def finish_render(perception: Perception, original: np.ndarray, generated: np.nd
 
     # Hands: paste each one only if it is in the same place in the render.
     hands_pasted = []
-    original_hands = hand_regions(original_analysis, w, h)
+    original_hands = hand_regions(original_analysis, w, h) if paste_hands else {}
     generated_hands = hand_regions(generated_analysis, w, h)
     # Only skin is pasted, so old sleeves or trousers next to the hand never come back.
     skin = cv2.morphologyEx(skin_pixel_mask(original).astype(np.uint8) * 255, cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
@@ -145,6 +183,7 @@ def finish_render(perception: Perception, original: np.ndarray, generated: np.nd
         "image": composed,
         "headPasted": bool(keep_mask is not None and head.startswith("pasted")),
         "headDecision": head,
+        "clearFace": clear_face,
         "warp": warp,
         "silhouette": silhouette,
         "handsPasted": hands_pasted,

@@ -110,6 +110,9 @@ export function createSidecar({ url, token, timeoutMs = 20_000, fetchImpl = (...
     segment: (imageDataUrl) => call('POST', '/segment', { imageDataUrl }),
     compareFaces: (referenceDataUrl, imageDataUrl) => call('POST', '/face/compare', { referenceDataUrl, imageDataUrl }),
     compose: (body) => call('POST', '/compose', body),
+    // The visit's clearest face so far, and placing a face onto a finished look (both local, no tokens).
+    bestFace: () => call('GET', '/face/best'),
+    transferFace: (imageDataUrl, faceDataUrl) => call('POST', '/face/transfer', { imageDataUrl, faceDataUrl }),
     arm: (sessionId) => call('POST', '/arm', { sessionId }),
     disarm: () => call('POST', '/disarm'),
     captureNow: () => call('POST', '/capture'),
@@ -145,7 +148,7 @@ export function restartPlan(previousRestarts, uptimeMs) {
 
 // The sidecar's own settings (see sidecar/kyra_sidecar/config.py and color.py). Everything else, notably
 // OPENAI_API_KEY, API_TOKEN, OPERATOR_TOKEN and ALERT_WEBHOOK_URL, stays out of its environment.
-const SIDECAR_ENV = /^(PATH|HOME|USER|LOGNAME|LANG|LC_[A-Z]+|TMPDIR|TZ|PYTHON[A-Z_]*|SIDECAR_[A-Z_]+|CAMERA(_[A-Z]+)?|ANALYSIS_WIDTH|TARGET_FPS|READY_HOLD_MS|SKIN_FRAMES|SKIN_COOL_MAX_HUE|SKIN_WARM_MIN_HUE|UNDERTONE_ENGINE|ABSENT_AFTER_MS|CAPTURE_TTL_S|GESTURES|GESTURE_HOLD_MS|GESTURE_COOLDOWN_MS|FREEZE_AFTER_S|MODELS_DIR|CALIBRATION_PATH|OPENCV_[A-Z_]+)$/;
+const SIDECAR_ENV = /^(PATH|HOME|USER|LOGNAME|LANG|LC_[A-Z]+|TMPDIR|TZ|PYTHON[A-Z_]*|SIDECAR_[A-Z_]+|COMPOSE_[A-Z_]+|CAMERA(_[A-Z]+)?|ANALYSIS_WIDTH|TARGET_FPS|READY_HOLD_MS|SKIN_FRAMES|SKIN_COOL_MAX_HUE|SKIN_WARM_MIN_HUE|UNDERTONE_ENGINE|ABSENT_AFTER_MS|CAPTURE_TTL_S|GESTURES|GESTURE_HOLD_MS|GESTURE_COOLDOWN_MS|FREEZE_AFTER_S|MODELS_DIR|CALIBRATION_PATH|OPENCV_[A-Z_]+)$/;
 
 export function sidecarEnv(env, { port, token = '' }) {
   const picked = Object.fromEntries(Object.entries(env).filter(([key]) => SIDECAR_ENV.test(key)));

@@ -28,11 +28,11 @@ const OPTIONS_SCHEMA = {
               items: {
                 type: 'object',
                 additionalProperties: false,
-                required: ['category', 'name', 'colorName', 'hex', 'fit', 'material'],
+                // No colour name: the code names each colour from the palette (enforceDesign), so writing it cost ~80 tokens for nothing.
+                required: ['category', 'name', 'hex', 'fit', 'material'],
                 properties: {
                   category: { type: 'string', enum: CATEGORIES },
                   name: { type: 'string' },
-                  colorName: { type: 'string' },
                   hex: { type: 'string' },
                   fit: { type: 'string' },
                   material: { type: 'string' }

@@ -69,3 +69,12 @@ def test_every_response_carries_security_headers(app):
     assert headers["referrer-policy"] == "no-referrer"
     assert headers["x-frame-options"] == "DENY"
     assert headers["cache-control"] == "no-store"
+
+
+def test_render_finishing_extras_are_off_by_default(monkeypatch):
+    # 7 Nov 2026: on a webcam capture, pasting real hands and matching the body outline caused visible artifacts.
+    monkeypatch.delenv("COMPOSE_HANDS", raising=False)
+    monkeypatch.delenv("COMPOSE_SILHOUETTE", raising=False)
+    assert Config().compose_hands is False and Config().compose_silhouette is False
+    monkeypatch.setenv("COMPOSE_HANDS", "true")
+    assert Config().compose_hands is True

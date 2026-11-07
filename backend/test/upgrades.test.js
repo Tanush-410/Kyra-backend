@@ -452,7 +452,7 @@ test('token rule: at FINAL_QUALITY=low a look uses fewer tokens than the origina
 test('token rule: drafts and face-check retries are skipped when they would push a look over budget', async () => {
   const sidecar = fakeSidecar({ bundle: () => bundleFor(), compose: () => ({ headPasted: false, handsPasted: [], similarity: 0.2, samePerson: false, threshold: 0.363, alignment: {} }) });
   const openai = usageOpenAI();
-  const { app } = await mirrorApp({ openai, sidecar, env: { RENDER_DRAFT: 'true', FINAL_QUALITY: 'low', LOOK_TOKEN_BUDGET: '2600' } });
+  const { app } = await mirrorApp({ openai, sidecar, env: { RENDER_DRAFT: 'true', FINAL_QUALITY: 'low', LOOK_TOKEN_BUDGET: '2600', RENDER_RETRIES: '1' } });
   const id = (await start(app)).json().sessionId;
   const { render } = await waitForRender(app, id);
   assert.equal(openai.images().length, 1, 'no draft and no retry: either would cross 2,600 tokens');
@@ -463,7 +463,7 @@ test('token rule: drafts and face-check retries are skipped when they would push
   await app.close();
 });
 
-test('soft webcam face: the close-up goes to the model as image 2 and to compose as the identity reference', async () => {
+test('soft webcam face: the close-up always goes to compose (the face is placed locally), and to the model only if RENDER_FACE_REFERENCE=true', async () => {
   const bundle = async () => {
     const b = await bundleFor();
     b.render.faceSourcePx = 45;
@@ -471,9 +471,19 @@ test('soft webcam face: the close-up goes to the model as image 2 and to compose
     b.render.faceRefDataUrl = b.render.keepMaskDataUrl; // any small image stands in for the close-up
     return b;
   };
+  // Default: no face image to the model (saves ~190 tokens), but compose still gets the close-up.
+  const lean = usageOpenAI();
+  const leanSidecar = fakeSidecar({ bundle });
+  const leanApp = (await mirrorApp({ openai: lean, sidecar: leanSidecar })).app;
+  await waitForRender(leanApp, (await start(leanApp)).json().sessionId);
+  assert.equal(lean.images()[0].images, 1);
+  assert.doesNotMatch(lean.images()[0].prompt, /Image 2/);
+  assert.ok(leanSidecar.callsTo('/compose')[0].body.referenceFaceDataUrl);
+  await leanApp.close();
+
   const sidecar = fakeSidecar({ bundle });
   const openai = usageOpenAI();
-  const { app } = await mirrorApp({ openai, sidecar });
+  const { app } = await mirrorApp({ openai, sidecar, env: { RENDER_FACE_REFERENCE: 'true' } });
   const id = (await start(app)).json().sessionId;
   const { render } = await waitForRender(app, id);
   assert.equal(openai.images()[0].images, 2);

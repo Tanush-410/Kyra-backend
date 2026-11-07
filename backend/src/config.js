@@ -96,7 +96,12 @@ export function loadConfig(env = process.env) {
 
     faceCheck: booleanFrom(env.FACE_CHECK, true),
     faceCheckMinScore: numberFrom(env.FACE_CHECK_MIN_SCORE, 0.7),
-    faceCheckRetries: numberFrom(env.FACE_CHECK_RETRIES, 1),
+    faceCheckRetries: numberFrom(env.FACE_CHECK_RETRIES, 1), // v1 routes
+    // Mirror (v2) token savings, 7 Nov 2026. The face now comes from the visit's clearest close-up, placed
+    // locally after the render (sidecar facetransfer.py), so the model needs no face image and a face that
+    // fails the identity check is no reason to pay for another image.
+    renderFaceReference: booleanFrom(env.RENDER_FACE_REFERENCE, false),
+    renderRetries: Math.max(0, numberFrom(env.RENDER_RETRIES, 0)),
     requireFullBody: booleanFrom(env.REQUIRE_FULL_BODY, true),
 
     artifactsDir: path.resolve(projectRoot, env.ARTIFACTS_DIR || 'How do I look'),
@@ -112,10 +117,12 @@ export function loadConfig(env = process.env) {
     sidecarDir: path.resolve(projectRoot, env.SIDECAR_DIR || 'sidecar'),
     autoEndOnLeave: booleanFrom(env.AUTO_END_ON_LEAVE, true),
     renderConcurrency: Math.max(1, numberFrom(env.RENDER_CONCURRENCY, 2)),
-    partialImages: Math.max(0, Math.min(3, numberFrom(env.PARTIAL_IMAGES, 2))),
-    // dwell = render the next option once the visitor has looked at the current one for
-    // PREFETCH_DWELL_MS and is still there; auto = whenever the queue is idle; true; false.
-    prefetchOptions: ['true', 'false', 'auto'].includes(String(env.PREFETCH_OPTIONS)) ? String(env.PREFETCH_OPTIONS) : 'dwell',
+    // Streamed previews while an image renders: each adds ~100 output tokens. 0 by default (token saving).
+    partialImages: Math.max(0, Math.min(3, numberFrom(env.PARTIAL_IMAGES, 0))),
+    // false (default) = render a look only when the visitor asks for it: a look rendered ahead of time costs
+    // ~2,700 tokens even if nobody sees it. dwell = render the next option after PREFETCH_DWELL_MS of viewing;
+    // auto = whenever the queue is idle; true = always.
+    prefetchOptions: ['true', 'dwell', 'auto'].includes(String(env.PREFETCH_OPTIONS)) ? String(env.PREFETCH_OPTIONS) : 'false',
     prefetchBudgetFraction: numberFrom(env.PREFETCH_BUDGET_FRACTION, 0.5),
     prefetchDwellMs: numberFrom(env.PREFETCH_DWELL_MS, 10_000),
     // Draft off by default: in real runs it cost ~30% of a final image to save 2-8 s.
@@ -134,8 +141,9 @@ export function loadConfig(env = process.env) {
     // A/B test: each visitor gets one of these final qualities, alternating; likes and real cost are
     // reported per quality. Empty = everyone gets FINAL_QUALITY.
     finalQualityExperiment: String(env.FINAL_QUALITY_EXPERIMENT ?? '').split(',').map((q) => q.trim()).filter(Boolean),
-    // Start designing outfits from the sidecar's early profile, before the photo is taken.
-    earlyDesign: booleanFrom(env.EARLY_DESIGN, true),
+    // Design outfits from the early profile, before the photo is taken (~5 s faster first idea). Off by
+    // default: a design started early is wasted (~900 tokens) whenever the visitor leaves before the photo.
+    earlyDesign: booleanFrom(env.EARLY_DESIGN, false),
     // Likes needed for an undertone before its liked colours start steering palettes and option order.
     learnMinRatings: numberFrom(env.LEARN_MIN_RATINGS, 20),
     requireConsent: booleanFrom(env.REQUIRE_CONSENT, true),
@@ -145,9 +153,10 @@ export function loadConfig(env = process.env) {
     // gpt-image-1.5 largely ignores the prompt inside a mask, so the default is an unmasked edit
     // that keeps the pose, followed by pasting the original head back when the render stayed aligned.
     renderMask: booleanFrom(env.RENDER_MASK, false),
-    // high keeps the visitor's face and features closer to their photo (dropped automatically if the image
-    // model rejects it). "off" sends nothing.
-    openaiInputFidelity: env.OPENAI_INPUT_FIDELITY === 'off' ? '' : env.OPENAI_INPUT_FIDELITY || 'high',
+    // Off by default. "high" keeps faces closer to the photo, but OpenAI then reads the photo at ~10,900 input
+    // tokens: measured 7 Nov 2026, $0.15 an image instead of ~$0.06, and on a webcam capture the face was too
+    // small (58 px) to benefit. The sharp close-up sent as a second image does that job for ~190 tokens.
+    openaiInputFidelity: env.OPENAI_INPUT_FIDELITY === 'off' ? '' : env.OPENAI_INPUT_FIDELITY || '',
     // Lower reasoning effort makes the outfit-design call several times faster.
     openaiReasoningEffort: env.OPENAI_REASONING_EFFORT ?? 'low',
 

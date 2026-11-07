@@ -13,6 +13,7 @@ from .calibration import Calibration
 from .capture import build_bundle, jsonable, visitor_profile
 from .guidance import GuidanceSmoother, evaluate
 from . import lighting, undertone_adapter
+from .facetransfer import crop_face, face_quality
 from .capture import skin_config
 from .perception import (EYE_CORNERS, LEFT_HIP, LEFT_SHOULDER, NOSE, RIGHT_HIP, RIGHT_SHOULDER, Perception,
                          SubjectTracker, face_width_px, skin_sample)
@@ -66,6 +67,7 @@ class CameraLoop:
         self._early_profile_at = 0.0
         self._smoother = GuidanceSmoother()
         self._best_face: dict | None = None
+        self._face_sent_score: float | None = None  # score of the face that went with this visit's capture
         # Multiple people: the nearest one is the subject, tracked across frames.
         self._tracker = SubjectTracker()
         self._subject_id: int | None = None
@@ -247,8 +249,9 @@ class CameraLoop:
                 session_id = self._armed_for
                 _, best_frame, best_analysis = max(self._ready_frames, key=lambda item: item[0])
                 skin = list(self._skin)
-                capture_face_px = face_width_px(best_analysis, best_frame.shape[1]) or 0
-                face_ref = self._best_face if self._best_face and self._best_face["facePx"] > capture_face_px * 1.25 else None
+                # The clearest face of the visit goes with every capture: the render's face is taken from it.
+                face_ref = self._best_face
+                self._face_sent_score = face_ref["score"] if face_ref else 0.0
                 self._armed_for = None
 
         guidance = {**guidance, "heldMs": int(held_ms), "armed": bool(self._armed_for) or capture_due}
@@ -281,6 +284,7 @@ class CameraLoop:
         self._subject_id = subject_id
         self._skin.clear()
         self._best_face = None
+        self._face_sent_score = None
         self._light.reset()
         with self._lock:
             self._ready_since = None
@@ -290,24 +294,25 @@ class CameraLoop:
             self.publish({"type": "subject", "subjectId": subject_id, "replaced": True})
 
     def _track_best_face(self, rgb: np.ndarray, analysis, face_px: float | None) -> None:
-        """Keeps the largest, sharpest, most frontal view of the face seen this visit (e.g. while the
-        visitor walked up), as a high-detail identity reference for the render."""
+        """Keeps the clearest view of the face seen this visit (largest, sharpest, facing the mirror, eyes open,
+        well lit), usually while the visitor walks up. The render's face is taken from it (facetransfer.py).
+        After a capture, a clearly better view (25% higher score) is announced so the look can be updated."""
         if not face_px or analysis.face_landmarks is None:
             return
         h, w = rgb.shape[:2]
         points = analysis.face_landmarks * [w, h]
-        eyes_mid = points[list(EYE_CORNERS)].mean(axis=0)
-        frontal = abs(points[1][0] - eyes_mid[0]) / max(face_px, 1) < 0.08  # nose tip under the eyes
-        score = face_px * min(1.0, analysis.sharpness / 80) * (1.0 if frontal else 0.5)
-        if self._best_face and score <= self._best_face["score"]:
+        quality = face_quality(rgb, points, face_px)
+        if quality["score"] <= 0 or (self._best_face and quality["score"] <= self._best_face["score"]):
             return
-        cx, cy = points.mean(axis=0)
-        half = int(face_px * 0.9)
-        x0, y0 = int(max(0, cx - half)), int(max(0, cy - half))
-        crop = rgb[y0:int(min(h, cy + half)), x0:int(min(w, cx + half))]
-        if crop.size == 0:
-            return
-        self._best_face = {"image": cv2.resize(crop, (384, 384), interpolation=cv2.INTER_AREA), "facePx": face_px, "score": score}
+        self._best_face = {"image": crop_face(rgb, points), "facePx": face_px, "score": quality["score"], "quality": quality}
+        sent = getattr(self, "_face_sent_score", None)
+        if sent is not None and quality["score"] > max(sent, 1e-6) * 1.25:
+            self._face_sent_score = quality["score"]
+            self.publish({"type": "face", "better": True, "score": quality["score"], "facePx": round(face_px, 1)})
+
+    def best_face(self) -> dict | None:
+        """The clearest face of this visit so far (image, facePx, score, quality), or None."""
+        return self._best_face
 
     def _send_early_profile(self, analysis, now: float) -> None:
         """While armed, sends the visitor's profile once it is stable, and again only if it changes.
@@ -363,12 +368,14 @@ class CameraLoop:
                 self._present = True
                 self._skin.clear()
                 self._best_face = None
+                self._face_sent_score = None
                 self._light.reset()
                 self.publish({"type": "presence", "present": True})
         elif self._present and (now - self._last_seen) * 1000 > self.config.absent_after_ms:
             self._present = False
             self._skin.clear()
             self._best_face = None
+            self._face_sent_score = None
             self._tracker.reset()  # whoever appears next is a new visitor
             self.publish({"type": "presence", "present": False})
 
