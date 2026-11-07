@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KYRA Mirror Console</title>
+<style>
+  :root { --bg: #000; --panel: #111113; --line: #26262b; --text: #f2f2f2; --muted: #9a9aa2; --accent: #e8e8e8; --ok: #7bd88f; --warn: #ffb35c; --err: #ff7a7a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 -apple-system, system-ui, sans-serif; }
+  main { max-width: 1280px; margin: 0 auto; padding: 20px 16px 48px; display: grid; gap: 16px; grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 1000px) { main { grid-template-columns: 1fr; } }
+  header { grid-column: 1 / -1; display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+  h1 { margin: 0; font-size: 20px; letter-spacing: 0.05em; }
+  .pill { font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 99px; padding: 2px 10px; }
+  .pill.ok { color: var(--ok); } .pill.err { color: var(--err); }
+  section { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; min-width: 0; }
+  h2 { margin: 0 0 10px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+  .frame { position: relative; aspect-ratio: 2 / 3; background: #000; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); }
+  .frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .guide { position: absolute; left: 0; right: 0; bottom: 0; padding: 12px; text-align: center; font-size: 18px; background: linear-gradient(transparent, rgba(0,0,0,.85)); }
+  .guide.ready { color: var(--ok); }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; align-items: center; }
+  button, .chip, input, select { font: inherit; color: var(--text); background: #1d1d21; border: 1px solid var(--line); border-radius: 8px; padding: 7px 11px; }
+  button { cursor: pointer; } button:disabled { opacity: .4; cursor: not-allowed; }
+  button.primary { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
+  .chip.on { background: var(--accent); color: #000; }
+  input[type=text] { flex: 1; min-width: 140px; } input[type=number] { width: 100px; }
+  label.file input { display: none; } label.file { cursor: pointer; }
+  details { margin-top: 10px; } summary { cursor: pointer; color: var(--muted); }
+  .status { margin-top: 10px; color: var(--muted); min-height: 1.4em; } .status.err { color: var(--err); }
+  .sw { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; margin: 0 10px 6px 0; }
+  .sw i { width: 18px; height: 18px; border-radius: 50%; border: 1px solid #444; display: inline-block; }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; font-size: 14px; } .kv dt { color: var(--muted); } .kv dd { margin: 0; }
+  .option { border: 1px solid var(--line); border-radius: 10px; padding: 10px; margin-top: 10px; }
+  .option.active { border-color: var(--accent); }
+  .option h3 { margin: 0; font-size: 15px; } .option p { margin: 4px 0; color: var(--muted); font-size: 13px; }
+  .option ul { list-style: none; padding: 0; margin: 6px 0; font-size: 13px; }
+  .face { font-size: 13px; margin-top: 8px; color: var(--muted); } .face.bad { color: var(--warn); }
+  .qr { margin-top: 10px; text-align: center; } .qr img { width: 160px; background: #fff; border-radius: 8px; }
+  .muted { color: var(--muted); font-size: 13px; }
+  .consent { display: flex; gap: 8px; align-items: flex-start; margin-top: 10px; font-size: 13px; color: var(--muted); }
+  .consent input { margin-top: 3px; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--accent); color: #000; padding: 10px 18px; border-radius: 99px; font-weight: 600; opacity: 0; transition: opacity .2s; pointer-events: none; }
+  .toast.show { opacity: 1; }
+  .badge { font-size: 11px; color: var(--ok); margin-left: 6px; }
+  .fix { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 10px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>KYRA · Mirror Console</h1>
+    <span id="conn" class="pill">connecting…</span>
+    <span id="cam" class="pill">camera ?</span>
+    <span id="budget" class="pill">budget ?</span>
+    <label class="pill"><input id="voice" type="checkbox"> voice guidance</label>
+  </header>
+
+  <section>
+    <h2>Camera</h2>
+    <div class="frame">
+      <img id="preview" alt="Live camera">
+      <div id="guide" class="guide">…</div>
+    </div>
+    <div class="row" id="styles"></div>
+    <div class="row">
+      <input id="customStyle" type="text" placeholder="…or your own style">
+    </div>
+    <div class="row">
+      <select id="gender"><option value="">Gender (optional)</option><option value="male">Male</option><option value="female">Female</option></select>
+      <input id="height" type="number" min="100" max="230" placeholder="Height cm">
+    </div>
+    <details>
+      <summary>Preferences</summary>
+      <div class="row">
+        <select id="season"><option value="">Any season</option><option>spring</option><option>summer</option><option>autumn</option><option>winter</option></select>
+        <select id="modesty"><option value="standard">Standard</option><option value="modest">Modest</option><option value="very-modest">Very modest</option></select>
+        <select id="budgetPref"><option value="">Any budget</option><option value="budget">Budget</option><option value="mid-range">Mid-range</option><option value="premium">Premium</option></select>
+      </div>
+      <div class="row"><input id="avoid" type="text" placeholder="Colours to avoid (comma separated)"></div>
+      <div class="row"><input id="token" type="password" placeholder="Kiosk token (apiToken in backend/.runtime/secrets.json)"></div>
+    </details>
+    <label class="consent"><input id="consent" type="checkbox">
+      <span>I agree to have my photo taken. It is sent to OpenAI to create my look, kept only in memory, and forgotten when I leave, unless I choose to take my look home.</span></label>
+    <div class="row">
+      <button id="start" class="primary" disabled>Start — auto-capture</button>
+      <label class="file chip">Upload photo<input id="file" type="file" accept="image/*" disabled></label>
+    </div>
+    <div id="status" class="status"></div>
+    <details>
+      <summary>Calibration</summary>
+      <p class="muted">Height: a person of known height stands on the visitor spot, head to toe in frame. Add 2+ samples at different distances for best results.</p>
+      <div class="row"><input id="calHeight" type="number" placeholder="Their height cm"><button id="calHeightBtn">Add height sample</button></div>
+      <p class="muted">White balance: place a matte neutral grey card in the box, calibrate it, then leave it visible there. Its current colour is read in every camera frame to follow room-light changes.</p>
+      <div class="row"><input id="roi" type="text" value="0.45,0.40,0.10,0.10"><button id="calWbBtn">Calibrate white balance</button></div>
+      <div class="row"><button id="calReset">Reset calibration</button></div>
+      <pre id="calOut" class="muted"></pre>
+    </details>
+  </section>
+
+  <section>
+    <h2>Profile &amp; options</h2>
+    <div id="profile" class="muted">No visitor yet.</div>
+    <div id="options"></div>
+    <div class="row" id="moreRow" hidden>
+      <input id="feedback" type="text" placeholder="Feedback (e.g. more colour, less formal)">
+      <button id="redesign">New ideas</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Your look</h2>
+    <div class="frame"><img id="result" alt=""></div>
+    <div id="face" class="face"></div>
+    <div class="row">
+      <button id="like" disabled>👍 Like</button>
+      <button id="dislike" disabled>👎 Next look</button>
+      <button id="keep" disabled>Take it home (QR)</button>
+      <button id="end" disabled>Done — forget me</button>
+    </div>
+    <p class="muted">Hands-free: thumbs up = like · thumbs down = next look · ✌️ = take it home</p>
+    <div id="qr" class="qr"></div>
+    <details><summary>Metrics</summary><pre id="metrics" class="muted"></pre></details>
+  </section>
+</main>
+<div id="toast" class="toast"></div>
+
+<script>
+  const API = 'http://localhost:3000';
+  const STYLES = ['Casual', 'Smart casual', 'Formal', 'Party', 'Wedding guest', 'Office', 'Date night'];
+  const $ = (id) => document.getElementById(id);
+  let picked = 'Smart casual';
+  let session = null;      // { id, rounds: {n: options[]}, active: {round, option}, done: Set }
+  let source = null;
+
+  const token = () => $('token').value.trim();
+  (() => {
+    const fromLink = new URLSearchParams(location.hash.slice(1)).get('token');
+    if (fromLink) {
+      localStorage.setItem('kyraToken:kiosk', fromLink);
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+    $('token').value = fromLink || localStorage.getItem('kyraToken:kiosk') || '';
+  })();
+
+  const q = () => (token() ? `?token=${encodeURIComponent(token())}` : '');
+  const headers = (json = true) => ({ ...(json ? { 'Content-Type': 'application/json' } : {}), ...(token() ? { Authorization: `Bearer ${token()}` } : {}) });
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const status = (msg, err = false) => { $('status').textContent = msg; $('status').className = 'status' + (err ? ' err' : ''); };
+  const toast = (msg) => { $('toast').textContent = msg; $('toast').classList.add('show'); clearTimeout(toast.t); toast.t = setTimeout(() => $('toast').classList.remove('show'), 2200); };
+  let lastSpoken = { text: '', at: 0 };
+  const speak = (text, force = false) => {
+    if (!$('voice').checked || !window.speechSynthesis || !text) return;
+    if (!force && (text === lastSpoken.text || Date.now() - lastSpoken.at < 2500)) return;
+    lastSpoken = { text, at: Date.now() };
+    speechSynthesis.cancel();
+    speechSynthesis.speak(new SpeechSynthesisUtterance(text.replace(/[—…·]/g, ',')));
+  };
+  $('consent').onchange = () => { $('start').disabled = !$('consent').checked; $('file').disabled = !$('consent').checked; };
+
+  STYLES.forEach((name) => {
+    const b = document.createElement('button');
+    b.className = 'chip' + (name === picked ? ' on' : '');
+    b.textContent = name;
+    b.onclick = () => { picked = name; $('customStyle').value = ''; document.querySelectorAll('#styles .chip').forEach((c) => c.classList.toggle('on', c === b)); };
+    $('styles').appendChild(b);
+  });
+  const style = () => $('customStyle').value.trim() || picked;
+  const preferences = () => ({ season: $('season').value, modesty: $('modesty').value, budget: $('budgetPref').value, avoidColors: $('avoid').value });
+
+  // The stream is scoped to this console's session once there is one: an unscoped stream carries no
+  // visitor images or share links (EVENT_STREAM_IMAGES=session on the backend).
+  function connect(sessionId = null) {
+    source?.close();
+    $('preview').src = `${API}/api/v2/preview.mjpg${q()}`;
+    const params = new URLSearchParams({ ...(token() ? { token: token() } : {}), ...(sessionId ? { sessionId } : {}) });
+    source = new EventSource(`${API}/api/v2/events${params.size ? `?${params}` : ''}`);
+    source.onopen = () => { $('conn').textContent = 'connected'; $('conn').className = 'pill ok'; };
+    source.onerror = () => { $('conn').textContent = 'reconnecting…'; $('conn').className = 'pill err'; checkToken(); };
+    const on = (type, fn) => source.addEventListener(type, (e) => fn(JSON.parse(e.data)));
+
+    on('hello', (e) => { $('cam').textContent = `camera ${e.sidecar}`; $('cam').className = 'pill ' + (e.sidecar === 'running' ? 'ok' : 'err'); if (sessionId) backfill(sessionId); });
+    on('camera', (e) => { $('cam').textContent = `camera ${e.status}`; $('cam').className = 'pill ' + (e.status === 'running' ? 'ok' : 'err'); });
+    on('perception', (e) => {
+      if (session && session.waiting) speak(e.message);
+      const armed = e.armed && session;
+      $('guide').textContent = armed && e.ready ? `${e.message} · ${Math.max(0, Math.ceil((900 - e.heldMs) / 300))}` : e.message;
+      $('guide').className = 'guide' + (e.ready ? ' ready' : '');
+    });
+    const mine = (fn) => (e) => { if (session && e.sessionId === session.id) fn(e); };
+    on('session.status', mine((e) => { status(e.message || e.status); if (e.status !== 'waiting_for_capture') session.waiting = false; }));
+    on('session.skin', mine((e) => { if (!session.profiled) renderEarlySkin(e); }));
+    on('session.profile', mine((e) => { session.profiled = true; renderProfile(e); speak('Got you. Designing looks in your colours.', true); }));
+    on('session.option', mine((e) => { (session.rounds[e.round] ||= []).push(e.option); renderOptions(e.round); }));
+    on('session.options', mine((e) => { session.rounds[e.round] = e.options; renderOptions(e.round, e.source); }));
+    on('session.render.queued', mine((e) => status(`In the queue — position ${e.position}`)));
+    on('session.render.started', mine((e) => { if (e.prefetch) return; session.active = e; session.drafted = false; renderOptions(e.round); $('face').textContent = 'Rendering…'; }));
+    on('session.render.draft', mine((e) => { if (!isActive(e) || !e.imageDataUrl) return; session.drafted = true; $('result').src = e.imageDataUrl; $('face').textContent = 'Quick preview — full quality on its way…'; }));
+    on('session.render.partial', mine((e) => { if (isActive(e) && !session.drafted && e.imageDataUrl) $('result').src = e.imageDataUrl; }));
+    on('session.render.done', mine((e) => {
+      session.done.add(`${e.round}.${e.option}`);
+      if (e.prefetch && !isActive(e)) { renderOptions(e.round); return; }
+      session.active = e;
+      if (e.imageDataUrl) $('result').src = e.imageDataUrl; else backfill(session.id);
+      ['keep', 'like', 'dislike'].forEach((id) => ($(id).disabled = false));
+      renderFace(e.faceCheck, e.tokens); renderOptions(e.round); refreshMetrics();
+      speak('Here is your look.', true);
+    }));
+    on('session.rated', mine((e) => toast(e.rating === 'up' ? 'Liked 👍' : 'Noted — showing another')));
+    on('session.kept', mine((e) => { if (e.qrDataUrl) showQr(e); }));
+    on('session.gesture', mine((e) => toast(`Gesture: ${e.gesture.replace('_', ' ')} → ${e.action}`)));
+    on('gesture', (e) => { if (!e.action) toast(`Gesture: ${e.gesture.replace('_', ' ')}`); });
+    on('budget.warning', (e) => { $('budget').className = 'pill err'; toast(`Budget warning: $${e.spentUsd} of $${e.limitUsd} used today`); });
+    on('session.render.failed', mine((e) => status(e.error, true)));
+    on('session.degraded', mine((e) => status(e.message || 'Image limit reached for today — showing outfit ideas only.', true)));
+    on('session.recovered', mine(() => status('Pictures are back.')));
+    on('session.error', mine((e) => status(e.error, true)));
+    on('session.ended', mine((e) => { status(`Session ended (${e.reason}).`); reset(); }));
+  }
+
+  const isActive = (e) => session && session.active && session.active.round === e.round && session.active.option === e.option;
+
+  function showQr(kept) {
+    $('qr').innerHTML = `<img src="${kept.qrDataUrl}" alt="QR code"><div class="muted"><a href="${esc(kept.url)}" target="_blank" style="color:inherit">${esc(kept.url)}</a><br>until ${new Date(kept.expiresAt).toLocaleString()}</div>`;
+    speak('Scan the code to take your look home.', true);
+  }
+
+  // The undertone needs only the face, so it shows while the visitor is still getting into position.
+  function renderEarlySkin(e) {
+    const m = e.skinMeasurement;
+    const sure = e.skinUndertoneSource === 'measured';
+    $('profile').innerHTML = `
+      <dl class="kv">
+        <dt>Undertone</dt><dd>${sure ? esc(e.skinUndertone) + (e.olive ? ' (olive)' : '') : '<span class="muted">reading… face the mirror in even light</span>'}${m ? ` <span class="muted">(hue ${m.hueAngle}°, ${esc(m.confidence)}, ${m.framesUsed} frames)</span>` : ''}</dd>
+        ${m?.skinHex ? `<dt>Your skin</dt><dd><span class="sw"><i style="background:${esc(m.skinHex)}"></i>${esc(m.skinHex)}</span>${sure && m.statement ? ` <span class="muted">${esc(m.statement)}</span>` : ''}</dd>` : ''}
+        ${sure && m?.styling ? `<dt>Metals</dt><dd>${m.styling.best_metals.map(esc).join(', ')}</dd>` : ''}
+        ${m?.hints?.length ? `<dt>Tip</dt><dd class="muted">${m.hints.map(esc).join(' ')}</dd>` : ''}
+      </dl>
+      ${sure ? `<div style="margin-top:8px">${e.palette.map((c) => `<span class="sw"><i style="background:${esc(c.hex)}"></i>${esc(c.name)}</span>`).join('')}</div>` : ''}
+      <p class="muted">Now step back so I can see you head to toe for your outfit.</p>`;
+  }
+
+  function renderProfile(e) {
+    const p = e.profile;
+    const m = p.skinMeasurement;
+    $('profile').innerHTML = `
+      <dl class="kv">
+        <dt>Undertone</dt><dd>${esc(p.skinUndertone || 'neutral')}${p.skinUndertoneSource === 'fallback' ? ` <span class="muted">— default: ${m ? `your reading (${esc(m.skinUndertone)}) wasn't clear enough` : "couldn't see your face"}</span>` : ''}${m?.warmCool?.olive ? ' (olive)' : ''}${m ? ` <span class="muted">(hue ${m.hueAngle}°${m.warmCool ? `, score ${m.warmCool.score}${m.warmCool.stable === false ? ' — near the boundary' : ''}` : ''}, ${esc(m.confidence)}, ${esc(m.whiteBalance)}, ${m.framesUsed} frames)</span>` : ''}</dd>
+        ${m?.hints?.length ? `<dt>Tip</dt><dd class="muted">${m.hints.map(esc).join(' ')}</dd>` : ''}
+        ${m?.skinHex ? `<dt>Your skin</dt><dd><span class="sw"><i style="background:${esc(m.skinHex)}"></i>${esc(m.skinHex)}</span>${p.skinUndertoneSource === 'measured' && m.statement ? ` <span class="muted">${esc(m.statement)}</span>` : ''}</dd>` : ''}
+        ${m?.styling && p.skinUndertoneSource === 'measured' ? `<dt>Metals</dt><dd>${m.styling.best_metals.map(esc).join(', ')}</dd><dt>Go easy on</dt><dd class="muted">${m.styling.avoid.map(esc).join(', ')}</dd>` : ''}
+        <dt>Depth</dt><dd>${p.skinDepth ? esc(p.skinDepth) : m?.skinDepth ? `${esc(m.skinDepth)}? <span class="muted">(not sure)</span>` : '<span class="muted">not measured</span>'}${m ? ` <span class="muted">(ITA ${m.ita}°)</span>` : ''}</dd>
+        <dt>Height</dt><dd>${p.heightCm ? `${p.heightCm} cm (${esc(p.heightSource)})` : '<span class="muted">not calibrated</span>'}</dd>
+        <dt>Build</dt><dd>${esc(p.build || 'unknown')}</dd>
+      </dl>
+      <div style="margin-top:8px">${e.palette.map((c) => `<span class="sw"><i style="background:${esc(c.hex)}"></i>${esc(c.name)}</span>`).join('')}</div>
+      ${e.fitGuidance.map((l) => `<p class="muted">${esc(l)}</p>`).join('')}
+      <div class="fix"><div class="row"><button id="confirmBtn">✓ Looks right</button><span class="muted">${m?.requireConfirmation ? 'please check your undertone — ' : ''}or, not quite right?</span></div>
+        <div class="row">
+          <select id="fixTone"><option value="">Undertone…</option><option>warm</option><option>neutral</option><option>cool</option></select>
+          <select id="fixDepth"><option value="">Depth…</option><option>fair</option><option>light</option><option>medium</option><option>tan</option><option>deep</option></select>
+          <input id="fixHeight" type="number" placeholder="Height cm">
+          <button id="fixBtn">Fix my profile</button>
+        </div></div>`;
+    $('confirmBtn').onclick = async () => {
+      try { await post(`/api/v2/sessions/${session.id}/profile/confirm`, {}); toast('Thanks — that helps tune the mirror'); $('confirmBtn').disabled = true; } catch (err) { status(err.message, true); }
+    };
+    $('fixBtn').onclick = async () => {
+      const body = { skinUndertone: $('fixTone').value, skinDepth: $('fixDepth').value };
+      if ($('fixHeight').value) body.heightCm = Number($('fixHeight').value);
+      try { await post(`/api/v2/sessions/${session.id}/profile`, body); toast('Profile updated — new looks coming'); } catch (err) { status(err.message, true); }
+    };
+  }
+
+  function renderOptions(round, sourceLabel) {
+    const options = session.rounds[round] || [];
+    $('moreRow').hidden = false;
+    $('options').innerHTML = `<p class="muted">Round ${round}${sourceLabel === 'fallback' ? ' · rule-based (AI unavailable)' : ''}</p>` + options.map((o) => {
+      const key = `${round}.${o.option}`;
+      const active = session.active && `${session.active.round}.${session.active.option}` === key;
+      return `<div class="option${active ? ' active' : ''}">
+        <h3>${o.option}. ${esc(o.title)}</h3><p>${esc(o.summary)}</p>
+        <ul>${o.items.map((it) => `<li><span class="sw"><i style="background:${esc(it.hex)}"></i>${esc(it.colorName)}</span>${esc(it.name)}</li>`).join('')}</ul>
+        <p>${esc(o.reasoning)}</p>
+        ${o.harmony ? `<p class="muted">Colours: ${esc(o.harmony.scheme)}${o.harmony.accents.length ? ` (${o.harmony.accents.map(esc).join(' + ')})` : ''}${o.items.some((it) => it.harmonised) ? ' · adjusted so the pieces go together' : ''}</p>` : ''}
+        <button data-round="${round}" data-option="${o.option}">${session.done.has(key) ? 'Show this' : 'Show me this'}</button>${session.done.has(key) && !active ? '<span class="badge">ready</span>' : ''}
+      </div>`;
+    }).join('');
+    $('options').querySelectorAll('button').forEach((b) => (b.onclick = () => render(Number(b.dataset.round), Number(b.dataset.option))));
+  }
+
+  function renderFace(fc, tokens) {
+    const el = $('face');
+    const tokenNote = tokens ? ` · ${tokens.total.toLocaleString()} tokens (original pipeline ${tokens.original.toLocaleString()})` : '';
+    const body = fc?.silhouette?.applied ? ` · body outline matched (${Math.round(fc.silhouette.widthErrorBefore * 100)}% → ${Math.round(fc.silhouette.widthErrorAfter * 100)}% off)` : '';
+    if (!fc?.checked) { el.textContent = 'Identity check unavailable.' + tokenNote; el.className = 'face'; return; }
+    el.textContent = (fc.passed
+      ? `Identity check passed (${fc.similarity}) · ${fc.headDecision || (fc.headPasted ? 'your real face, pasted back' : 'rendered face')}`
+      : `Face may differ from you (${fc.similarity})`) + body + tokenNote;
+    el.className = 'face' + (fc.passed ? '' : ' bad');
+  }
+
+  // Anything the stream missed while (re)connecting: the active look's finished image.
+  async function backfill(sessionId) {
+    try {
+      const res = await fetch(`${API}/api/v2/sessions/${sessionId}`, { headers: headers(false) });
+      if (!res.ok || !session || session.id !== sessionId) return;
+      const snapshot = await res.json();
+      const done = snapshot.renders.find((r) => r.key === snapshot.activeKey && r.status === 'done');
+      if (done?.imageDataUrl) {
+        session.done.add(done.key); session.active = { round: done.round, option: done.option };
+        $('result').src = done.imageDataUrl; ['keep', 'like', 'dislike'].forEach((id) => ($(id).disabled = false));
+      }
+    } catch { /* the next event will try again */ }
+  }
+
+  async function post(path, body, method = 'POST') {
+    const res = await fetch(`${API}${path}`, { method, headers: headers(Boolean(body)), body: body ? JSON.stringify(body) : undefined });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
+    return data;
+  }
+
+  function reset() {
+    session = null;
+    ['keep', 'end', 'like', 'dislike'].forEach((id) => ($(id).disabled = true)); $('moreRow').hidden = true;
+    $('options').innerHTML = ''; $('face').textContent = ''; $('qr').innerHTML = ''; $('result').removeAttribute('src');
+  }
+
+  async function start(imageDataUrl) {
+    reset();
+    const body = { style: style(), preferences: preferences() };
+    if ($('gender').value) body.gender = $('gender').value;
+    if ($('height').value) body.heightCm = Number($('height').value);
+    if (imageDataUrl) body.imageDataUrl = imageDataUrl;
+    body.consent = $('consent').checked;
+    try {
+      const created = await post('/api/v2/sessions', body);
+      session = { id: created.sessionId, rounds: {}, active: null, done: new Set(), waiting: created.status === 'waiting_for_capture' };
+      connect(session.id);
+      $('end').disabled = false;
+      status(created.status === 'waiting_for_capture' ? 'Waiting for the visitor to hold still…' : 'Analysing photo…');
+    } catch (err) { status(err.message, true); }
+  }
+
+  async function render(round, option) {
+    try { await post(`/api/v2/sessions/${session.id}/render`, { round, option }); } catch (err) { status(err.message, true); }
+  }
+
+  $('start').onclick = () => start(null);
+  $('file').onchange = (e) => {
+    const f = e.target.files[0]; if (!f) return;
+    const img = new Image();
+    img.onload = () => {
+      const scale = Math.min(1, 1600 / Math.max(img.naturalWidth, img.naturalHeight));
+      const c = document.createElement('canvas'); c.width = img.naturalWidth * scale; c.height = img.naturalHeight * scale;
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      start(c.toDataURL('image/jpeg', 0.92));
+    };
+    img.src = URL.createObjectURL(f);
+    e.target.value = '';
+  };
+  $('redesign').onclick = async () => {
+    try {
+      await post(`/api/v2/sessions/${session.id}/redesign`, { feedback: $('feedback').value.trim(), style: style(), preferences: preferences() });
+      $('feedback').value = '';
+    } catch (err) { status(err.message, true); }
+  };
+  $('keep').onclick = async () => {
+    try { showQr(await post(`/api/v2/sessions/${session.id}/keep`, { round: session.active.round, option: session.active.option })); } catch (err) { status(err.message, true); }
+  };
+  const rate = async (rating) => {
+    const { round, option } = session.active;
+    try {
+      await post(`/api/v2/sessions/${session.id}/rate`, { round, option, rating });
+      if (rating === 'down') {
+        await post(`/api/v2/sessions/${session.id}/next`, {});
+      }
+    } catch (err) { status(err.message, true); }
+  };
+  $('like').onclick = () => rate('up');
+  $('dislike').onclick = () => rate('down');
+  $('end').onclick = async () => { try { await post(`/api/v2/sessions/${session.id}`, null, 'DELETE'); } catch (err) { status(err.message, true); } };
+
+  const calOut = (data) => {
+    $('calOut').textContent = data?.error && /operator token/i.test(data.error)
+      ? 'Calibration needs the operator token: paste operatorToken from backend/.runtime/secrets.json into the token field.'
+      : JSON.stringify(data, null, 2);
+  };
+  $('calHeightBtn').onclick = () => post('/api/v2/calibrate/height', { heightCm: Number($('calHeight').value) }).then(calOut).catch((err) => calOut({ error: err.message }));
+  $('calWbBtn').onclick = () => {
+    const [x, y, width, height] = $('roi').value.split(',').map(Number);
+    post('/api/v2/calibrate/white-balance', { roi: { x, y, width, height } }).then(calOut).catch((err) => calOut({ error: err.message }));
+  };
+  $('calReset').onclick = () => post('/api/v2/calibration', null, 'DELETE').then(calOut).catch((err) => calOut({ error: err.message }));
+
+  // Today's spend comes from /health (open to this page); step timings need the operator token.
+  async function refreshMetrics() {
+    try {
+      const { budget } = await (await fetch(`${API}/health`)).json();
+      $('budget').textContent = `$${budget.spentUsd.toFixed(2)} / $${budget.limitUsd ?? '∞'} today`;
+    } catch { /* backend unreachable: the connection pill says so */ }
+    try {
+      const res = await fetch(`${API}/api/v2/metrics`, { headers: headers(false) });
+      $('metrics').textContent = res.ok ? JSON.stringify((await res.json()).steps, null, 2)
+        : 'Step timings need the operator token (see the dashboard).';
+    } catch { /* metrics are optional */ }
+  }
+
+  // A refused stream looks like a dropped connection; ask the API which it is, and say so plainly.
+  async function checkToken() {
+    try {
+      const res = await fetch(`${API}/api/v2/sessions/check-token`, { headers: headers(false) });
+      if (res.status !== 401) return;
+      source?.close();
+      $('conn').textContent = token() ? 'wrong token' : 'token needed'; $('conn').className = 'pill err';
+      status(token() ? 'That token was refused. Paste the kiosk token (apiToken in backend/.runtime/secrets.json).'
+                     : 'This mirror needs its kiosk token: paste apiToken from backend/.runtime/secrets.json below.', true);
+      const box = $('token').closest('details'); if (box) box.open = true;
+      $('token').focus();
+    } catch { /* backend unreachable: keep reconnecting */ }
+  }
+  $('token').onchange = () => { localStorage.setItem('kyraToken:kiosk', token()); connect(session?.id); refreshMetrics(); };
+  connect();
+  refreshMetrics();
+  fetch(`${API}/api/v2/calibration${q()}`, { headers: headers(false) }).then((r) => r.json()).then(calOut).catch(() => {});
+</script>
+</body>
+</html>

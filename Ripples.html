@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KYRA Smart Mirror - Wave Superposition</title>
+<style>
+  body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    overflow: hidden;
+  }
+  canvas {
+    display: block;
+  }
+</style>
+</head>
+<body>
+<canvas id="mirrorCanvas"></canvas>
+
+<script>
+  const canvas = document.getElementById('mirrorCanvas');
+  const ctx = canvas.getContext('2d');
+  
+  let width, height, cutoffRadius;
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+    // Fade out begins when the wave crosses this threshold
+    cutoffRadius = Math.max(width, height) * 0.55; 
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // --- WAVE PHYSICS CONSTANTS ---
+  const V = 0.5;          // Base expansion speed
+  const A = 0.002;        // Radial acceleration (Causes the offset gap to increase outward)
+  const DELAY = 45;       // Time gap between consecutive offset rings
+  const NUM_RINGS = 4;    // Number of rings per ripple source
+  const MAX_DEFORM = 18;  // Maximum pixel distortion when waves collide
+  
+  class RippleCenter {
+    constructor(x, y) {
+      this.x = x;
+      this.y = y;
+      this.age = 0;
+      this.rings = [];
+      
+      for (let i = 0; i < NUM_RINGS; i++) {
+        this.rings.push({
+          age: -i * DELAY, // Staggered start times
+          opacity: 1.0,
+        });
+      }
+    }
+
+    update() {
+      this.age++;
+      let allDead = true;
+      
+      for (let r of this.rings) {
+        if (r.age >= 0) {
+          // Calculate the theoretical radius using acceleration
+          let baseRad = V * r.age + A * r.age * r.age;
+          
+          // Strict cutoff time: perfectly solid until threshold, then rapid fade
+          if (baseRad > cutoffRadius) {
+            r.opacity -= 0.015; 
+          }
+        }
+        r.age++;
+        if (r.opacity > 0) allDead = false;
+      }
+      return allDead;
+    }
+
+    draw(ctx, allCenters) {
+      for (let r of this.rings) {
+        if (r.age <= 0 || r.opacity <= 0) continue;
+        
+        let baseRad = V * r.age + A * r.age * r.age;
+        
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(255, 255, 255, ${Math.max(0, r.opacity)})`;
+        ctx.lineWidth = 1.5;
+        
+        // Calculate points around the circumference
+        const points = 200; 
+        for (let i = 0; i <= points; i++) {
+          let angle = (i / points) * Math.PI * 2;
+          let px = this.x + baseRad * Math.cos(angle);
+          let py = this.y + baseRad * Math.sin(angle);
+          
+          let deformation = 0;
+          
+          // Calculate physical interference from ALL other active ripples
+          for (let other of allCenters) {
+            if (other === this) continue;
+            
+            let dist = Math.hypot(px - other.x, py - other.y);
+            
+            // Calculate the exact time (td) it took for the other wave to reach this point.
+            // Solved via quadratic equation: A(t^2) + V(t) - dist = 0
+            let td = (-V + Math.sqrt(V * V + 4 * A * dist)) / (2 * A);
+            
+            // Only apply deformation if the other wave has physically reached this coordinate
+            if (other.age > td) {
+              // Convert the time delta into a trigonometric phase
+              let phase = (other.age - td) * (Math.PI * 2) / DELAY;
+              
+              // Energy decays exponentially with distance
+              let amplitude = MAX_DEFORM * Math.exp(-dist / 250);
+              
+              deformation += Math.cos(phase) * amplitude;
+            }
+          }
+          
+          // Apply the superposition deformation to the radius
+          let finalRad = baseRad + deformation;
+          let fx = this.x + finalRad * Math.cos(angle);
+          let fy = this.y + finalRad * Math.sin(angle);
+          
+          if (i === 0) ctx.moveTo(fx, fy);
+          else ctx.lineTo(fx, fy);
+        }
+        ctx.closePath();
+        ctx.stroke();
+      }
+    }
+  }
+
+  let centers = [];
+
+  function spawnInterferenceGroup() {
+    const x = width / 2 + (Math.random() - 0.5) * width * 0.4;
+    const y = height / 2 + (Math.random() - 0.5) * height * 0.4;
+    centers.push(new RippleCenter(x, y));
+    
+    // Always drop a secondary ripple nearby to guarantee interaction and wave deformation
+    setTimeout(() => {
+      const altX = x + (Math.random() - 0.5) * 250;
+      const altY = y + (Math.random() - 0.5) * 250;
+      centers.push(new RippleCenter(altX, altY));
+    }, 600 + Math.random() * 500);
+  }
+
+  function animate() {
+    // Pure black void
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, width, height);
+
+    // Randomly trigger new wave events, keeping screen somewhat clean
+    if (Math.random() < 0.005 && centers.length < 6) {
+      spawnInterferenceGroup();
+    }
+
+    for (let i = centers.length - 1; i >= 0; i--) {
+      let isDead = centers[i].update();
+      centers[i].draw(ctx, centers);
+      
+      if (isDead) centers.splice(i, 1);
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  spawnInterferenceGroup();
+  animate();
+</script>
+</body>
+</html>

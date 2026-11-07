@@ -1,0 +1,30 @@
+{
+  "name": "kyra-backend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "test": "node --test 'test/*.test.js'",
+    "loadtest": "node scripts/loadtest.mjs",
+    "mock-openai": "node scripts/mock-openai.mjs",
+    "tune-thresholds": "node scripts/tune-thresholds.mjs",
+    "check": "npm test && cd ../sidecar && .venv/bin/python -m pytest -q tests",
+    "soak": "node --expose-gc scripts/soak.mjs",
+    "compare": "node scripts/compare-pipelines.mjs"
+  },
+  "dependencies": {
+    "@fastify/cors": "^10.0.1",
+    "@fastify/rate-limit": "^11.2.2",
+    "fastify": "^5.0.0",
+    "qrcode": "^1.5.4",
+    "sharp": "^0.35.5"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "gpt-tokenizer": "^4.1.0"
+  }
+}

@@ -1,0 +1,25 @@
+node_modules/
+dist/
+src-tauri/target/
+.DS_Store
+*.log
+src-tauri/sidecar/.venv/
+*.zip
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Visitor photos and generated try-ons
+How do I look/
+
+# Perception sidecar: virtualenv, downloaded models, per-installation calibration
+sidecar/.venv/
+sidecar/models/
+sidecar/calibration.json
+__pycache__/
+.pytest_cache/
+
+# Backend runtime state (daily spend ledger)
+backend/.runtime/

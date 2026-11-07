@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KYRA Style Me</title>
+<style>
+  :root { --bg: #0b0b0c; --panel: #161618; --line: #2a2a2e; --text: #f2f2f2; --muted: #9a9aa2; --accent: #e8e8e8; --warn: #ffb35c; --err: #ff7a7a; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 15px/1.45 -apple-system, system-ui, sans-serif; }
+  main { max-width: 1100px; margin: 0 auto; padding: 24px 16px 48px; display: grid; gap: 20px; grid-template-columns: 1fr 1fr; }
+  @media (max-width: 800px) { main { grid-template-columns: 1fr; } }
+  h1 { grid-column: 1 / -1; margin: 0; font-size: 22px; letter-spacing: 0.04em; }
+  h1 span { color: var(--muted); font-weight: 400; font-size: 14px; margin-left: 8px; }
+  section { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px; }
+  h2 { margin: 0 0 12px; font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .frame { position: relative; aspect-ratio: 3 / 4; background: #000; border-radius: 8px; overflow: hidden; }
+  .frame video, .frame img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+  button, .chip, input, select { font: inherit; color: var(--text); background: #222226; border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; }
+  button { cursor: pointer; }
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
+  button.primary { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
+  .chip { cursor: pointer; }
+  .chip.on { background: var(--accent); color: #000; border-color: var(--accent); }
+  input[type=text], input[type=password] { flex: 1; min-width: 160px; }
+  input[type=number] { width: 110px; }
+  label.file { cursor: pointer; }
+  label.file input { display: none; }
+  details { margin-top: 12px; }
+  summary { cursor: pointer; color: var(--muted); }
+  .status { color: var(--muted); margin-top: 12px; min-height: 1.4em; }
+  .status.err { color: var(--err); }
+  .kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 14px; }
+  .kv dt { color: var(--muted); }
+  .kv dd { margin: 0; }
+  .tag { font-size: 12px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; margin-left: 6px; }
+  .swatches { display: flex; gap: 10px; flex-wrap: wrap; margin: 12px 0; }
+  .sw { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+  .sw i { width: 22px; height: 22px; border-radius: 50%; border: 1px solid #444; display: inline-block; flex: none; }
+  ul.items { list-style: none; padding: 0; margin: 12px 0 0; display: grid; gap: 8px; }
+  ul.items li { display: flex; gap: 10px; align-items: center; }
+  ul.items small { color: var(--muted); }
+  .summary { font-size: 17px; margin: 14px 0 4px; }
+  .reason { color: var(--muted); margin: 0; }
+  .empty { color: var(--muted); }
+  .facecheck { margin-top: 8px; font-size: 13px; color: var(--muted); }
+  .facecheck.bad { color: var(--warn); }
+</style>
+</head>
+<body>
+<main>
+  <h1>KYRA · Style Me <span>dev test page for /api/style-me</span></h1>
+
+  <section>
+    <h2>1 · Capture</h2>
+    <div class="frame">
+      <video id="video" autoplay playsinline muted></video>
+      <img id="still" alt="" hidden>
+    </div>
+    <div class="row">
+      <button id="snap" disabled>Starting camera…</button>
+      <button id="retake" hidden>Retake</button>
+      <label class="file chip">Upload photo<input id="file" type="file" accept="image/*"></label>
+    </div>
+
+    <h2 style="margin-top:20px">2 · What are you dressing for?</h2>
+    <div class="row" id="styles"></div>
+    <div class="row">
+      <input id="customStyle" type="text" placeholder="…or type your own (e.g. beach wedding)">
+    </div>
+    <div class="row">
+      <select id="gender">
+        <option value="">Gender (optional)</option>
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+      <input id="height" type="number" min="100" max="230" placeholder="Height cm">
+    </div>
+    <details>
+      <summary>Preferences</summary>
+      <div class="row">
+        <select id="season">
+          <option value="">Any season</option>
+          <option>spring</option><option>summer</option><option>autumn</option><option>winter</option>
+        </select>
+        <select id="modesty">
+          <option value="standard">Standard coverage</option>
+          <option value="modest">Modest</option>
+          <option value="very-modest">Very modest</option>
+        </select>
+        <select id="budget">
+          <option value="">Any budget</option>
+          <option value="budget">Budget</option>
+          <option value="mid-range">Mid-range</option>
+          <option value="premium">Premium</option>
+        </select>
+      </div>
+      <div class="row">
+        <input id="weather" type="text" placeholder="Weather (e.g. rainy, 18°C)">
+        <input id="avoid" type="text" placeholder="Colours to avoid (comma separated)">
+      </div>
+      <div class="row">
+        <input id="token" type="password" placeholder="API token (only if API_TOKEN is set)">
+      </div>
+    </details>
+    <div class="row">
+      <button id="go" class="primary" disabled>Style me</button>
+    </div>
+    <div id="status" class="status"></div>
+  </section>
+
+  <section>
+    <h2>3 · Your look</h2>
+    <div class="frame"><img id="result" alt="" hidden></div>
+    <div id="facecheck" class="facecheck"></div>
+    <div id="analysis"><p class="empty">Take a photo, pick a style, press “Style me”.</p></div>
+    <div id="more" hidden>
+      <div class="row">
+        <input id="feedback" type="text" placeholder="Feedback (e.g. less formal, no black)">
+        <button id="another">Show me another</button>
+      </div>
+      <div class="row">
+        <button id="done">I’m done — delete my photos</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+  const API = 'http://localhost:3000';
+  const STYLES = ['Casual', 'Smart casual', 'Formal', 'Party', 'Wedding guest', 'Date night', 'Office', 'Ethnic / traditional'];
+
+  const $ = (id) => document.getElementById(id);
+  const video = $('video'), still = $('still'), status = $('status');
+  let captured = '';
+  let pickedStyle = '';
+  let sessionId = '';
+  let busy = false;
+
+  STYLES.forEach((name) => {
+    const b = document.createElement('button');
+    b.className = 'chip';
+    b.textContent = name;
+    b.onclick = () => {
+      pickedStyle = pickedStyle === name ? '' : name;
+      $('customStyle').value = '';
+      document.querySelectorAll('#styles .chip').forEach((c) => c.classList.toggle('on', c.textContent === pickedStyle));
+      refresh();
+    };
+    $('styles').appendChild(b);
+  });
+  $('customStyle').oninput = () => {
+    pickedStyle = '';
+    document.querySelectorAll('#styles .chip').forEach((c) => c.classList.remove('on'));
+    refresh();
+  };
+
+  const currentStyle = () => $('customStyle').value.trim() || pickedStyle;
+  const refresh = () => {
+    $('go').disabled = busy || !(captured && currentStyle());
+    $('another').disabled = busy || !sessionId;
+    $('done').disabled = busy || !sessionId;
+  };
+  const setStatus = (msg, isErr = false) => { status.textContent = msg; status.className = 'status' + (isErr ? ' err' : ''); };
+  const headers = () => {
+    const h = { 'Content-Type': 'application/json' };
+    if ($('token').value) h.Authorization = `Bearer ${$('token').value}`;
+    return h;
+  };
+
+  // Downscale to keep payloads well under the backend's 10 MB body limit.
+  function grab(source, w, h) {
+    const scale = Math.min(1, 1536 / Math.max(w, h));
+    const c = document.createElement('canvas');
+    c.width = Math.round(w * scale);
+    c.height = Math.round(h * scale);
+    const ctx = c.getContext('2d');
+    ctx.drawImage(source, 0, 0, c.width, c.height);
+    const px = ctx.getImageData(0, 0, c.width, c.height).data;
+    let sum = 0;
+    for (let i = 0; i < px.length; i += 4 * 97) sum += px[i] + px[i + 1] + px[i + 2];
+    return { dataUrl: c.toDataURL('image/jpeg', 0.9), brightness: sum / (3 * Math.ceil(px.length / (4 * 97))) };
+  }
+
+  // Webcams often deliver black frames while warming up; only enable capture once real pixels arrive.
+  async function waitForRealFrame() {
+    for (let i = 0; i < 50; i += 1) {
+      if (video.videoWidth && grab(video, video.videoWidth, video.videoHeight).brightness > 8) return true;
+      await new Promise((r) => setTimeout(r, 100));
+    }
+    return false;
+  }
+
+  navigator.mediaDevices?.getUserMedia({ video: { width: 1280, height: 1920 } })
+    .then(async (stream) => {
+      video.srcObject = stream;
+      await video.play().catch(() => {});
+      const ok = await waitForRealFrame();
+      $('snap').disabled = false;
+      $('snap').textContent = 'Take photo';
+      if (!ok) setStatus('Camera only shows black — check it is not covered, or use “Upload photo”.', true);
+    })
+    .catch(() => {
+      $('snap').textContent = 'No camera';
+      setStatus('No camera access — use “Upload photo” instead.');
+    });
+
+  function showStill(dataUrl) {
+    captured = dataUrl;
+    still.src = dataUrl;
+    still.hidden = false;
+    video.hidden = true;
+    $('retake').hidden = false;
+    setStatus('');
+    refresh();
+  }
+
+  $('snap').onclick = async () => {
+    if (!(await waitForRealFrame())) return setStatus('Camera frame is black. Check the camera and try again.', true);
+    showStill(grab(video, video.videoWidth, video.videoHeight).dataUrl);
+  };
+  $('retake').onclick = () => {
+    captured = '';
+    still.hidden = true;
+    video.hidden = false;
+    $('retake').hidden = true;
+    refresh();
+  };
+  $('file').onchange = (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const img = new Image();
+    img.onload = () => showStill(grab(img, img.naturalWidth, img.naturalHeight).dataUrl);
+    img.src = URL.createObjectURL(f);
+  };
+
+  function esc(s) { return String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
+
+  function preferences() {
+    return {
+      season: $('season').value,
+      modesty: $('modesty').value,
+      budget: $('budget').value,
+      weather: $('weather').value.trim(),
+      avoidColors: $('avoid').value
+    };
+  }
+
+  function renderAnalysis(data) {
+    const p = data.profile || {};
+    const m = p.skinMeasurement;
+    const height = p.heightCm ? `${p.heightCm} cm (${p.heightImpression || '—'})` : `${p.heightImpression || '—'} (estimated)`;
+    const source = p.skinToneSource === 'measured'
+      ? `<span class="tag">measured · ${esc(m.confidence)}</span>`
+      : '<span class="tag">AI estimate</span>';
+    $('analysis').innerHTML = `
+      <dl class="kv" style="margin-top:14px">
+        <dt>Undertone</dt><dd>${esc(p.skinUndertone || '—')} ${source}</dd>
+        <dt>Skin depth</dt><dd>${esc(p.skinDepth || '—')}</dd>
+        ${m ? `<dt>Measured</dt><dd>hue ${esc(m.hueAngle)}° · ITA ${esc(m.ita)}° · ${esc(m.sampleCount)} px</dd>` : ''}
+        <dt>Height</dt><dd>${esc(height)}</dd>
+        <dt>Frame</dt><dd>${esc(p.frame || '—')}</dd>
+        <dt>Option</dt><dd>#${esc(data.optionNumber)} · ${esc(data.style)}</dd>
+      </dl>
+      <div class="swatches">${(data.palette || []).map((c) => `<span class="sw"><i style="background:${esc(c.hex)}"></i>${esc(c.name)}</span>`).join('')}</div>
+      <p class="summary">${esc(data.outfit?.summary)}</p>
+      <p class="reason">${esc(data.outfit?.reasoning)}</p>
+      <ul class="items">${(data.outfit?.items || []).map((it) => `
+        <li><span class="sw"><i style="background:${esc(it.hex || '#555')}"></i></span>
+          <span>${esc(it.name)}<br><small>${esc([it.category, it.fit, it.material].filter(Boolean).join(' · '))}</small></span></li>`).join('')}
+      </ul>`;
+  }
+
+  function renderFaceCheck(fc) {
+    const el = $('facecheck');
+    if (!fc?.checked) { el.textContent = 'Face check: not run.'; el.className = 'facecheck'; return; }
+    el.textContent = fc.passed
+      ? `Face check passed (score ${fc.score}, ${fc.attempts} attempt${fc.attempts > 1 ? 's' : ''}).`
+      : `Face may differ from the photo (score ${fc.score}): ${fc.issues || 'unknown'}.`;
+    el.className = 'facecheck' + (fc.passed ? '' : ' bad');
+  }
+
+  async function poll(jobId, started) {
+    const res = await fetch(`${API}/api/virtual-tryon/${jobId}`, { headers: headers() });
+    const job = await res.json();
+    if (job.status === 'done') {
+      $('result').src = job.result.imageDataUrl;
+      $('result').hidden = false;
+      renderFaceCheck(job.result.faceCheck);
+      setStatus(`Done in ${Math.round((Date.now() - started) / 1000)}s.`);
+      busy = false;
+      return refresh();
+    }
+    if (job.status === 'failed' || !res.ok) {
+      setStatus(job.error || 'Image generation failed.', true);
+      busy = false;
+      return refresh();
+    }
+    setStatus(`Rendering your look… ${Math.round((Date.now() - started) / 1000)}s`);
+    setTimeout(() => poll(jobId, started), 2000);
+  }
+
+  async function request(url, body, label) {
+    busy = true;
+    refresh();
+    $('result').hidden = true;
+    $('facecheck').textContent = '';
+    const started = Date.now();
+    setStatus(label);
+    try {
+      const res = await fetch(url, { method: 'POST', headers: headers(), body: JSON.stringify(body) });
+      const data = await res.json();
+      if (res.status === 422) throw new Error(`Retake needed: ${data.error}`);
+      if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
+      sessionId = data.sessionId;
+      $('more').hidden = false;
+      renderAnalysis(data);
+      poll(data.virtualTryOnJobId, started);
+    } catch (err) {
+      setStatus(err.message === 'Failed to fetch' ? 'Backend not reachable on localhost:3000.' : err.message, true);
+      busy = false;
+      refresh();
+    }
+  }
+
+  $('go').onclick = () => {
+    const body = { imageDataUrl: captured, style: currentStyle(), preferences: preferences() };
+    if ($('gender').value) body.gender = $('gender').value;
+    if ($('height').value) body.heightCm = Number($('height').value);
+    request(`${API}/api/style-me`, body, 'Checking photo, measuring skin tone, designing outfit…');
+  };
+
+  $('another').onclick = () => {
+    const body = { feedback: $('feedback').value.trim(), preferences: preferences() };
+    if (currentStyle()) body.style = currentStyle();
+    $('feedback').value = '';
+    request(`${API}/api/style-me/${sessionId}/next`, body, 'Designing another option…');
+  };
+
+  $('done').onclick = async () => {
+    const { 'Content-Type': _, ...auth } = headers();
+    const res = await fetch(`${API}/api/style-me/${sessionId}`, { method: 'DELETE', headers: auth });
+    const data = await res.json().catch(() => ({}));
+    sessionId = '';
+    $('more').hidden = true;
+    $('result').hidden = true;
+    $('facecheck').textContent = '';
+    $('analysis').innerHTML = '<p class="empty">Session ended.</p>';
+    setStatus(res.ok ? `Deleted ${data.filesDeleted} file(s) from this session.` : (data.error || 'Delete failed.'), !res.ok);
+    refresh();
+  };
+</script>
+</body>
+</html>

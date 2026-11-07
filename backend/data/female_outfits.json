@@ -1,0 +1,7366 @@
+[
+  {
+    "outfit_id": "female_outfit_9abf95",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_9abf95.png",
+    "items": [
+      {
+        "image_id": "t1",
+        "image_path": "processed_items/t1.png",
+        "type": "Tank Top",
+        "category": "top",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Cream Smocked Tank",
+        "texture": "smocked knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#EFE5D6",
+            "percentage": 80
+          },
+          {
+            "hex": "#D9CDBA",
+            "percentage": 15
+          },
+          {
+            "hex": "#BEB29E",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_585e19",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_585e19.png",
+    "items": [
+      {
+        "image_id": "o1",
+        "image_path": "processed_items/o1.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Beige Utility Jacket",
+        "texture": "matte woven fabric",
+        "material": "cotton",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#B9A98F",
+            "percentage": 75
+          },
+          {
+            "hex": "#8E7F69",
+            "percentage": 15
+          },
+          {
+            "hex": "#6E6252",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t1",
+        "image_path": "processed_items/t1.png",
+        "type": "Tank Top",
+        "category": "top",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Cream Smocked Tank",
+        "texture": "smocked knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#EFE5D6",
+            "percentage": 80
+          },
+          {
+            "hex": "#D9CDBA",
+            "percentage": 15
+          },
+          {
+            "hex": "#BEB29E",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_cd404c",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_cd404c.png",
+    "items": [
+      {
+        "image_id": "o2",
+        "image_path": "processed_items/o2.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Denim Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Blue Denim Jacket",
+        "texture": "rugged denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#4F6F8F",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F8FAF",
+            "percentage": 20
+          },
+          {
+            "hex": "#2F4A63",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t1",
+        "image_path": "processed_items/t1.png",
+        "type": "Tank Top",
+        "category": "top",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Cream Smocked Tank",
+        "texture": "smocked knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#EFE5D6",
+            "percentage": 80
+          },
+          {
+            "hex": "#D9CDBA",
+            "percentage": 15
+          },
+          {
+            "hex": "#BEB29E",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_47e68b",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_47e68b.png",
+    "items": [
+      {
+        "image_id": "o3",
+        "image_path": "processed_items/o3.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Burgundy",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Burgundy Leather Jacket",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#5A2323",
+            "percentage": 75
+          },
+          {
+            "hex": "#7A3A3A",
+            "percentage": 15
+          },
+          {
+            "hex": "#3A1616",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t1",
+        "image_path": "processed_items/t1.png",
+        "type": "Tank Top",
+        "category": "top",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Cream Smocked Tank",
+        "texture": "smocked knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#EFE5D6",
+            "percentage": 80
+          },
+          {
+            "hex": "#D9CDBA",
+            "percentage": 15
+          },
+          {
+            "hex": "#BEB29E",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_e813f7",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_e813f7.png",
+    "items": [
+      {
+        "image_id": "t1",
+        "image_path": "processed_items/t1.png",
+        "type": "Tank Top",
+        "category": "top",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Cream Smocked Tank",
+        "texture": "smocked knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#EFE5D6",
+            "percentage": 80
+          },
+          {
+            "hex": "#D9CDBA",
+            "percentage": 15
+          },
+          {
+            "hex": "#BEB29E",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_fae668",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_fae668.png",
+    "items": [
+      {
+        "image_id": "o1",
+        "image_path": "processed_items/o1.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Beige Utility Jacket",
+        "texture": "matte woven fabric",
+        "material": "cotton",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#B9A98F",
+            "percentage": 75
+          },
+          {
+            "hex": "#8E7F69",
+            "percentage": 15
+          },
+          {
+            "hex": "#6E6252",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t1",
+        "image_path": "processed_items/t1.png",
+        "type": "Tank Top",
+        "category": "top",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Cream Smocked Tank",
+        "texture": "smocked knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#EFE5D6",
+            "percentage": 80
+          },
+          {
+            "hex": "#D9CDBA",
+            "percentage": 15
+          },
+          {
+            "hex": "#BEB29E",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_a9179d",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_a9179d.png",
+    "items": [
+      {
+        "image_id": "o2",
+        "image_path": "processed_items/o2.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Denim Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Blue Denim Jacket",
+        "texture": "rugged denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#4F6F8F",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F8FAF",
+            "percentage": 20
+          },
+          {
+            "hex": "#2F4A63",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t1",
+        "image_path": "processed_items/t1.png",
+        "type": "Tank Top",
+        "category": "top",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Cream Smocked Tank",
+        "texture": "smocked knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#EFE5D6",
+            "percentage": 80
+          },
+          {
+            "hex": "#D9CDBA",
+            "percentage": 15
+          },
+          {
+            "hex": "#BEB29E",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_65a7ab",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_65a7ab.png",
+    "items": [
+      {
+        "image_id": "o3",
+        "image_path": "processed_items/o3.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Burgundy",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Burgundy Leather Jacket",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#5A2323",
+            "percentage": 75
+          },
+          {
+            "hex": "#7A3A3A",
+            "percentage": 15
+          },
+          {
+            "hex": "#3A1616",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t1",
+        "image_path": "processed_items/t1.png",
+        "type": "Tank Top",
+        "category": "top",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Cream Smocked Tank",
+        "texture": "smocked knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#EFE5D6",
+            "percentage": 80
+          },
+          {
+            "hex": "#D9CDBA",
+            "percentage": 15
+          },
+          {
+            "hex": "#BEB29E",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_0becac",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_0becac.png",
+    "items": [
+      {
+        "image_id": "t1",
+        "image_path": "processed_items/t1.png",
+        "type": "Tank Top",
+        "category": "top",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Cream Smocked Tank",
+        "texture": "smocked knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#EFE5D6",
+            "percentage": 80
+          },
+          {
+            "hex": "#D9CDBA",
+            "percentage": 15
+          },
+          {
+            "hex": "#BEB29E",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_021bb3",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_021bb3.png",
+    "items": [
+      {
+        "image_id": "o1",
+        "image_path": "processed_items/o1.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Beige Utility Jacket",
+        "texture": "matte woven fabric",
+        "material": "cotton",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#B9A98F",
+            "percentage": 75
+          },
+          {
+            "hex": "#8E7F69",
+            "percentage": 15
+          },
+          {
+            "hex": "#6E6252",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t1",
+        "image_path": "processed_items/t1.png",
+        "type": "Tank Top",
+        "category": "top",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Cream Smocked Tank",
+        "texture": "smocked knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#EFE5D6",
+            "percentage": 80
+          },
+          {
+            "hex": "#D9CDBA",
+            "percentage": 15
+          },
+          {
+            "hex": "#BEB29E",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_90c769",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_90c769.png",
+    "items": [
+      {
+        "image_id": "o2",
+        "image_path": "processed_items/o2.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Denim Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Blue Denim Jacket",
+        "texture": "rugged denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#4F6F8F",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F8FAF",
+            "percentage": 20
+          },
+          {
+            "hex": "#2F4A63",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t1",
+        "image_path": "processed_items/t1.png",
+        "type": "Tank Top",
+        "category": "top",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Cream Smocked Tank",
+        "texture": "smocked knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#EFE5D6",
+            "percentage": 80
+          },
+          {
+            "hex": "#D9CDBA",
+            "percentage": 15
+          },
+          {
+            "hex": "#BEB29E",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_e3db67",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_e3db67.png",
+    "items": [
+      {
+        "image_id": "o3",
+        "image_path": "processed_items/o3.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Burgundy",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Burgundy Leather Jacket",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#5A2323",
+            "percentage": 75
+          },
+          {
+            "hex": "#7A3A3A",
+            "percentage": 15
+          },
+          {
+            "hex": "#3A1616",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t1",
+        "image_path": "processed_items/t1.png",
+        "type": "Tank Top",
+        "category": "top",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Cream Smocked Tank",
+        "texture": "smocked knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#EFE5D6",
+            "percentage": 80
+          },
+          {
+            "hex": "#D9CDBA",
+            "percentage": 15
+          },
+          {
+            "hex": "#BEB29E",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_9ed1ab",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_9ed1ab.png",
+    "items": [
+      {
+        "image_id": "t2",
+        "image_path": "processed_items/t2.png",
+        "type": "Camisole",
+        "category": "top",
+        "gender": "female",
+        "color": "Chocolate Brown",
+        "pattern": "polka",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Brown Polka Camisole",
+        "texture": "smooth woven",
+        "material": "viscose",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6B3E2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#F3E6D8",
+            "percentage": 20
+          },
+          {
+            "hex": "#3E241B",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_e452a4",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_e452a4.png",
+    "items": [
+      {
+        "image_id": "o1",
+        "image_path": "processed_items/o1.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Beige Utility Jacket",
+        "texture": "matte woven fabric",
+        "material": "cotton",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#B9A98F",
+            "percentage": 75
+          },
+          {
+            "hex": "#8E7F69",
+            "percentage": 15
+          },
+          {
+            "hex": "#6E6252",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t2",
+        "image_path": "processed_items/t2.png",
+        "type": "Camisole",
+        "category": "top",
+        "gender": "female",
+        "color": "Chocolate Brown",
+        "pattern": "polka",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Brown Polka Camisole",
+        "texture": "smooth woven",
+        "material": "viscose",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6B3E2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#F3E6D8",
+            "percentage": 20
+          },
+          {
+            "hex": "#3E241B",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_c48f1e",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_c48f1e.png",
+    "items": [
+      {
+        "image_id": "o2",
+        "image_path": "processed_items/o2.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Denim Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Blue Denim Jacket",
+        "texture": "rugged denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#4F6F8F",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F8FAF",
+            "percentage": 20
+          },
+          {
+            "hex": "#2F4A63",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t2",
+        "image_path": "processed_items/t2.png",
+        "type": "Camisole",
+        "category": "top",
+        "gender": "female",
+        "color": "Chocolate Brown",
+        "pattern": "polka",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Brown Polka Camisole",
+        "texture": "smooth woven",
+        "material": "viscose",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6B3E2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#F3E6D8",
+            "percentage": 20
+          },
+          {
+            "hex": "#3E241B",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_114821",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_114821.png",
+    "items": [
+      {
+        "image_id": "o3",
+        "image_path": "processed_items/o3.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Burgundy",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Burgundy Leather Jacket",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#5A2323",
+            "percentage": 75
+          },
+          {
+            "hex": "#7A3A3A",
+            "percentage": 15
+          },
+          {
+            "hex": "#3A1616",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t2",
+        "image_path": "processed_items/t2.png",
+        "type": "Camisole",
+        "category": "top",
+        "gender": "female",
+        "color": "Chocolate Brown",
+        "pattern": "polka",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Brown Polka Camisole",
+        "texture": "smooth woven",
+        "material": "viscose",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6B3E2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#F3E6D8",
+            "percentage": 20
+          },
+          {
+            "hex": "#3E241B",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_e0cdfd",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_e0cdfd.png",
+    "items": [
+      {
+        "image_id": "t2",
+        "image_path": "processed_items/t2.png",
+        "type": "Camisole",
+        "category": "top",
+        "gender": "female",
+        "color": "Chocolate Brown",
+        "pattern": "polka",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Brown Polka Camisole",
+        "texture": "smooth woven",
+        "material": "viscose",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6B3E2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#F3E6D8",
+            "percentage": 20
+          },
+          {
+            "hex": "#3E241B",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_2cc510",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_2cc510.png",
+    "items": [
+      {
+        "image_id": "o1",
+        "image_path": "processed_items/o1.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Beige Utility Jacket",
+        "texture": "matte woven fabric",
+        "material": "cotton",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#B9A98F",
+            "percentage": 75
+          },
+          {
+            "hex": "#8E7F69",
+            "percentage": 15
+          },
+          {
+            "hex": "#6E6252",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t2",
+        "image_path": "processed_items/t2.png",
+        "type": "Camisole",
+        "category": "top",
+        "gender": "female",
+        "color": "Chocolate Brown",
+        "pattern": "polka",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Brown Polka Camisole",
+        "texture": "smooth woven",
+        "material": "viscose",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6B3E2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#F3E6D8",
+            "percentage": 20
+          },
+          {
+            "hex": "#3E241B",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_3e8abf",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_3e8abf.png",
+    "items": [
+      {
+        "image_id": "o2",
+        "image_path": "processed_items/o2.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Denim Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Blue Denim Jacket",
+        "texture": "rugged denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#4F6F8F",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F8FAF",
+            "percentage": 20
+          },
+          {
+            "hex": "#2F4A63",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t2",
+        "image_path": "processed_items/t2.png",
+        "type": "Camisole",
+        "category": "top",
+        "gender": "female",
+        "color": "Chocolate Brown",
+        "pattern": "polka",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Brown Polka Camisole",
+        "texture": "smooth woven",
+        "material": "viscose",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6B3E2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#F3E6D8",
+            "percentage": 20
+          },
+          {
+            "hex": "#3E241B",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_84e294",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_84e294.png",
+    "items": [
+      {
+        "image_id": "o3",
+        "image_path": "processed_items/o3.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Burgundy",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Burgundy Leather Jacket",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#5A2323",
+            "percentage": 75
+          },
+          {
+            "hex": "#7A3A3A",
+            "percentage": 15
+          },
+          {
+            "hex": "#3A1616",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t2",
+        "image_path": "processed_items/t2.png",
+        "type": "Camisole",
+        "category": "top",
+        "gender": "female",
+        "color": "Chocolate Brown",
+        "pattern": "polka",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Brown Polka Camisole",
+        "texture": "smooth woven",
+        "material": "viscose",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6B3E2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#F3E6D8",
+            "percentage": 20
+          },
+          {
+            "hex": "#3E241B",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_02a215",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_02a215.png",
+    "items": [
+      {
+        "image_id": "t2",
+        "image_path": "processed_items/t2.png",
+        "type": "Camisole",
+        "category": "top",
+        "gender": "female",
+        "color": "Chocolate Brown",
+        "pattern": "polka",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Brown Polka Camisole",
+        "texture": "smooth woven",
+        "material": "viscose",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6B3E2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#F3E6D8",
+            "percentage": 20
+          },
+          {
+            "hex": "#3E241B",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_274955",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_274955.png",
+    "items": [
+      {
+        "image_id": "o1",
+        "image_path": "processed_items/o1.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Beige Utility Jacket",
+        "texture": "matte woven fabric",
+        "material": "cotton",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#B9A98F",
+            "percentage": 75
+          },
+          {
+            "hex": "#8E7F69",
+            "percentage": 15
+          },
+          {
+            "hex": "#6E6252",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t2",
+        "image_path": "processed_items/t2.png",
+        "type": "Camisole",
+        "category": "top",
+        "gender": "female",
+        "color": "Chocolate Brown",
+        "pattern": "polka",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Brown Polka Camisole",
+        "texture": "smooth woven",
+        "material": "viscose",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6B3E2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#F3E6D8",
+            "percentage": 20
+          },
+          {
+            "hex": "#3E241B",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_73a235",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_73a235.png",
+    "items": [
+      {
+        "image_id": "o2",
+        "image_path": "processed_items/o2.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Denim Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Blue Denim Jacket",
+        "texture": "rugged denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#4F6F8F",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F8FAF",
+            "percentage": 20
+          },
+          {
+            "hex": "#2F4A63",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t2",
+        "image_path": "processed_items/t2.png",
+        "type": "Camisole",
+        "category": "top",
+        "gender": "female",
+        "color": "Chocolate Brown",
+        "pattern": "polka",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Brown Polka Camisole",
+        "texture": "smooth woven",
+        "material": "viscose",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6B3E2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#F3E6D8",
+            "percentage": 20
+          },
+          {
+            "hex": "#3E241B",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_c586ee",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_c586ee.png",
+    "items": [
+      {
+        "image_id": "o3",
+        "image_path": "processed_items/o3.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Burgundy",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Burgundy Leather Jacket",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#5A2323",
+            "percentage": 75
+          },
+          {
+            "hex": "#7A3A3A",
+            "percentage": 15
+          },
+          {
+            "hex": "#3A1616",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t2",
+        "image_path": "processed_items/t2.png",
+        "type": "Camisole",
+        "category": "top",
+        "gender": "female",
+        "color": "Chocolate Brown",
+        "pattern": "polka",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Brown Polka Camisole",
+        "texture": "smooth woven",
+        "material": "viscose",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6B3E2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#F3E6D8",
+            "percentage": 20
+          },
+          {
+            "hex": "#3E241B",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_f59cb7",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_f59cb7.png",
+    "items": [
+      {
+        "image_id": "t3",
+        "image_path": "processed_items/t3.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Ivory Textured Top",
+        "texture": "crinkled knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#F4EFE6",
+            "percentage": 80
+          },
+          {
+            "hex": "#DCD4C6",
+            "percentage": 15
+          },
+          {
+            "hex": "#BFB6A8",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_278e22",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_278e22.png",
+    "items": [
+      {
+        "image_id": "o1",
+        "image_path": "processed_items/o1.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Beige Utility Jacket",
+        "texture": "matte woven fabric",
+        "material": "cotton",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#B9A98F",
+            "percentage": 75
+          },
+          {
+            "hex": "#8E7F69",
+            "percentage": 15
+          },
+          {
+            "hex": "#6E6252",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t3",
+        "image_path": "processed_items/t3.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Ivory Textured Top",
+        "texture": "crinkled knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#F4EFE6",
+            "percentage": 80
+          },
+          {
+            "hex": "#DCD4C6",
+            "percentage": 15
+          },
+          {
+            "hex": "#BFB6A8",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_bfcdb8",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_bfcdb8.png",
+    "items": [
+      {
+        "image_id": "o2",
+        "image_path": "processed_items/o2.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Denim Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Blue Denim Jacket",
+        "texture": "rugged denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#4F6F8F",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F8FAF",
+            "percentage": 20
+          },
+          {
+            "hex": "#2F4A63",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t3",
+        "image_path": "processed_items/t3.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Ivory Textured Top",
+        "texture": "crinkled knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#F4EFE6",
+            "percentage": 80
+          },
+          {
+            "hex": "#DCD4C6",
+            "percentage": 15
+          },
+          {
+            "hex": "#BFB6A8",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_6679bb",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_6679bb.png",
+    "items": [
+      {
+        "image_id": "o3",
+        "image_path": "processed_items/o3.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Burgundy",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Burgundy Leather Jacket",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#5A2323",
+            "percentage": 75
+          },
+          {
+            "hex": "#7A3A3A",
+            "percentage": 15
+          },
+          {
+            "hex": "#3A1616",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t3",
+        "image_path": "processed_items/t3.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Ivory Textured Top",
+        "texture": "crinkled knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#F4EFE6",
+            "percentage": 80
+          },
+          {
+            "hex": "#DCD4C6",
+            "percentage": 15
+          },
+          {
+            "hex": "#BFB6A8",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_4328d1",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_4328d1.png",
+    "items": [
+      {
+        "image_id": "t3",
+        "image_path": "processed_items/t3.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Ivory Textured Top",
+        "texture": "crinkled knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#F4EFE6",
+            "percentage": 80
+          },
+          {
+            "hex": "#DCD4C6",
+            "percentage": 15
+          },
+          {
+            "hex": "#BFB6A8",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_bd6e7d",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_bd6e7d.png",
+    "items": [
+      {
+        "image_id": "o1",
+        "image_path": "processed_items/o1.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Beige Utility Jacket",
+        "texture": "matte woven fabric",
+        "material": "cotton",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#B9A98F",
+            "percentage": 75
+          },
+          {
+            "hex": "#8E7F69",
+            "percentage": 15
+          },
+          {
+            "hex": "#6E6252",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t3",
+        "image_path": "processed_items/t3.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Ivory Textured Top",
+        "texture": "crinkled knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#F4EFE6",
+            "percentage": 80
+          },
+          {
+            "hex": "#DCD4C6",
+            "percentage": 15
+          },
+          {
+            "hex": "#BFB6A8",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_0a8717",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_0a8717.png",
+    "items": [
+      {
+        "image_id": "o2",
+        "image_path": "processed_items/o2.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Denim Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Blue Denim Jacket",
+        "texture": "rugged denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#4F6F8F",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F8FAF",
+            "percentage": 20
+          },
+          {
+            "hex": "#2F4A63",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t3",
+        "image_path": "processed_items/t3.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Ivory Textured Top",
+        "texture": "crinkled knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#F4EFE6",
+            "percentage": 80
+          },
+          {
+            "hex": "#DCD4C6",
+            "percentage": 15
+          },
+          {
+            "hex": "#BFB6A8",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_e53aec",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_e53aec.png",
+    "items": [
+      {
+        "image_id": "o3",
+        "image_path": "processed_items/o3.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Burgundy",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Burgundy Leather Jacket",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#5A2323",
+            "percentage": 75
+          },
+          {
+            "hex": "#7A3A3A",
+            "percentage": 15
+          },
+          {
+            "hex": "#3A1616",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t3",
+        "image_path": "processed_items/t3.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Ivory Textured Top",
+        "texture": "crinkled knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#F4EFE6",
+            "percentage": 80
+          },
+          {
+            "hex": "#DCD4C6",
+            "percentage": 15
+          },
+          {
+            "hex": "#BFB6A8",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_e5d244",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_e5d244.png",
+    "items": [
+      {
+        "image_id": "t3",
+        "image_path": "processed_items/t3.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Ivory Textured Top",
+        "texture": "crinkled knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#F4EFE6",
+            "percentage": 80
+          },
+          {
+            "hex": "#DCD4C6",
+            "percentage": 15
+          },
+          {
+            "hex": "#BFB6A8",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_9b282b",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_9b282b.png",
+    "items": [
+      {
+        "image_id": "o1",
+        "image_path": "processed_items/o1.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Beige Utility Jacket",
+        "texture": "matte woven fabric",
+        "material": "cotton",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#B9A98F",
+            "percentage": 75
+          },
+          {
+            "hex": "#8E7F69",
+            "percentage": 15
+          },
+          {
+            "hex": "#6E6252",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t3",
+        "image_path": "processed_items/t3.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Ivory Textured Top",
+        "texture": "crinkled knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#F4EFE6",
+            "percentage": 80
+          },
+          {
+            "hex": "#DCD4C6",
+            "percentage": 15
+          },
+          {
+            "hex": "#BFB6A8",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_07b599",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_07b599.png",
+    "items": [
+      {
+        "image_id": "o2",
+        "image_path": "processed_items/o2.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Denim Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Blue Denim Jacket",
+        "texture": "rugged denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#4F6F8F",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F8FAF",
+            "percentage": 20
+          },
+          {
+            "hex": "#2F4A63",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t3",
+        "image_path": "processed_items/t3.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Ivory Textured Top",
+        "texture": "crinkled knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#F4EFE6",
+            "percentage": 80
+          },
+          {
+            "hex": "#DCD4C6",
+            "percentage": 15
+          },
+          {
+            "hex": "#BFB6A8",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_3dee79",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_3dee79.png",
+    "items": [
+      {
+        "image_id": "o3",
+        "image_path": "processed_items/o3.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Burgundy",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Burgundy Leather Jacket",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#5A2323",
+            "percentage": 75
+          },
+          {
+            "hex": "#7A3A3A",
+            "percentage": 15
+          },
+          {
+            "hex": "#3A1616",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t3",
+        "image_path": "processed_items/t3.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Ivory Textured Top",
+        "texture": "crinkled knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#F4EFE6",
+            "percentage": 80
+          },
+          {
+            "hex": "#DCD4C6",
+            "percentage": 15
+          },
+          {
+            "hex": "#BFB6A8",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_eb6199",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_eb6199.png",
+    "items": [
+      {
+        "image_id": "t4",
+        "image_path": "processed_items/t4.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "medium",
+        "article_name": "Ivory Peplum Blouse",
+        "texture": "light crinkled cotton",
+        "material": "cotton",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#F3EFE7",
+            "percentage": 80
+          },
+          {
+            "hex": "#E1DBCF",
+            "percentage": 15
+          },
+          {
+            "hex": "#C8C1B4",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_4232a3",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_4232a3.png",
+    "items": [
+      {
+        "image_id": "o1",
+        "image_path": "processed_items/o1.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Beige Utility Jacket",
+        "texture": "matte woven fabric",
+        "material": "cotton",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#B9A98F",
+            "percentage": 75
+          },
+          {
+            "hex": "#8E7F69",
+            "percentage": 15
+          },
+          {
+            "hex": "#6E6252",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t4",
+        "image_path": "processed_items/t4.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "medium",
+        "article_name": "Ivory Peplum Blouse",
+        "texture": "light crinkled cotton",
+        "material": "cotton",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#F3EFE7",
+            "percentage": 80
+          },
+          {
+            "hex": "#E1DBCF",
+            "percentage": 15
+          },
+          {
+            "hex": "#C8C1B4",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_449e4c",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_449e4c.png",
+    "items": [
+      {
+        "image_id": "o2",
+        "image_path": "processed_items/o2.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Denim Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Blue Denim Jacket",
+        "texture": "rugged denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#4F6F8F",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F8FAF",
+            "percentage": 20
+          },
+          {
+            "hex": "#2F4A63",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t4",
+        "image_path": "processed_items/t4.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "medium",
+        "article_name": "Ivory Peplum Blouse",
+        "texture": "light crinkled cotton",
+        "material": "cotton",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#F3EFE7",
+            "percentage": 80
+          },
+          {
+            "hex": "#E1DBCF",
+            "percentage": 15
+          },
+          {
+            "hex": "#C8C1B4",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_2c09f9",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_2c09f9.png",
+    "items": [
+      {
+        "image_id": "o3",
+        "image_path": "processed_items/o3.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Burgundy",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Burgundy Leather Jacket",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#5A2323",
+            "percentage": 75
+          },
+          {
+            "hex": "#7A3A3A",
+            "percentage": 15
+          },
+          {
+            "hex": "#3A1616",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t4",
+        "image_path": "processed_items/t4.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "medium",
+        "article_name": "Ivory Peplum Blouse",
+        "texture": "light crinkled cotton",
+        "material": "cotton",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#F3EFE7",
+            "percentage": 80
+          },
+          {
+            "hex": "#E1DBCF",
+            "percentage": 15
+          },
+          {
+            "hex": "#C8C1B4",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_35c770",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_35c770.png",
+    "items": [
+      {
+        "image_id": "t4",
+        "image_path": "processed_items/t4.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "medium",
+        "article_name": "Ivory Peplum Blouse",
+        "texture": "light crinkled cotton",
+        "material": "cotton",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#F3EFE7",
+            "percentage": 80
+          },
+          {
+            "hex": "#E1DBCF",
+            "percentage": 15
+          },
+          {
+            "hex": "#C8C1B4",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_4efd76",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_4efd76.png",
+    "items": [
+      {
+        "image_id": "o1",
+        "image_path": "processed_items/o1.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Beige Utility Jacket",
+        "texture": "matte woven fabric",
+        "material": "cotton",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#B9A98F",
+            "percentage": 75
+          },
+          {
+            "hex": "#8E7F69",
+            "percentage": 15
+          },
+          {
+            "hex": "#6E6252",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t4",
+        "image_path": "processed_items/t4.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "medium",
+        "article_name": "Ivory Peplum Blouse",
+        "texture": "light crinkled cotton",
+        "material": "cotton",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#F3EFE7",
+            "percentage": 80
+          },
+          {
+            "hex": "#E1DBCF",
+            "percentage": 15
+          },
+          {
+            "hex": "#C8C1B4",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_f82f85",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_f82f85.png",
+    "items": [
+      {
+        "image_id": "o2",
+        "image_path": "processed_items/o2.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Denim Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Blue Denim Jacket",
+        "texture": "rugged denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#4F6F8F",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F8FAF",
+            "percentage": 20
+          },
+          {
+            "hex": "#2F4A63",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t4",
+        "image_path": "processed_items/t4.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "medium",
+        "article_name": "Ivory Peplum Blouse",
+        "texture": "light crinkled cotton",
+        "material": "cotton",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#F3EFE7",
+            "percentage": 80
+          },
+          {
+            "hex": "#E1DBCF",
+            "percentage": 15
+          },
+          {
+            "hex": "#C8C1B4",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_b13c6a",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_b13c6a.png",
+    "items": [
+      {
+        "image_id": "o3",
+        "image_path": "processed_items/o3.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Burgundy",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Burgundy Leather Jacket",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#5A2323",
+            "percentage": 75
+          },
+          {
+            "hex": "#7A3A3A",
+            "percentage": 15
+          },
+          {
+            "hex": "#3A1616",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t4",
+        "image_path": "processed_items/t4.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "medium",
+        "article_name": "Ivory Peplum Blouse",
+        "texture": "light crinkled cotton",
+        "material": "cotton",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#F3EFE7",
+            "percentage": 80
+          },
+          {
+            "hex": "#E1DBCF",
+            "percentage": 15
+          },
+          {
+            "hex": "#C8C1B4",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_62af02",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_62af02.png",
+    "items": [
+      {
+        "image_id": "t4",
+        "image_path": "processed_items/t4.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "medium",
+        "article_name": "Ivory Peplum Blouse",
+        "texture": "light crinkled cotton",
+        "material": "cotton",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#F3EFE7",
+            "percentage": 80
+          },
+          {
+            "hex": "#E1DBCF",
+            "percentage": 15
+          },
+          {
+            "hex": "#C8C1B4",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_ec7941",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_ec7941.png",
+    "items": [
+      {
+        "image_id": "o1",
+        "image_path": "processed_items/o1.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Beige Utility Jacket",
+        "texture": "matte woven fabric",
+        "material": "cotton",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#B9A98F",
+            "percentage": 75
+          },
+          {
+            "hex": "#8E7F69",
+            "percentage": 15
+          },
+          {
+            "hex": "#6E6252",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t4",
+        "image_path": "processed_items/t4.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "medium",
+        "article_name": "Ivory Peplum Blouse",
+        "texture": "light crinkled cotton",
+        "material": "cotton",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#F3EFE7",
+            "percentage": 80
+          },
+          {
+            "hex": "#E1DBCF",
+            "percentage": 15
+          },
+          {
+            "hex": "#C8C1B4",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_d90fe8",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_d90fe8.png",
+    "items": [
+      {
+        "image_id": "o2",
+        "image_path": "processed_items/o2.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Denim Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Blue Denim Jacket",
+        "texture": "rugged denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#4F6F8F",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F8FAF",
+            "percentage": 20
+          },
+          {
+            "hex": "#2F4A63",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t4",
+        "image_path": "processed_items/t4.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "medium",
+        "article_name": "Ivory Peplum Blouse",
+        "texture": "light crinkled cotton",
+        "material": "cotton",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#F3EFE7",
+            "percentage": 80
+          },
+          {
+            "hex": "#E1DBCF",
+            "percentage": 15
+          },
+          {
+            "hex": "#C8C1B4",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_e5fbe7",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_e5fbe7.png",
+    "items": [
+      {
+        "image_id": "o3",
+        "image_path": "processed_items/o3.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Burgundy",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Burgundy Leather Jacket",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#5A2323",
+            "percentage": 75
+          },
+          {
+            "hex": "#7A3A3A",
+            "percentage": 15
+          },
+          {
+            "hex": "#3A1616",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t4",
+        "image_path": "processed_items/t4.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Ivory",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "medium",
+        "article_name": "Ivory Peplum Blouse",
+        "texture": "light crinkled cotton",
+        "material": "cotton",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#F3EFE7",
+            "percentage": 80
+          },
+          {
+            "hex": "#E1DBCF",
+            "percentage": 15
+          },
+          {
+            "hex": "#C8C1B4",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_053b41",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_053b41.png",
+    "items": [
+      {
+        "image_id": "t5",
+        "image_path": "processed_items/t5.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Olive Green",
+        "pattern": "geometric",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Olive Eyelet Blouse",
+        "texture": "embroidered eyelet",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6E7A2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#4F571F",
+            "percentage": 20
+          },
+          {
+            "hex": "#8C9650",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_09dd08",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_09dd08.png",
+    "items": [
+      {
+        "image_id": "o1",
+        "image_path": "processed_items/o1.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Beige Utility Jacket",
+        "texture": "matte woven fabric",
+        "material": "cotton",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#B9A98F",
+            "percentage": 75
+          },
+          {
+            "hex": "#8E7F69",
+            "percentage": 15
+          },
+          {
+            "hex": "#6E6252",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t5",
+        "image_path": "processed_items/t5.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Olive Green",
+        "pattern": "geometric",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Olive Eyelet Blouse",
+        "texture": "embroidered eyelet",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6E7A2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#4F571F",
+            "percentage": 20
+          },
+          {
+            "hex": "#8C9650",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_45d50b",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_45d50b.png",
+    "items": [
+      {
+        "image_id": "o2",
+        "image_path": "processed_items/o2.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Denim Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Blue Denim Jacket",
+        "texture": "rugged denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#4F6F8F",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F8FAF",
+            "percentage": 20
+          },
+          {
+            "hex": "#2F4A63",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t5",
+        "image_path": "processed_items/t5.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Olive Green",
+        "pattern": "geometric",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Olive Eyelet Blouse",
+        "texture": "embroidered eyelet",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6E7A2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#4F571F",
+            "percentage": 20
+          },
+          {
+            "hex": "#8C9650",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_82dde8",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_82dde8.png",
+    "items": [
+      {
+        "image_id": "o3",
+        "image_path": "processed_items/o3.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Burgundy",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Burgundy Leather Jacket",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#5A2323",
+            "percentage": 75
+          },
+          {
+            "hex": "#7A3A3A",
+            "percentage": 15
+          },
+          {
+            "hex": "#3A1616",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t5",
+        "image_path": "processed_items/t5.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Olive Green",
+        "pattern": "geometric",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Olive Eyelet Blouse",
+        "texture": "embroidered eyelet",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6E7A2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#4F571F",
+            "percentage": 20
+          },
+          {
+            "hex": "#8C9650",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_4c91a7",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_4c91a7.png",
+    "items": [
+      {
+        "image_id": "t5",
+        "image_path": "processed_items/t5.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Olive Green",
+        "pattern": "geometric",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Olive Eyelet Blouse",
+        "texture": "embroidered eyelet",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6E7A2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#4F571F",
+            "percentage": 20
+          },
+          {
+            "hex": "#8C9650",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_e566ae",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_e566ae.png",
+    "items": [
+      {
+        "image_id": "o1",
+        "image_path": "processed_items/o1.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Beige Utility Jacket",
+        "texture": "matte woven fabric",
+        "material": "cotton",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#B9A98F",
+            "percentage": 75
+          },
+          {
+            "hex": "#8E7F69",
+            "percentage": 15
+          },
+          {
+            "hex": "#6E6252",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t5",
+        "image_path": "processed_items/t5.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Olive Green",
+        "pattern": "geometric",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Olive Eyelet Blouse",
+        "texture": "embroidered eyelet",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6E7A2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#4F571F",
+            "percentage": 20
+          },
+          {
+            "hex": "#8C9650",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_3ff034",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_3ff034.png",
+    "items": [
+      {
+        "image_id": "o2",
+        "image_path": "processed_items/o2.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Denim Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Blue Denim Jacket",
+        "texture": "rugged denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#4F6F8F",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F8FAF",
+            "percentage": 20
+          },
+          {
+            "hex": "#2F4A63",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t5",
+        "image_path": "processed_items/t5.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Olive Green",
+        "pattern": "geometric",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Olive Eyelet Blouse",
+        "texture": "embroidered eyelet",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6E7A2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#4F571F",
+            "percentage": 20
+          },
+          {
+            "hex": "#8C9650",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_d2a930",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_d2a930.png",
+    "items": [
+      {
+        "image_id": "o3",
+        "image_path": "processed_items/o3.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Burgundy",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Burgundy Leather Jacket",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#5A2323",
+            "percentage": 75
+          },
+          {
+            "hex": "#7A3A3A",
+            "percentage": 15
+          },
+          {
+            "hex": "#3A1616",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t5",
+        "image_path": "processed_items/t5.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Olive Green",
+        "pattern": "geometric",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Olive Eyelet Blouse",
+        "texture": "embroidered eyelet",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6E7A2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#4F571F",
+            "percentage": 20
+          },
+          {
+            "hex": "#8C9650",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b3",
+        "image_path": "processed_items/b3.png",
+        "type": "Wide Leg Pants",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "loose",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Beige Wide Pants",
+        "texture": "soft woven",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB8",
+            "percentage": 70
+          },
+          {
+            "hex": "#C4B49F",
+            "percentage": 20
+          },
+          {
+            "hex": "#A99882",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_75c50e",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_75c50e.png",
+    "items": [
+      {
+        "image_id": "t5",
+        "image_path": "processed_items/t5.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Olive Green",
+        "pattern": "geometric",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Olive Eyelet Blouse",
+        "texture": "embroidered eyelet",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6E7A2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#4F571F",
+            "percentage": 20
+          },
+          {
+            "hex": "#8C9650",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_20347f",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_20347f.png",
+    "items": [
+      {
+        "image_id": "o1",
+        "image_path": "processed_items/o1.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Beige Utility Jacket",
+        "texture": "matte woven fabric",
+        "material": "cotton",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#B9A98F",
+            "percentage": 75
+          },
+          {
+            "hex": "#8E7F69",
+            "percentage": 15
+          },
+          {
+            "hex": "#6E6252",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t5",
+        "image_path": "processed_items/t5.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Olive Green",
+        "pattern": "geometric",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Olive Eyelet Blouse",
+        "texture": "embroidered eyelet",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6E7A2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#4F571F",
+            "percentage": 20
+          },
+          {
+            "hex": "#8C9650",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f1",
+        "image_path": "processed_items/f1.png",
+        "type": "Heels",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Caramel Brown",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Brown Slingback Heels",
+        "texture": "soft suede",
+        "material": "leather",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#8B5A2B",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F431F",
+            "percentage": 20
+          },
+          {
+            "hex": "#4E2D15",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_9ba2f9",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_9ba2f9.png",
+    "items": [
+      {
+        "image_id": "o2",
+        "image_path": "processed_items/o2.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Denim Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Blue Denim Jacket",
+        "texture": "rugged denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#4F6F8F",
+            "percentage": 70
+          },
+          {
+            "hex": "#6F8FAF",
+            "percentage": 20
+          },
+          {
+            "hex": "#2F4A63",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t5",
+        "image_path": "processed_items/t5.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Olive Green",
+        "pattern": "geometric",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Olive Eyelet Blouse",
+        "texture": "embroidered eyelet",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6E7A2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#4F571F",
+            "percentage": 20
+          },
+          {
+            "hex": "#8C9650",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_0d7ca2",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_0d7ca2.png",
+    "items": [
+      {
+        "image_id": "o3",
+        "image_path": "processed_items/o3.png",
+        "type": "Jacket",
+        "category": "outerwear",
+        "gender": "female",
+        "color": "Burgundy",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Burgundy Leather Jacket",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "fall",
+        "color_hex_codes": [
+          {
+            "hex": "#5A2323",
+            "percentage": 75
+          },
+          {
+            "hex": "#7A3A3A",
+            "percentage": 15
+          },
+          {
+            "hex": "#3A1616",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "t5",
+        "image_path": "processed_items/t5.png",
+        "type": "Blouse",
+        "category": "top",
+        "gender": "female",
+        "color": "Olive Green",
+        "pattern": "geometric",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Olive Eyelet Blouse",
+        "texture": "embroidered eyelet",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#6E7A2E",
+            "percentage": 70
+          },
+          {
+            "hex": "#4F571F",
+            "percentage": 20
+          },
+          {
+            "hex": "#8C9650",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "b4",
+        "image_path": "processed_items/b4.png",
+        "type": "Skirt",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "short",
+        "article_name": "Denim Mini Skirt",
+        "texture": "washed denim",
+        "material": "denim",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#9FB3C7",
+            "percentage": 70
+          },
+          {
+            "hex": "#7F97AD",
+            "percentage": 20
+          },
+          {
+            "hex": "#5E748A",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_f2a941",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_f2a941.png",
+    "items": [
+      {
+        "image_id": "t1",
+        "image_path": "processed_items/t1.png",
+        "type": "Tank Top",
+        "category": "top",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Cream Smocked Tank",
+        "texture": "smocked knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#EFE5D6",
+            "percentage": 80
+          },
+          {
+            "hex": "#D9CDBA",
+            "percentage": 15
+          },
+          {
+            "hex": "#BEB29E",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f2",
+        "image_path": "processed_items/f2.png",
+        "type": "Flats",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Cream Slingback Flats",
+        "texture": "smooth leather",
+        "material": "leather",
+        "season": "spring",
+        "color_hex_codes": [
+          {
+            "hex": "#E8E0D2",
+            "percentage": 80
+          },
+          {
+            "hex": "#C8BCA6",
+            "percentage": 15
+          },
+          {
+            "hex": "#9A8F7A",
+            "percentage": 5
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "outfit_id": "female_outfit_f89520",
+    "gender": "female",
+    "collage_path": "wardrobe/outfits/female_outfit_f89520.png",
+    "items": [
+      {
+        "image_id": "t1",
+        "image_path": "processed_items/t1.png",
+        "type": "Tank Top",
+        "category": "top",
+        "gender": "female",
+        "color": "Cream",
+        "pattern": "solid",
+        "fit": "fitted",
+        "formality": "casual",
+        "length": "cropped",
+        "article_name": "Cream Smocked Tank",
+        "texture": "smocked knit",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#EFE5D6",
+            "percentage": 80
+          },
+          {
+            "hex": "#D9CDBA",
+            "percentage": 15
+          },
+          {
+            "hex": "#BEB29E",
+            "percentage": 5
+          }
+        ]
+      },
+      {
+        "image_id": "b1",
+        "image_path": "processed_items/b1.png",
+        "type": "Jeans",
+        "category": "bottom",
+        "gender": "female",
+        "color": "Light Blue",
+        "pattern": "solid",
+        "fit": "relaxed",
+        "formality": "casual",
+        "length": "full-length",
+        "article_name": "Light Wash Jeans",
+        "texture": "soft washed denim",
+        "material": "denim",
+        "season": "all-season",
+        "color_hex_codes": [
+          {
+            "hex": "#C7D6E2",
+            "percentage": 70
+          },
+          {
+            "hex": "#AFC0CF",
+            "percentage": 20
+          },
+          {
+            "hex": "#8FA3B5",
+            "percentage": 10
+          }
+        ]
+      },
+      {
+        "image_id": "f3",
+        "image_path": "processed_items/f3.png",
+        "type": "Loafers",
+        "category": "footwear",
+        "gender": "female",
+        "color": "Beige",
+        "pattern": "solid",
+        "fit": "regular",
+        "formality": "casual",
+        "length": "Unknown",
+        "article_name": "Beige Canvas Loafers",
+        "texture": "woven canvas",
+        "material": "cotton",
+        "season": "summer",
+        "color_hex_codes": [
+          {
+            "hex": "#D8CBB6",
+            "percentage": 65
+          },
+          {
+            "hex": "#5A3F2F",
+            "percentage": 25
+          },
+          {
+            "hex": "#A89074",
+            "percentage": 10
+          }
+        ]
+      }
+    ]
+  }
+]

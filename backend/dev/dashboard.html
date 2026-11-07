@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KYRA Operations</title>
+<style>
+  :root { --bg: #0b0c0e; --panel: #15171a; --line: #272a30; --text: #eef0f2; --muted: #969ba3; --ok: #6fcf86; --warn: #f0b04f; --err: #ef6b6b; --bar: #3b8f86; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 -apple-system, system-ui, sans-serif; }
+  main { max-width: 1200px; margin: 0 auto; padding: 20px 16px 40px; display: grid; gap: 14px; grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { main { grid-template-columns: 1fr; } }
+  header { grid-column: 1 / -1; display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+  h1 { margin: 0; font-size: 20px; }
+  .muted { color: var(--muted); }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; min-width: 0; }
+  .wide { grid-column: span 2; } .full { grid-column: 1 / -1; }
+  @media (max-width: 560px) { .wide { grid-column: auto; } }
+  .label { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  .big { font-size: 28px; font-weight: 650; margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .bar { height: 8px; background: #22252a; border-radius: 99px; margin-top: 10px; overflow: hidden; }
+  .bar > i { display: block; height: 100%; background: var(--bar); width: 0; transition: width .4s; }
+  .ok { color: var(--ok); } .warn { color: var(--warn); } .err { color: var(--err); }
+  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  th, td { text-align: left; padding: 5px 6px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 500; font-size: 12px; }
+  .alert { display: none; grid-column: 1 / -1; background: #3a2a10; border: 1px solid var(--warn); color: var(--warn); border-radius: 10px; padding: 10px 14px; }
+  input { font: inherit; color: var(--text); background: #1d1f23; border: 1px solid var(--line); border-radius: 8px; padding: 5px 9px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>KYRA · Operations</h1>
+    <span id="updated" class="muted">connecting…</span>
+    <input id="token" type="password" placeholder="Operator token (operatorToken in backend/.runtime/secrets.json)">
+  </header>
+  <div id="alert" class="alert"></div>
+
+  <div class="card"><div class="label">Spend today</div><div id="spend" class="big">–</div><div class="bar"><i id="spendBar"></i></div><div id="spendNote" class="muted"></div></div>
+  <div class="card"><div class="label">Camera</div><div id="camera" class="big">–</div><div id="cameraNote" class="muted"></div></div>
+  <div class="card"><div class="label">Render queue</div><div id="queue" class="big">–</div><div id="queueNote" class="muted"></div></div>
+  <div class="card"><div class="label">Visitors now</div><div id="sessions" class="big">–</div><div id="sessionsNote" class="muted"></div></div>
+
+  <div class="card wide"><div class="label">Timings (seconds)</div><table id="steps"></table></div>
+  <div class="card wide"><div class="label">Counters</div><table id="counters"></table></div>
+
+  <div class="card wide"><div class="label">Look ratings</div><table id="ratings"></table></div>
+  <div class="card wide"><div class="label">Final image quality test</div><table id="quality"></table>
+    <p class="muted">Each visitor gets one quality (FINAL_QUALITY_EXPERIMENT). Real cost per image from OpenAI usage.</p></div>
+  <div class="card wide"><div class="label">Speed and spend helpers</div><table id="helpers"></table></div>
+  <div class="card wide"><div class="label">Profile corrections → undertone thresholds</div><table id="corrections"></table>
+    <p class="muted">Measured hue angle of people who corrected their undertone. Current rule: cool ≤ 50°, warm ≥ 58°.</p></div>
+</main>
+
+<script>
+  const API = 'http://localhost:3000';
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const auth = () => ($('token').value ? { Authorization: `Bearer ${$('token').value.trim()}` } : {});
+  (() => {
+    const fromLink = new URLSearchParams(location.hash.slice(1)).get('token');
+    if (fromLink) {
+      localStorage.setItem('kyraToken:operator', fromLink);
+      history.replaceState(null, '', location.pathname + location.search);
+    }
+    $('token').value = fromLink || localStorage.getItem('kyraToken:operator') || '';
+  })();
+  $('token').addEventListener('change', () => { localStorage.setItem('kyraToken:operator', $('token').value.trim()); refresh(); });
+  const STEP_NAMES = {
+    capture_to_first_option: 'Capture → first outfit idea (0 when designed early)', design: 'Outfit design (all 3)', first_image: 'Render start → first image',
+    draft: 'Draft image', generation: 'Final image (OpenAI)', tokens_per_look: 'Tokens per look (×1000 = shown value; original 2,673)', post_process: 'Head/hands paste + checks', render_total: 'Render total', render_prefetch: 'Background prefetch'
+  };
+  const sec = (ms) => (ms / 1000).toFixed(1);
+  const rows = (pairs) => pairs.map((cells) => `<tr>${cells.map((c, i) => (i ? `<td>${c}</td>` : `<th>${c}</th>`)).join('')}</tr>`).join('');
+
+  async function refresh() {
+    try {
+      const [metrics, health] = await Promise.all([
+        fetch(`${API}/api/v2/metrics`, { headers: auth() }).then((r) => { if (!r.ok) throw new Error(`metrics ${r.status}`); return r.json(); }),
+        fetch(`${API}/health`).then((r) => r.json())
+      ]);
+      const { budget, queue, steps, counters, insights } = metrics;
+      const used = budget.limitUsd ? budget.spentUsd / budget.limitUsd : 0;
+      $('spend').textContent = `$${budget.spentUsd.toFixed(2)}`;
+      $('spend').className = 'big ' + (used >= 1 ? 'err' : used >= 0.8 ? 'warn' : '');
+      $('spendBar').style.width = `${Math.min(100, used * 100)}%`;
+      $('spendBar').style.background = used >= 0.8 ? 'var(--warn)' : 'var(--bar)';
+      $('spendNote').textContent = budget.limitUsd ? `of $${budget.limitUsd} · ${Object.entries(budget.calls).map(([k, v]) => `${v} ${k}`).join(', ') || 'no calls yet'}` : 'no cap';
+
+      const cam = typeof health.sidecar === 'object' ? health.sidecar.camera : 'unavailable';
+      $('camera').textContent = cam; $('camera').className = 'big ' + (cam === 'running' ? 'ok' : 'err');
+      $('cameraNote').textContent = health.sidecar?.cameraError || (counters.sidecar_restarts ? `${counters.sidecar_restarts} watchdog restarts` : '');
+
+      $('queue').textContent = `${queue.running}/${queue.concurrency}`;
+      $('queueNote').textContent = queue.waiting ? `${queue.waiting} waiting` : 'no one waiting';
+      $('queue').className = 'big ' + (queue.waiting > 3 ? 'warn' : '');
+      $('sessions').textContent = metrics.activeSessions;
+      $('sessionsNote').textContent = `${counters.sessions || 0} today · ${metrics.eventClients} screen(s) connected`;
+
+      $('steps').innerHTML = '<tr><th></th><th>p50</th><th>p90</th><th>n</th></tr>' + rows(
+        Object.entries(STEP_NAMES).filter(([k]) => steps[k]).map(([k, label]) => [label, sec(steps[k].p50Ms), sec(steps[k].p90Ms), steps[k].count])
+      );
+      $('counters').innerHTML = rows(Object.entries(counters).map(([k, v]) => [esc(k.replace(/_/g, ' ')), v])) || '<tr><td class="muted">nothing yet</td></tr>';
+      $('ratings').innerHTML = rows([
+        ['All looks', insights.ratings ? `${insights.approvalPercent}% liked of ${insights.ratings}` : '–'],
+        ...Object.entries(insights.byUndertone).map(([tone, r]) => [`${tone} undertone`, r.ratings ? `${r.approvalPercent}% of ${r.ratings}` : '–'])
+      ]);
+      const t = insights.thresholds;
+      $('corrections').innerHTML = rows([
+        ['Corrections / confirmations', `${insights.corrections} (${insights.undertoneCorrections} undertone) / ${insights.confirmations}`],
+        ['Thresholds now', `cool ≤ ${t.current.coolMax}°, warm ≥ ${t.current.warmMin}° · ${Math.round(t.current.accuracy * 100)}% agree`],
+        ['Suggested', t.samples ? `cool ≤ ${t.suggested.coolMax}°, warm ≥ ${t.suggested.warmMin}° · ${Math.round(t.suggested.accuracy * 100)}% agree${t.enoughData ? '' : ' (need 10+ samples)'}` : 'no data yet'],
+        ...Object.entries(insights.hueByCorrectedUndertone).map(([tone, h]) => [`Said ${tone}`, `hue ${h.min}–${h.max}°, median ${h.median}° (n=${h.count})`])
+      ]);
+
+      const byKind = metrics.usage?.byKind || {};
+      $('quality').innerHTML = '<tr><th></th><th>liked</th><th>images</th><th>cost / image</th></tr>' + rows(
+        ['low', 'medium', 'high'].filter((q) => insights.byFinalQuality?.[q] || byKind[`image:${q}`]).map((q) => {
+          const r = insights.byFinalQuality?.[q];
+          const u = byKind[`image:${q}`];
+          return [q, r ? `${r.approvalPercent}% of ${r.ratings}` : '–', u ? u.calls : 0, u && u.calls ? `$${(u.usd / u.calls).toFixed(4)}` : '–'];
+        })
+      );
+      const earlyTotal = (counters.early_design_hits || 0) + (counters.early_design_misses || 0);
+      $('helpers').innerHTML = rows([
+        ['Designed before the photo', earlyTotal ? `${counters.early_design_hits || 0} of ${earlyTotal} reused at capture` : '–'],
+        ['Looks rendered ahead (dwell prefetch)', counters.prefetches || 0],
+        ['Real OpenAI cost (this run)', metrics.usage ? `$${metrics.usage.usd.toFixed(3)} over ${metrics.usage.calls} calls` : '–'],
+        ['Tokens per look (median) vs original 2,673', steps.tokens_per_look ? `${steps.tokens_per_look.p50Ms.toLocaleString()} · ${counters.looks_over_original_tokens || 0} looks over` : '–'],
+        ['Extras skipped to stay under the token rule', `${counters.drafts_skipped_for_token_budget || 0} drafts, ${counters.retries_skipped_for_token_budget || 0} retries`]
+      ]);
+
+      const alerts = [];
+      if (used >= 0.8) alerts.push(`Spend is at ${Math.round(used * 100)}% of today's cap${used >= 1 ? ' — images are off, visitors get outfit ideas only' : ''}.`);
+      if (cam !== 'running') alerts.push('Camera is not running.');
+      if (queue.waiting > 3) alerts.push(`${queue.waiting} renders waiting — consider raising RENDER_CONCURRENCY if your OpenAI limits allow.`);
+      $('alert').style.display = alerts.length ? 'block' : 'none';
+      $('alert').textContent = alerts.join(' ');
+      $('updated').textContent = `updated ${new Date().toLocaleTimeString()}`;
+    } catch (error) {
+      $('updated').textContent = /metrics 401/.test(error.message)
+        ? ($('token').value ? 'operator token refused' : 'paste the operator token (operatorToken in backend/.runtime/secrets.json) →')
+        : `backend unreachable (${error.message})`;
+    }
+  }
+  refresh();
+  setInterval(refresh, 3000);
+</script>
+</body>
+</html>

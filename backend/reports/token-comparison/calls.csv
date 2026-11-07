@@ -1,0 +1,301 @@
+test,person,condition,photo,style,pipeline,call,quality,images,prompt_tokens_exact,total_tokens,usd
+t01-p01-webcam-1920x1080,p01,webcam-1920x1080,1920x1080,"casual",old,photo_check,,1920x1080,399,1620,0.004158
+t01-p01-webcam-1920x1080,p01,webcam-1920x1080,1920x1080,"casual",old,design_1_outfit,,,364,752,0.005971
+t01-p01-webcam-1920x1080,p01,webcam-1920x1080,1920x1080,"casual",old,image_edit,medium,1920x1080,410,2947,0.060362
+t01-p01-webcam-1920x1080,p01,webcam-1920x1080,1920x1080,"casual",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t01-p01-webcam-1920x1080,p01,webcam-1920x1080,1920x1080,"casual",new,design_3_options,,,410,1377,0.014158
+t01-p01-webcam-1920x1080,p01,webcam-1920x1080,1920x1080,"casual",new,image_edit,low,1024x1536,213,1300,0.024353
+t02-p02-webcam-1920x1080,p02,webcam-1920x1080,1920x1080,"office",old,photo_check,,1920x1080,399,1620,0.004158
+t02-p02-webcam-1920x1080,p02,webcam-1920x1080,1920x1080,"office",old,design_1_outfit,,,363,751,0.005969
+t02-p02-webcam-1920x1080,p02,webcam-1920x1080,1920x1080,"office",old,image_edit,medium,1920x1080,410,2947,0.060362
+t02-p02-webcam-1920x1080,p02,webcam-1920x1080,1920x1080,"office",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t02-p02-webcam-1920x1080,p02,webcam-1920x1080,1920x1080,"office",new,design_3_options,,,409,1376,0.014156
+t02-p02-webcam-1920x1080,p02,webcam-1920x1080,1920x1080,"office",new,image_edit,low,1024x1536,213,1300,0.024353
+t03-p03-webcam-1920x1080,p03,webcam-1920x1080,1920x1080,"wedding guest",old,photo_check,,1920x1080,399,1620,0.004158
+t03-p03-webcam-1920x1080,p03,webcam-1920x1080,1920x1080,"wedding guest",old,design_1_outfit,,,365,753,0.005973
+t03-p03-webcam-1920x1080,p03,webcam-1920x1080,1920x1080,"wedding guest",old,image_edit,medium,1920x1080,411,2948,0.060367
+t03-p03-webcam-1920x1080,p03,webcam-1920x1080,1920x1080,"wedding guest",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t03-p03-webcam-1920x1080,p03,webcam-1920x1080,1920x1080,"wedding guest",new,design_3_options,,,407,1374,0.014152
+t03-p03-webcam-1920x1080,p03,webcam-1920x1080,1920x1080,"wedding guest",new,image_edit,low,1024x1536,209,1296,0.024333
+t04-p04-webcam-1920x1080,p04,webcam-1920x1080,1920x1080,"party",old,photo_check,,1920x1080,399,1620,0.004158
+t04-p04-webcam-1920x1080,p04,webcam-1920x1080,1920x1080,"party",old,design_1_outfit,,,363,751,0.005969
+t04-p04-webcam-1920x1080,p04,webcam-1920x1080,1920x1080,"party",old,image_edit,medium,1920x1080,410,2947,0.060362
+t04-p04-webcam-1920x1080,p04,webcam-1920x1080,1920x1080,"party",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t04-p04-webcam-1920x1080,p04,webcam-1920x1080,1920x1080,"party",new,design_3_options,,,406,1373,0.014151
+t04-p04-webcam-1920x1080,p04,webcam-1920x1080,1920x1080,"party",new,image_edit,low,1024x1536,209,1296,0.024333
+t05-p05-webcam-1920x1080,p05,webcam-1920x1080,1920x1080,"smart casual",old,photo_check,,1920x1080,399,1620,0.004158
+t05-p05-webcam-1920x1080,p05,webcam-1920x1080,1920x1080,"smart casual",old,design_1_outfit,,,364,752,0.005971
+t05-p05-webcam-1920x1080,p05,webcam-1920x1080,1920x1080,"smart casual",old,image_edit,medium,1920x1080,411,2948,0.060367
+t05-p05-webcam-1920x1080,p05,webcam-1920x1080,1920x1080,"smart casual",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t05-p05-webcam-1920x1080,p05,webcam-1920x1080,1920x1080,"smart casual",new,design_3_options,,,410,1377,0.014158
+t05-p05-webcam-1920x1080,p05,webcam-1920x1080,1920x1080,"smart casual",new,image_edit,low,1024x1536,209,1296,0.024333
+t06-p06-webcam-1920x1080,p06,webcam-1920x1080,1920x1080,"casual",old,photo_check,,1920x1080,399,1620,0.004158
+t06-p06-webcam-1920x1080,p06,webcam-1920x1080,1920x1080,"casual",old,design_1_outfit,,,362,750,0.005968
+t06-p06-webcam-1920x1080,p06,webcam-1920x1080,1920x1080,"casual",old,image_edit,medium,1920x1080,410,2947,0.060362
+t06-p06-webcam-1920x1080,p06,webcam-1920x1080,1920x1080,"casual",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t06-p06-webcam-1920x1080,p06,webcam-1920x1080,1920x1080,"casual",new,design_3_options,,,403,1370,0.014145
+t06-p06-webcam-1920x1080,p06,webcam-1920x1080,1920x1080,"casual",new,image_edit,low,1024x1536,212,1299,0.024348
+t07-p07-webcam-1920x1080,p07,webcam-1920x1080,1920x1080,"office",old,photo_check,,1920x1080,399,1620,0.004158
+t07-p07-webcam-1920x1080,p07,webcam-1920x1080,1920x1080,"office",old,design_1_outfit,,,363,751,0.005969
+t07-p07-webcam-1920x1080,p07,webcam-1920x1080,1920x1080,"office",old,image_edit,medium,1920x1080,410,2947,0.060362
+t07-p07-webcam-1920x1080,p07,webcam-1920x1080,1920x1080,"office",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t07-p07-webcam-1920x1080,p07,webcam-1920x1080,1920x1080,"office",new,design_3_options,,,409,1376,0.014156
+t07-p07-webcam-1920x1080,p07,webcam-1920x1080,1920x1080,"office",new,image_edit,low,1024x1536,209,1296,0.024333
+t08-p08-webcam-1920x1080,p08,webcam-1920x1080,1920x1080,"wedding guest",old,photo_check,,1920x1080,399,1620,0.004158
+t08-p08-webcam-1920x1080,p08,webcam-1920x1080,1920x1080,"wedding guest",old,design_1_outfit,,,365,753,0.005973
+t08-p08-webcam-1920x1080,p08,webcam-1920x1080,1920x1080,"wedding guest",old,image_edit,medium,1920x1080,411,2948,0.060367
+t08-p08-webcam-1920x1080,p08,webcam-1920x1080,1920x1080,"wedding guest",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t08-p08-webcam-1920x1080,p08,webcam-1920x1080,1920x1080,"wedding guest",new,design_3_options,,,411,1378,0.014159
+t08-p08-webcam-1920x1080,p08,webcam-1920x1080,1920x1080,"wedding guest",new,image_edit,low,1024x1536,209,1296,0.024333
+t09-p09-webcam-1920x1080,p09,webcam-1920x1080,1920x1080,"party",old,photo_check,,1920x1080,399,1620,0.004158
+t09-p09-webcam-1920x1080,p09,webcam-1920x1080,1920x1080,"party",old,design_1_outfit,,,359,747,0.005962
+t09-p09-webcam-1920x1080,p09,webcam-1920x1080,1920x1080,"party",old,image_edit,medium,1920x1080,410,2947,0.060362
+t09-p09-webcam-1920x1080,p09,webcam-1920x1080,1920x1080,"party",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t09-p09-webcam-1920x1080,p09,webcam-1920x1080,1920x1080,"party",new,design_3_options,,,409,1376,0.014156
+t09-p09-webcam-1920x1080,p09,webcam-1920x1080,1920x1080,"party",new,image_edit,low,1024x1536,209,1296,0.024333
+t10-p10-webcam-1920x1080,p10,webcam-1920x1080,1920x1080,"smart casual",old,photo_check,,1920x1080,399,1620,0.004158
+t10-p10-webcam-1920x1080,p10,webcam-1920x1080,1920x1080,"smart casual",old,design_1_outfit,,,362,750,0.005968
+t10-p10-webcam-1920x1080,p10,webcam-1920x1080,1920x1080,"smart casual",old,image_edit,medium,1920x1080,411,2948,0.060367
+t10-p10-webcam-1920x1080,p10,webcam-1920x1080,1920x1080,"smart casual",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t10-p10-webcam-1920x1080,p10,webcam-1920x1080,1920x1080,"smart casual",new,design_3_options,,,410,1377,0.014158
+t10-p10-webcam-1920x1080,p10,webcam-1920x1080,1920x1080,"smart casual",new,image_edit,low,1024x1536,209,1296,0.024333
+t11-p01-kiosk-portrait-1080x1920,p01,kiosk-portrait-1080x1920,1080x1920,"casual",old,photo_check,,1080x1920,399,1618,0.00413
+t11-p01-kiosk-portrait-1080x1920,p01,kiosk-portrait-1080x1920,1080x1920,"casual",old,design_1_outfit,,,364,752,0.005971
+t11-p01-kiosk-portrait-1080x1920,p01,kiosk-portrait-1080x1920,1080x1920,"casual",old,image_edit,medium,1080x1920,410,2947,0.060362
+t11-p01-kiosk-portrait-1080x1920,p01,kiosk-portrait-1080x1920,1080x1920,"casual",old,face_check,,1080x1920 1024x1536,124,2358,0.004323
+t11-p01-kiosk-portrait-1080x1920,p01,kiosk-portrait-1080x1920,1080x1920,"casual",new,design_3_options,,,410,1377,0.014158
+t11-p01-kiosk-portrait-1080x1920,p01,kiosk-portrait-1080x1920,1080x1920,"casual",new,image_edit,low,1024x1536,213,1300,0.024353
+t12-p02-kiosk-portrait-1080x1920,p02,kiosk-portrait-1080x1920,1080x1920,"office",old,photo_check,,1080x1920,399,1618,0.00413
+t12-p02-kiosk-portrait-1080x1920,p02,kiosk-portrait-1080x1920,1080x1920,"office",old,design_1_outfit,,,363,751,0.005969
+t12-p02-kiosk-portrait-1080x1920,p02,kiosk-portrait-1080x1920,1080x1920,"office",old,image_edit,medium,1080x1920,410,2947,0.060362
+t12-p02-kiosk-portrait-1080x1920,p02,kiosk-portrait-1080x1920,1080x1920,"office",old,face_check,,1080x1920 1024x1536,124,2358,0.004323
+t12-p02-kiosk-portrait-1080x1920,p02,kiosk-portrait-1080x1920,1080x1920,"office",new,design_3_options,,,409,1376,0.014156
+t12-p02-kiosk-portrait-1080x1920,p02,kiosk-portrait-1080x1920,1080x1920,"office",new,image_edit,low,1024x1536,213,1300,0.024353
+t13-p03-kiosk-portrait-1080x1920,p03,kiosk-portrait-1080x1920,1080x1920,"wedding guest",old,photo_check,,1080x1920,399,1618,0.00413
+t13-p03-kiosk-portrait-1080x1920,p03,kiosk-portrait-1080x1920,1080x1920,"wedding guest",old,design_1_outfit,,,363,751,0.005969
+t13-p03-kiosk-portrait-1080x1920,p03,kiosk-portrait-1080x1920,1080x1920,"wedding guest",old,image_edit,medium,1080x1920,411,2948,0.060367
+t13-p03-kiosk-portrait-1080x1920,p03,kiosk-portrait-1080x1920,1080x1920,"wedding guest",old,face_check,,1080x1920 1024x1536,124,2358,0.004323
+t13-p03-kiosk-portrait-1080x1920,p03,kiosk-portrait-1080x1920,1080x1920,"wedding guest",new,design_3_options,,,407,1374,0.014152
+t13-p03-kiosk-portrait-1080x1920,p03,kiosk-portrait-1080x1920,1080x1920,"wedding guest",new,image_edit,low,1024x1536,209,1296,0.024333
+t14-p04-kiosk-portrait-1080x1920,p04,kiosk-portrait-1080x1920,1080x1920,"party",old,photo_check,,1080x1920,399,1618,0.00413
+t14-p04-kiosk-portrait-1080x1920,p04,kiosk-portrait-1080x1920,1080x1920,"party",old,design_1_outfit,,,363,751,0.005969
+t14-p04-kiosk-portrait-1080x1920,p04,kiosk-portrait-1080x1920,1080x1920,"party",old,image_edit,medium,1080x1920,410,2947,0.060362
+t14-p04-kiosk-portrait-1080x1920,p04,kiosk-portrait-1080x1920,1080x1920,"party",old,face_check,,1080x1920 1024x1536,124,2358,0.004323
+t14-p04-kiosk-portrait-1080x1920,p04,kiosk-portrait-1080x1920,1080x1920,"party",new,design_3_options,,,406,1373,0.014151
+t14-p04-kiosk-portrait-1080x1920,p04,kiosk-portrait-1080x1920,1080x1920,"party",new,image_edit,low,1024x1536,209,1296,0.024333
+t15-p05-kiosk-portrait-1080x1920,p05,kiosk-portrait-1080x1920,1080x1920,"smart casual",old,photo_check,,1080x1920,399,1618,0.00413
+t15-p05-kiosk-portrait-1080x1920,p05,kiosk-portrait-1080x1920,1080x1920,"smart casual",old,design_1_outfit,,,364,752,0.005971
+t15-p05-kiosk-portrait-1080x1920,p05,kiosk-portrait-1080x1920,1080x1920,"smart casual",old,image_edit,medium,1080x1920,411,2948,0.060367
+t15-p05-kiosk-portrait-1080x1920,p05,kiosk-portrait-1080x1920,1080x1920,"smart casual",old,face_check,,1080x1920 1024x1536,124,2358,0.004323
+t15-p05-kiosk-portrait-1080x1920,p05,kiosk-portrait-1080x1920,1080x1920,"smart casual",new,design_3_options,,,410,1377,0.014158
+t15-p05-kiosk-portrait-1080x1920,p05,kiosk-portrait-1080x1920,1080x1920,"smart casual",new,image_edit,low,1024x1536,209,1296,0.024333
+t16-p06-kiosk-portrait-1080x1920,p06,kiosk-portrait-1080x1920,1080x1920,"casual",old,photo_check,,1080x1920,399,1618,0.00413
+t16-p06-kiosk-portrait-1080x1920,p06,kiosk-portrait-1080x1920,1080x1920,"casual",old,design_1_outfit,,,360,748,0.005964
+t16-p06-kiosk-portrait-1080x1920,p06,kiosk-portrait-1080x1920,1080x1920,"casual",old,image_edit,medium,1080x1920,410,2947,0.060362
+t16-p06-kiosk-portrait-1080x1920,p06,kiosk-portrait-1080x1920,1080x1920,"casual",old,face_check,,1080x1920 1024x1536,124,2358,0.004323
+t16-p06-kiosk-portrait-1080x1920,p06,kiosk-portrait-1080x1920,1080x1920,"casual",new,design_3_options,,,403,1370,0.014145
+t16-p06-kiosk-portrait-1080x1920,p06,kiosk-portrait-1080x1920,1080x1920,"casual",new,image_edit,low,1024x1536,212,1299,0.024348
+t17-p07-kiosk-portrait-1080x1920,p07,kiosk-portrait-1080x1920,1080x1920,"office",old,photo_check,,1080x1920,399,1618,0.00413
+t17-p07-kiosk-portrait-1080x1920,p07,kiosk-portrait-1080x1920,1080x1920,"office",old,design_1_outfit,,,359,747,0.005962
+t17-p07-kiosk-portrait-1080x1920,p07,kiosk-portrait-1080x1920,1080x1920,"office",old,image_edit,medium,1080x1920,410,2947,0.060362
+t17-p07-kiosk-portrait-1080x1920,p07,kiosk-portrait-1080x1920,1080x1920,"office",old,face_check,,1080x1920 1024x1536,124,2358,0.004323
+t17-p07-kiosk-portrait-1080x1920,p07,kiosk-portrait-1080x1920,1080x1920,"office",new,design_3_options,,,409,1376,0.014156
+t17-p07-kiosk-portrait-1080x1920,p07,kiosk-portrait-1080x1920,1080x1920,"office",new,image_edit,low,1024x1536,209,1296,0.024333
+t18-p08-kiosk-portrait-1080x1920,p08,kiosk-portrait-1080x1920,1080x1920,"wedding guest",old,photo_check,,1080x1920,399,1618,0.00413
+t18-p08-kiosk-portrait-1080x1920,p08,kiosk-portrait-1080x1920,1080x1920,"wedding guest",old,design_1_outfit,,,365,753,0.005973
+t18-p08-kiosk-portrait-1080x1920,p08,kiosk-portrait-1080x1920,1080x1920,"wedding guest",old,image_edit,medium,1080x1920,411,2948,0.060367
+t18-p08-kiosk-portrait-1080x1920,p08,kiosk-portrait-1080x1920,1080x1920,"wedding guest",old,face_check,,1080x1920 1024x1536,124,2358,0.004323
+t18-p08-kiosk-portrait-1080x1920,p08,kiosk-portrait-1080x1920,1080x1920,"wedding guest",new,design_3_options,,,411,1378,0.014159
+t18-p08-kiosk-portrait-1080x1920,p08,kiosk-portrait-1080x1920,1080x1920,"wedding guest",new,image_edit,low,1024x1536,209,1296,0.024333
+t19-p09-kiosk-portrait-1080x1920,p09,kiosk-portrait-1080x1920,1080x1920,"party",old,photo_check,,1080x1920,399,1618,0.00413
+t19-p09-kiosk-portrait-1080x1920,p09,kiosk-portrait-1080x1920,1080x1920,"party",old,design_1_outfit,,,363,751,0.005969
+t19-p09-kiosk-portrait-1080x1920,p09,kiosk-portrait-1080x1920,1080x1920,"party",old,image_edit,medium,1080x1920,410,2947,0.060362
+t19-p09-kiosk-portrait-1080x1920,p09,kiosk-portrait-1080x1920,1080x1920,"party",old,face_check,,1080x1920 1024x1536,124,2358,0.004323
+t19-p09-kiosk-portrait-1080x1920,p09,kiosk-portrait-1080x1920,1080x1920,"party",new,design_3_options,,,409,1376,0.014156
+t19-p09-kiosk-portrait-1080x1920,p09,kiosk-portrait-1080x1920,1080x1920,"party",new,image_edit,low,1024x1536,209,1296,0.024333
+t20-p10-kiosk-portrait-1080x1920,p10,kiosk-portrait-1080x1920,1080x1920,"smart casual",old,photo_check,,1080x1920,399,1618,0.00413
+t20-p10-kiosk-portrait-1080x1920,p10,kiosk-portrait-1080x1920,1080x1920,"smart casual",old,design_1_outfit,,,364,752,0.005971
+t20-p10-kiosk-portrait-1080x1920,p10,kiosk-portrait-1080x1920,1080x1920,"smart casual",old,image_edit,medium,1080x1920,411,2948,0.060367
+t20-p10-kiosk-portrait-1080x1920,p10,kiosk-portrait-1080x1920,1080x1920,"smart casual",old,face_check,,1080x1920 1024x1536,124,2358,0.004323
+t20-p10-kiosk-portrait-1080x1920,p10,kiosk-portrait-1080x1920,1080x1920,"smart casual",new,design_3_options,,,410,1377,0.014158
+t20-p10-kiosk-portrait-1080x1920,p10,kiosk-portrait-1080x1920,1080x1920,"smart casual",new,image_edit,low,1024x1536,209,1296,0.024333
+t21-p01-phone-3024x4032,p01,phone-3024x4032,3024x4032,"casual",old,photo_check,,3024x4032,399,1274,0.003479
+t21-p01-phone-3024x4032,p01,phone-3024x4032,3024x4032,"casual",old,design_1_outfit,,,364,752,0.005971
+t21-p01-phone-3024x4032,p01,phone-3024x4032,3024x4032,"casual",old,image_edit,medium,3024x4032,410,2947,0.060362
+t21-p01-phone-3024x4032,p01,phone-3024x4032,3024x4032,"casual",old,face_check,,3024x4032 1024x1536,124,2018,0.003728
+t21-p01-phone-3024x4032,p01,phone-3024x4032,3024x4032,"casual",new,design_3_options,,,410,1377,0.014158
+t21-p01-phone-3024x4032,p01,phone-3024x4032,3024x4032,"casual",new,image_edit,low,1024x1536,213,1300,0.024353
+t22-p02-phone-3024x4032,p02,phone-3024x4032,3024x4032,"office",old,photo_check,,3024x4032,399,1274,0.003479
+t22-p02-phone-3024x4032,p02,phone-3024x4032,3024x4032,"office",old,design_1_outfit,,,363,751,0.005969
+t22-p02-phone-3024x4032,p02,phone-3024x4032,3024x4032,"office",old,image_edit,medium,3024x4032,410,2947,0.060362
+t22-p02-phone-3024x4032,p02,phone-3024x4032,3024x4032,"office",old,face_check,,3024x4032 1024x1536,124,2018,0.003728
+t22-p02-phone-3024x4032,p02,phone-3024x4032,3024x4032,"office",new,design_3_options,,,409,1376,0.014156
+t22-p02-phone-3024x4032,p02,phone-3024x4032,3024x4032,"office",new,image_edit,low,1024x1536,213,1300,0.024353
+t23-p03-phone-3024x4032,p03,phone-3024x4032,3024x4032,"wedding guest",old,photo_check,,3024x4032,399,1274,0.003479
+t23-p03-phone-3024x4032,p03,phone-3024x4032,3024x4032,"wedding guest",old,design_1_outfit,,,365,753,0.005973
+t23-p03-phone-3024x4032,p03,phone-3024x4032,3024x4032,"wedding guest",old,image_edit,medium,3024x4032,411,2948,0.060367
+t23-p03-phone-3024x4032,p03,phone-3024x4032,3024x4032,"wedding guest",old,face_check,,3024x4032 1024x1536,124,2018,0.003728
+t23-p03-phone-3024x4032,p03,phone-3024x4032,3024x4032,"wedding guest",new,design_3_options,,,407,1374,0.014152
+t23-p03-phone-3024x4032,p03,phone-3024x4032,3024x4032,"wedding guest",new,image_edit,low,1024x1536,209,1296,0.024333
+t24-p04-phone-3024x4032,p04,phone-3024x4032,3024x4032,"party",old,photo_check,,3024x4032,399,1274,0.003479
+t24-p04-phone-3024x4032,p04,phone-3024x4032,3024x4032,"party",old,design_1_outfit,,,363,751,0.005969
+t24-p04-phone-3024x4032,p04,phone-3024x4032,3024x4032,"party",old,image_edit,medium,3024x4032,410,2947,0.060362
+t24-p04-phone-3024x4032,p04,phone-3024x4032,3024x4032,"party",old,face_check,,3024x4032 1024x1536,124,2018,0.003728
+t24-p04-phone-3024x4032,p04,phone-3024x4032,3024x4032,"party",new,design_3_options,,,406,1373,0.014151
+t24-p04-phone-3024x4032,p04,phone-3024x4032,3024x4032,"party",new,image_edit,low,1024x1536,209,1296,0.024333
+t25-p05-phone-3024x4032,p05,phone-3024x4032,3024x4032,"smart casual",old,photo_check,,3024x4032,399,1274,0.003479
+t25-p05-phone-3024x4032,p05,phone-3024x4032,3024x4032,"smart casual",old,design_1_outfit,,,364,752,0.005971
+t25-p05-phone-3024x4032,p05,phone-3024x4032,3024x4032,"smart casual",old,image_edit,medium,3024x4032,411,2948,0.060367
+t25-p05-phone-3024x4032,p05,phone-3024x4032,3024x4032,"smart casual",old,face_check,,3024x4032 1024x1536,124,2018,0.003728
+t25-p05-phone-3024x4032,p05,phone-3024x4032,3024x4032,"smart casual",new,design_3_options,,,410,1377,0.014158
+t25-p05-phone-3024x4032,p05,phone-3024x4032,3024x4032,"smart casual",new,image_edit,low,1024x1536,209,1296,0.024333
+t26-p06-phone-3024x4032,p06,phone-3024x4032,3024x4032,"casual",old,photo_check,,3024x4032,399,1274,0.003479
+t26-p06-phone-3024x4032,p06,phone-3024x4032,3024x4032,"casual",old,design_1_outfit,,,362,750,0.005968
+t26-p06-phone-3024x4032,p06,phone-3024x4032,3024x4032,"casual",old,image_edit,medium,3024x4032,410,2947,0.060362
+t26-p06-phone-3024x4032,p06,phone-3024x4032,3024x4032,"casual",old,face_check,,3024x4032 1024x1536,124,2018,0.003728
+t26-p06-phone-3024x4032,p06,phone-3024x4032,3024x4032,"casual",new,design_3_options,,,403,1370,0.014145
+t26-p06-phone-3024x4032,p06,phone-3024x4032,3024x4032,"casual",new,image_edit,low,1024x1536,212,1299,0.024348
+t27-p07-phone-3024x4032,p07,phone-3024x4032,3024x4032,"office",old,photo_check,,3024x4032,399,1274,0.003479
+t27-p07-phone-3024x4032,p07,phone-3024x4032,3024x4032,"office",old,design_1_outfit,,,363,751,0.005969
+t27-p07-phone-3024x4032,p07,phone-3024x4032,3024x4032,"office",old,image_edit,medium,3024x4032,410,2947,0.060362
+t27-p07-phone-3024x4032,p07,phone-3024x4032,3024x4032,"office",old,face_check,,3024x4032 1024x1536,124,2018,0.003728
+t27-p07-phone-3024x4032,p07,phone-3024x4032,3024x4032,"office",new,design_3_options,,,409,1376,0.014156
+t27-p07-phone-3024x4032,p07,phone-3024x4032,3024x4032,"office",new,image_edit,low,1024x1536,209,1296,0.024333
+t28-p08-phone-3024x4032,p08,phone-3024x4032,3024x4032,"wedding guest",old,photo_check,,3024x4032,399,1274,0.003479
+t28-p08-phone-3024x4032,p08,phone-3024x4032,3024x4032,"wedding guest",old,design_1_outfit,,,363,751,0.005969
+t28-p08-phone-3024x4032,p08,phone-3024x4032,3024x4032,"wedding guest",old,image_edit,medium,3024x4032,411,2948,0.060367
+t28-p08-phone-3024x4032,p08,phone-3024x4032,3024x4032,"wedding guest",old,face_check,,3024x4032 1024x1536,124,2018,0.003728
+t28-p08-phone-3024x4032,p08,phone-3024x4032,3024x4032,"wedding guest",new,design_3_options,,,411,1378,0.014159
+t28-p08-phone-3024x4032,p08,phone-3024x4032,3024x4032,"wedding guest",new,image_edit,low,1024x1536,209,1296,0.024333
+t29-p09-phone-3024x4032,p09,phone-3024x4032,3024x4032,"party",old,photo_check,,3024x4032,399,1274,0.003479
+t29-p09-phone-3024x4032,p09,phone-3024x4032,3024x4032,"party",old,design_1_outfit,,,363,751,0.005969
+t29-p09-phone-3024x4032,p09,phone-3024x4032,3024x4032,"party",old,image_edit,medium,3024x4032,410,2947,0.060362
+t29-p09-phone-3024x4032,p09,phone-3024x4032,3024x4032,"party",old,face_check,,3024x4032 1024x1536,124,2018,0.003728
+t29-p09-phone-3024x4032,p09,phone-3024x4032,3024x4032,"party",new,design_3_options,,,409,1376,0.014156
+t29-p09-phone-3024x4032,p09,phone-3024x4032,3024x4032,"party",new,image_edit,low,1024x1536,209,1296,0.024333
+t30-p10-phone-3024x4032,p10,phone-3024x4032,3024x4032,"smart casual",old,photo_check,,3024x4032,399,1274,0.003479
+t30-p10-phone-3024x4032,p10,phone-3024x4032,3024x4032,"smart casual",old,design_1_outfit,,,362,750,0.005968
+t30-p10-phone-3024x4032,p10,phone-3024x4032,3024x4032,"smart casual",old,image_edit,medium,3024x4032,411,2948,0.060367
+t30-p10-phone-3024x4032,p10,phone-3024x4032,3024x4032,"smart casual",old,face_check,,3024x4032 1024x1536,124,2018,0.003728
+t30-p10-phone-3024x4032,p10,phone-3024x4032,3024x4032,"smart casual",new,design_3_options,,,410,1377,0.014158
+t30-p10-phone-3024x4032,p10,phone-3024x4032,3024x4032,"smart casual",new,image_edit,low,1024x1536,209,1296,0.024333
+t31-p01-warm-tungsten-1920x1080,p01,warm-tungsten-1920x1080,1920x1080,"casual",old,photo_check,,1920x1080,399,1620,0.004158
+t31-p01-warm-tungsten-1920x1080,p01,warm-tungsten-1920x1080,1920x1080,"casual",old,design_1_outfit,,,364,752,0.005971
+t31-p01-warm-tungsten-1920x1080,p01,warm-tungsten-1920x1080,1920x1080,"casual",old,image_edit,medium,1920x1080,410,2947,0.060362
+t31-p01-warm-tungsten-1920x1080,p01,warm-tungsten-1920x1080,1920x1080,"casual",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t31-p01-warm-tungsten-1920x1080,p01,warm-tungsten-1920x1080,1920x1080,"casual",new,design_3_options,,,410,1377,0.014158
+t31-p01-warm-tungsten-1920x1080,p01,warm-tungsten-1920x1080,1920x1080,"casual",new,image_edit,low,1024x1536,213,1300,0.024353
+t32-p02-warm-tungsten-1920x1080,p02,warm-tungsten-1920x1080,1920x1080,"office",old,photo_check,,1920x1080,399,1620,0.004158
+t32-p02-warm-tungsten-1920x1080,p02,warm-tungsten-1920x1080,1920x1080,"office",old,design_1_outfit,,,363,751,0.005969
+t32-p02-warm-tungsten-1920x1080,p02,warm-tungsten-1920x1080,1920x1080,"office",old,image_edit,medium,1920x1080,410,2947,0.060362
+t32-p02-warm-tungsten-1920x1080,p02,warm-tungsten-1920x1080,1920x1080,"office",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t32-p02-warm-tungsten-1920x1080,p02,warm-tungsten-1920x1080,1920x1080,"office",new,design_3_options,,,409,1376,0.014156
+t32-p02-warm-tungsten-1920x1080,p02,warm-tungsten-1920x1080,1920x1080,"office",new,image_edit,low,1024x1536,213,1300,0.024353
+t33-p03-warm-tungsten-1920x1080,p03,warm-tungsten-1920x1080,1920x1080,"wedding guest",old,photo_check,,1920x1080,399,1620,0.004158
+t33-p03-warm-tungsten-1920x1080,p03,warm-tungsten-1920x1080,1920x1080,"wedding guest",old,design_1_outfit,,,361,749,0.005966
+t33-p03-warm-tungsten-1920x1080,p03,warm-tungsten-1920x1080,1920x1080,"wedding guest",old,image_edit,medium,1920x1080,411,2948,0.060367
+t33-p03-warm-tungsten-1920x1080,p03,warm-tungsten-1920x1080,1920x1080,"wedding guest",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t33-p03-warm-tungsten-1920x1080,p03,warm-tungsten-1920x1080,1920x1080,"wedding guest",new,design_3_options,,,407,1374,0.014152
+t33-p03-warm-tungsten-1920x1080,p03,warm-tungsten-1920x1080,1920x1080,"wedding guest",new,image_edit,low,1024x1536,209,1296,0.024333
+t34-p04-warm-tungsten-1920x1080,p04,warm-tungsten-1920x1080,1920x1080,"party",old,photo_check,,1920x1080,399,1620,0.004158
+t34-p04-warm-tungsten-1920x1080,p04,warm-tungsten-1920x1080,1920x1080,"party",old,design_1_outfit,,,361,749,0.005966
+t34-p04-warm-tungsten-1920x1080,p04,warm-tungsten-1920x1080,1920x1080,"party",old,image_edit,medium,1920x1080,410,2947,0.060362
+t34-p04-warm-tungsten-1920x1080,p04,warm-tungsten-1920x1080,1920x1080,"party",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t34-p04-warm-tungsten-1920x1080,p04,warm-tungsten-1920x1080,1920x1080,"party",new,design_3_options,,,406,1373,0.014151
+t34-p04-warm-tungsten-1920x1080,p04,warm-tungsten-1920x1080,1920x1080,"party",new,image_edit,low,1024x1536,209,1296,0.024333
+t35-p05-warm-tungsten-1920x1080,p05,warm-tungsten-1920x1080,1920x1080,"smart casual",old,photo_check,,1920x1080,399,1620,0.004158
+t35-p05-warm-tungsten-1920x1080,p05,warm-tungsten-1920x1080,1920x1080,"smart casual",old,design_1_outfit,,,364,752,0.005971
+t35-p05-warm-tungsten-1920x1080,p05,warm-tungsten-1920x1080,1920x1080,"smart casual",old,image_edit,medium,1920x1080,411,2948,0.060367
+t35-p05-warm-tungsten-1920x1080,p05,warm-tungsten-1920x1080,1920x1080,"smart casual",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t35-p05-warm-tungsten-1920x1080,p05,warm-tungsten-1920x1080,1920x1080,"smart casual",new,design_3_options,,,410,1377,0.014158
+t35-p05-warm-tungsten-1920x1080,p05,warm-tungsten-1920x1080,1920x1080,"smart casual",new,image_edit,low,1024x1536,209,1296,0.024333
+t36-p06-warm-tungsten-1920x1080,p06,warm-tungsten-1920x1080,1920x1080,"casual",old,photo_check,,1920x1080,399,1620,0.004158
+t36-p06-warm-tungsten-1920x1080,p06,warm-tungsten-1920x1080,1920x1080,"casual",old,design_1_outfit,,,362,750,0.005968
+t36-p06-warm-tungsten-1920x1080,p06,warm-tungsten-1920x1080,1920x1080,"casual",old,image_edit,medium,1920x1080,410,2947,0.060362
+t36-p06-warm-tungsten-1920x1080,p06,warm-tungsten-1920x1080,1920x1080,"casual",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t36-p06-warm-tungsten-1920x1080,p06,warm-tungsten-1920x1080,1920x1080,"casual",new,design_3_options,,,403,1370,0.014145
+t36-p06-warm-tungsten-1920x1080,p06,warm-tungsten-1920x1080,1920x1080,"casual",new,image_edit,low,1024x1536,212,1299,0.024348
+t37-p07-warm-tungsten-1920x1080,p07,warm-tungsten-1920x1080,1920x1080,"office",old,photo_check,,1920x1080,399,1620,0.004158
+t37-p07-warm-tungsten-1920x1080,p07,warm-tungsten-1920x1080,1920x1080,"office",old,design_1_outfit,,,363,751,0.005969
+t37-p07-warm-tungsten-1920x1080,p07,warm-tungsten-1920x1080,1920x1080,"office",old,image_edit,medium,1920x1080,410,2947,0.060362
+t37-p07-warm-tungsten-1920x1080,p07,warm-tungsten-1920x1080,1920x1080,"office",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t37-p07-warm-tungsten-1920x1080,p07,warm-tungsten-1920x1080,1920x1080,"office",new,design_3_options,,,409,1376,0.014156
+t37-p07-warm-tungsten-1920x1080,p07,warm-tungsten-1920x1080,1920x1080,"office",new,image_edit,low,1024x1536,209,1296,0.024333
+t38-p08-warm-tungsten-1920x1080,p08,warm-tungsten-1920x1080,1920x1080,"wedding guest",old,photo_check,,1920x1080,399,1620,0.004158
+t38-p08-warm-tungsten-1920x1080,p08,warm-tungsten-1920x1080,1920x1080,"wedding guest",old,design_1_outfit,,,363,751,0.005969
+t38-p08-warm-tungsten-1920x1080,p08,warm-tungsten-1920x1080,1920x1080,"wedding guest",old,image_edit,medium,1920x1080,411,2948,0.060367
+t38-p08-warm-tungsten-1920x1080,p08,warm-tungsten-1920x1080,1920x1080,"wedding guest",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t38-p08-warm-tungsten-1920x1080,p08,warm-tungsten-1920x1080,1920x1080,"wedding guest",new,design_3_options,,,411,1378,0.014159
+t38-p08-warm-tungsten-1920x1080,p08,warm-tungsten-1920x1080,1920x1080,"wedding guest",new,image_edit,low,1024x1536,209,1296,0.024333
+t39-p09-warm-tungsten-1920x1080,p09,warm-tungsten-1920x1080,1920x1080,"party",old,photo_check,,1920x1080,399,1620,0.004158
+t39-p09-warm-tungsten-1920x1080,p09,warm-tungsten-1920x1080,1920x1080,"party",old,design_1_outfit,,,363,751,0.005969
+t39-p09-warm-tungsten-1920x1080,p09,warm-tungsten-1920x1080,1920x1080,"party",old,image_edit,medium,1920x1080,410,2947,0.060362
+t39-p09-warm-tungsten-1920x1080,p09,warm-tungsten-1920x1080,1920x1080,"party",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t39-p09-warm-tungsten-1920x1080,p09,warm-tungsten-1920x1080,1920x1080,"party",new,design_3_options,,,409,1376,0.014156
+t39-p09-warm-tungsten-1920x1080,p09,warm-tungsten-1920x1080,1920x1080,"party",new,image_edit,low,1024x1536,209,1296,0.024333
+t40-p10-warm-tungsten-1920x1080,p10,warm-tungsten-1920x1080,1920x1080,"smart casual",old,photo_check,,1920x1080,399,1620,0.004158
+t40-p10-warm-tungsten-1920x1080,p10,warm-tungsten-1920x1080,1920x1080,"smart casual",old,design_1_outfit,,,364,752,0.005971
+t40-p10-warm-tungsten-1920x1080,p10,warm-tungsten-1920x1080,1920x1080,"smart casual",old,image_edit,medium,1920x1080,411,2948,0.060367
+t40-p10-warm-tungsten-1920x1080,p10,warm-tungsten-1920x1080,1920x1080,"smart casual",old,face_check,,1920x1080 1024x1536,124,2358,0.004323
+t40-p10-warm-tungsten-1920x1080,p10,warm-tungsten-1920x1080,1920x1080,"smart casual",new,design_3_options,,,410,1377,0.014158
+t40-p10-warm-tungsten-1920x1080,p10,warm-tungsten-1920x1080,1920x1080,"smart casual",new,image_edit,low,1024x1536,209,1296,0.024333
+t41-p01-cool-led-dim-1280x720,p01,cool-led-dim-1280x720,1280x720,"casual",old,photo_check,,1280x720,399,1612,0.004046
+t41-p01-cool-led-dim-1280x720,p01,cool-led-dim-1280x720,1280x720,"casual",old,design_1_outfit,,,364,752,0.005971
+t41-p01-cool-led-dim-1280x720,p01,cool-led-dim-1280x720,1280x720,"casual",old,image_edit,medium,1280x720,410,2947,0.060362
+t41-p01-cool-led-dim-1280x720,p01,cool-led-dim-1280x720,1280x720,"casual",old,face_check,,1280x720 1024x1536,124,2358,0.004323
+t41-p01-cool-led-dim-1280x720,p01,cool-led-dim-1280x720,1280x720,"casual",new,design_3_options,,,410,1377,0.014158
+t41-p01-cool-led-dim-1280x720,p01,cool-led-dim-1280x720,1280x720,"casual",new,image_edit,low,1024x1536,213,1300,0.024353
+t42-p02-cool-led-dim-1280x720,p02,cool-led-dim-1280x720,1280x720,"office",old,photo_check,,1280x720,399,1612,0.004046
+t42-p02-cool-led-dim-1280x720,p02,cool-led-dim-1280x720,1280x720,"office",old,design_1_outfit,,,363,751,0.005969
+t42-p02-cool-led-dim-1280x720,p02,cool-led-dim-1280x720,1280x720,"office",old,image_edit,medium,1280x720,410,2947,0.060362
+t42-p02-cool-led-dim-1280x720,p02,cool-led-dim-1280x720,1280x720,"office",old,face_check,,1280x720 1024x1536,124,2358,0.004323
+t42-p02-cool-led-dim-1280x720,p02,cool-led-dim-1280x720,1280x720,"office",new,design_3_options,,,409,1376,0.014156
+t42-p02-cool-led-dim-1280x720,p02,cool-led-dim-1280x720,1280x720,"office",new,image_edit,low,1024x1536,213,1300,0.024353
+t43-p03-cool-led-dim-1280x720,p03,cool-led-dim-1280x720,1280x720,"wedding guest",old,photo_check,,1280x720,399,1612,0.004046
+t43-p03-cool-led-dim-1280x720,p03,cool-led-dim-1280x720,1280x720,"wedding guest",old,design_1_outfit,,,361,749,0.005966
+t43-p03-cool-led-dim-1280x720,p03,cool-led-dim-1280x720,1280x720,"wedding guest",old,image_edit,medium,1280x720,411,2948,0.060367
+t43-p03-cool-led-dim-1280x720,p03,cool-led-dim-1280x720,1280x720,"wedding guest",old,face_check,,1280x720 1024x1536,124,2358,0.004323
+t43-p03-cool-led-dim-1280x720,p03,cool-led-dim-1280x720,1280x720,"wedding guest",new,design_3_options,,,407,1374,0.014152
+t43-p03-cool-led-dim-1280x720,p03,cool-led-dim-1280x720,1280x720,"wedding guest",new,image_edit,low,1024x1536,209,1296,0.024333
+t44-p04-cool-led-dim-1280x720,p04,cool-led-dim-1280x720,1280x720,"party",old,photo_check,,1280x720,399,1612,0.004046
+t44-p04-cool-led-dim-1280x720,p04,cool-led-dim-1280x720,1280x720,"party",old,design_1_outfit,,,363,751,0.005969
+t44-p04-cool-led-dim-1280x720,p04,cool-led-dim-1280x720,1280x720,"party",old,image_edit,medium,1280x720,410,2947,0.060362
+t44-p04-cool-led-dim-1280x720,p04,cool-led-dim-1280x720,1280x720,"party",old,face_check,,1280x720 1024x1536,124,2358,0.004323
+t44-p04-cool-led-dim-1280x720,p04,cool-led-dim-1280x720,1280x720,"party",new,design_3_options,,,406,1373,0.014151
+t44-p04-cool-led-dim-1280x720,p04,cool-led-dim-1280x720,1280x720,"party",new,image_edit,low,1024x1536,209,1296,0.024333
+t45-p05-cool-led-dim-1280x720,p05,cool-led-dim-1280x720,1280x720,"smart casual",old,photo_check,,1280x720,399,1612,0.004046
+t45-p05-cool-led-dim-1280x720,p05,cool-led-dim-1280x720,1280x720,"smart casual",old,design_1_outfit,,,364,752,0.005971
+t45-p05-cool-led-dim-1280x720,p05,cool-led-dim-1280x720,1280x720,"smart casual",old,image_edit,medium,1280x720,411,2948,0.060367
+t45-p05-cool-led-dim-1280x720,p05,cool-led-dim-1280x720,1280x720,"smart casual",old,face_check,,1280x720 1024x1536,124,2358,0.004323
+t45-p05-cool-led-dim-1280x720,p05,cool-led-dim-1280x720,1280x720,"smart casual",new,design_3_options,,,410,1377,0.014158
+t45-p05-cool-led-dim-1280x720,p05,cool-led-dim-1280x720,1280x720,"smart casual",new,image_edit,low,1024x1536,209,1296,0.024333
+t46-p06-cool-led-dim-1280x720,p06,cool-led-dim-1280x720,1280x720,"casual",old,photo_check,,1280x720,399,1612,0.004046
+t46-p06-cool-led-dim-1280x720,p06,cool-led-dim-1280x720,1280x720,"casual",old,design_1_outfit,,,364,752,0.005971
+t46-p06-cool-led-dim-1280x720,p06,cool-led-dim-1280x720,1280x720,"casual",old,image_edit,medium,1280x720,410,2947,0.060362
+t46-p06-cool-led-dim-1280x720,p06,cool-led-dim-1280x720,1280x720,"casual",old,face_check,,1280x720 1024x1536,124,2358,0.004323
+t46-p06-cool-led-dim-1280x720,p06,cool-led-dim-1280x720,1280x720,"casual",new,design_3_options,,,403,1370,0.014145
+t46-p06-cool-led-dim-1280x720,p06,cool-led-dim-1280x720,1280x720,"casual",new,image_edit,low,1024x1536,212,1299,0.024348
+t47-p07-cool-led-dim-1280x720,p07,cool-led-dim-1280x720,1280x720,"office",old,photo_check,,1280x720,399,1612,0.004046
+t47-p07-cool-led-dim-1280x720,p07,cool-led-dim-1280x720,1280x720,"office",old,design_1_outfit,,,361,749,0.005966
+t47-p07-cool-led-dim-1280x720,p07,cool-led-dim-1280x720,1280x720,"office",old,image_edit,medium,1280x720,410,2947,0.060362
+t47-p07-cool-led-dim-1280x720,p07,cool-led-dim-1280x720,1280x720,"office",old,face_check,,1280x720 1024x1536,124,2358,0.004323
+t47-p07-cool-led-dim-1280x720,p07,cool-led-dim-1280x720,1280x720,"office",new,design_3_options,,,409,1376,0.014156
+t47-p07-cool-led-dim-1280x720,p07,cool-led-dim-1280x720,1280x720,"office",new,image_edit,low,1024x1536,209,1296,0.024333
+t48-p08-cool-led-dim-1280x720,p08,cool-led-dim-1280x720,1280x720,"wedding guest",old,photo_check,,1280x720,399,1612,0.004046
+t48-p08-cool-led-dim-1280x720,p08,cool-led-dim-1280x720,1280x720,"wedding guest",old,design_1_outfit,,,365,753,0.005973
+t48-p08-cool-led-dim-1280x720,p08,cool-led-dim-1280x720,1280x720,"wedding guest",old,image_edit,medium,1280x720,411,2948,0.060367
+t48-p08-cool-led-dim-1280x720,p08,cool-led-dim-1280x720,1280x720,"wedding guest",old,face_check,,1280x720 1024x1536,124,2358,0.004323
+t48-p08-cool-led-dim-1280x720,p08,cool-led-dim-1280x720,1280x720,"wedding guest",new,design_3_options,,,411,1378,0.014159
+t48-p08-cool-led-dim-1280x720,p08,cool-led-dim-1280x720,1280x720,"wedding guest",new,image_edit,low,1024x1536,209,1296,0.024333
+t49-p09-cool-led-dim-1280x720,p09,cool-led-dim-1280x720,1280x720,"party",old,photo_check,,1280x720,399,1612,0.004046
+t49-p09-cool-led-dim-1280x720,p09,cool-led-dim-1280x720,1280x720,"party",old,design_1_outfit,,,361,749,0.005966
+t49-p09-cool-led-dim-1280x720,p09,cool-led-dim-1280x720,1280x720,"party",old,image_edit,medium,1280x720,410,2947,0.060362
+t49-p09-cool-led-dim-1280x720,p09,cool-led-dim-1280x720,1280x720,"party",old,face_check,,1280x720 1024x1536,124,2358,0.004323
+t49-p09-cool-led-dim-1280x720,p09,cool-led-dim-1280x720,1280x720,"party",new,design_3_options,,,409,1376,0.014156
+t49-p09-cool-led-dim-1280x720,p09,cool-led-dim-1280x720,1280x720,"party",new,image_edit,low,1024x1536,209,1296,0.024333
+t50-p10-cool-led-dim-1280x720,p10,cool-led-dim-1280x720,1280x720,"smart casual",old,photo_check,,1280x720,399,1612,0.004046
+t50-p10-cool-led-dim-1280x720,p10,cool-led-dim-1280x720,1280x720,"smart casual",old,design_1_outfit,,,364,752,0.005971
+t50-p10-cool-led-dim-1280x720,p10,cool-led-dim-1280x720,1280x720,"smart casual",old,image_edit,medium,1280x720,411,2948,0.060367
+t50-p10-cool-led-dim-1280x720,p10,cool-led-dim-1280x720,1280x720,"smart casual",old,face_check,,1280x720 1024x1536,124,2358,0.004323
+t50-p10-cool-led-dim-1280x720,p10,cool-led-dim-1280x720,1280x720,"smart casual",new,design_3_options,,,410,1377,0.014158
+t50-p10-cool-led-dim-1280x720,p10,cool-led-dim-1280x720,1280x720,"smart casual",new,image_edit,low,1024x1536,209,1296,0.024333

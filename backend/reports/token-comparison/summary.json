@@ -1,0 +1,172 @@
+{
+  "generatedAt": "2026-11-07T07:47:59.303Z",
+  "tests": 50,
+  "pipelines": {
+    "old": "v1 POST /api/style-me: photo check (vision) + design (1 outfit) + image edit at quality auto + face check (vision)",
+    "new": "v2 POST /api/v2/sessions: local perception + design (3 outfits) + image edit at quality low (2 streamed previews) + local identity check"
+  },
+  "assumptions": {
+    "tokenizer": "o200k_base (gpt-tokenizer), exact for prompt, schema and response text",
+    "visionImageTokens": "gpt-5.2 tile formula: 85 + 170 per 512 px tile after fitting 2048 and scaling the short side to 768",
+    "imageEditTokens": "calibrated on this project's real gpt-image-1.5 calls: {\"low\":1100,\"medium\":2750,\"high\":6000} total per call; +100 output tokens per streamed preview",
+    "oldImageQualityAuto": "resolved as medium in the headline numbers (conservative); high shown separately (matches the real $0.26/visitor of 5 Nov)",
+    "reasoningTokens": "0 for both (unknown offline; the old pipeline makes 3 text calls to the new one's 1, so this favours the old)",
+    "faceCheckRetries": "none needed (face check passes); a real drift would add a second image and check to the old pipeline only",
+    "v2RenderPromptTokensExact": 213
+  },
+  "perLook": {
+    "old": {
+      "tokens": {
+        "mean": 7537.16,
+        "median": 7674,
+        "min": 6989,
+        "max": 7679
+      },
+      "usd": {
+        "mean": 0.07,
+        "median": 0.074786,
+        "min": 0.073537,
+        "max": 0.074821
+      },
+      "paidCalls": {
+        "mean": 4,
+        "median": 4,
+        "min": 4,
+        "max": 4
+      },
+      "imagesSent": {
+        "mean": 4,
+        "median": 4,
+        "min": 4,
+        "max": 4
+      }
+    },
+    "oldIfAutoIsHigh": {
+      "tokens": {
+        "mean": 10787.16,
+        "median": 10924,
+        "min": 10239,
+        "max": 10929
+      }
+    },
+    "new": {
+      "tokens": {
+        "mean": 2672.5,
+        "median": 2673,
+        "min": 2669,
+        "max": 2677
+      },
+      "usd": {
+        "mean": 0.04,
+        "median": 0.038491,
+        "min": 0.038484,
+        "max": 0.038511
+      },
+      "paidCalls": {
+        "mean": 2,
+        "median": 2,
+        "min": 2,
+        "max": 2
+      },
+      "imagesSent": {
+        "mean": 1,
+        "median": 1,
+        "min": 1,
+        "max": 1
+      }
+    }
+  },
+  "saving": {
+    "tokensPerLook": {
+      "mean": 4864.66,
+      "median": 5000,
+      "min": 4314,
+      "max": 5009
+    },
+    "percent": 64.5,
+    "percentIfAutoIsHigh": 75.2,
+    "usdPercent": 48.4,
+    "newPipelineWins": 50
+  },
+  "byCallKind": {
+    "old": {
+      "photo_check": {
+        "calls": 50,
+        "tokens": 77440,
+        "tokensPerLook": 1549,
+        "callsPerLook": 1,
+        "usdPerLook": 0.00399
+      },
+      "design_1_outfit": {
+        "calls": 50,
+        "tokens": 37548,
+        "tokensPerLook": 751,
+        "callsPerLook": 1,
+        "usdPerLook": 0.00597
+      },
+      "image_edit": {
+        "calls": 50,
+        "tokens": 147370,
+        "tokensPerLook": 2947,
+        "callsPerLook": 1,
+        "usdPerLook": 0.06036
+      },
+      "face_check": {
+        "calls": 50,
+        "tokens": 114500,
+        "tokensPerLook": 2290,
+        "callsPerLook": 1,
+        "usdPerLook": 0.0042
+      }
+    },
+    "new": {
+      "design_3_options": {
+        "calls": 50,
+        "tokens": 68770,
+        "tokensPerLook": 1375,
+        "callsPerLook": 1,
+        "usdPerLook": 0.01415
+      },
+      "image_edit": {
+        "calls": 50,
+        "tokens": 64855,
+        "tokensPerLook": 1297,
+        "callsPerLook": 1,
+        "usdPerLook": 0.02434
+      }
+    }
+  },
+  "byCondition": {
+    "webcam-1920x1080": {
+      "tests": 10,
+      "oldTokens": 7676.4,
+      "newTokens": 2672.5
+    },
+    "kiosk-portrait-1080x1920": {
+      "tests": 10,
+      "oldTokens": 7674.2,
+      "newTokens": 2672.5
+    },
+    "phone-3024x4032": {
+      "tests": 10,
+      "oldTokens": 6990.6,
+      "newTokens": 2672.5
+    },
+    "warm-tungsten-1920x1080": {
+      "tests": 10,
+      "oldTokens": 7676.2,
+      "newTokens": 2672.5
+    },
+    "cool-led-dim-1280x720": {
+      "tests": 10,
+      "oldTokens": 7668.4,
+      "newTokens": 2672.5
+    }
+  },
+  "recordedReference": {
+    "note": "Real measurements already in this project, for comparison with the modelled numbers above",
+    "newPipelineReadme": "1,857–1,970 tokens and about $0.028 per look (real calls, 6 Nov 2026)",
+    "originalPipelineReadme": "2,673 tokens and $0.060 per look (real calls)",
+    "report5Nov": "about $0.26 per visitor (one text call plus one image, default quality)"
+  }
+}
