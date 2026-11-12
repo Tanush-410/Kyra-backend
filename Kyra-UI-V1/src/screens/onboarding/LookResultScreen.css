@@ -1,10 +1,19 @@
 /* Results (1080 x 3840 kiosk canvas). Sizes follow the onboarding screens: 90px titles, 52-60px text. */
-.look {
-  gap: 44px;
-  padding: 0 60px;
-  margin-top: 60px;
+/* The results fill the 3840px screen exactly, whatever the header shows: the header takes its height,
+   the rest goes to .look, and the picture gets whatever .look's other parts leave (never less than
+   700px). Nothing ends up below the screen, where a visitor could never reach it. */
+.look-screen { display: flex; flex-direction: column; }
+.look-screen > .app-header { flex: none; }
+.screen__content.look {
+  flex: 1 1 0;
+  min-height: 0;
+  gap: 40px;
+  padding: 0 60px 40px;
+  margin-top: 24px;
+  overflow: hidden;
 }
-.look--centred {
+.look > * { flex: none; }
+.screen__content.look.look--centred {
   gap: 120px;
   margin-top: 600px;
   padding: 0 87px;
@@ -17,8 +26,8 @@
   object-fit: contain;
   border-radius: var(--radius-card);
   background: rgba(255, 255, 255, 0.06);
-  flex: none;
 }
+.look > .look__image { flex: 1 1 0; height: auto; min-height: 700px; max-height: 1300px; }
 .look__image--pending {
   position: relative;
   display: flex;
