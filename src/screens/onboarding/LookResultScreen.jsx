@@ -195,7 +195,7 @@ export default function LookResultScreen() {
   };
 
   return (
-    <div className="screen">
+    <div className="screen look-screen">
       <ShopHeader onExit={() => setExitOpen(true)} />
       <div className="screen__content look" inert={modalOpen ? "" : undefined}>
         <h1 className="title title--h4">{done ? "Here’s your look" : option ? "Your look is on its way" : "Building your profile"}</h1>
