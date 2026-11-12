@@ -6,6 +6,8 @@ export const SKIN_TONE_PATH = "/welcome/looking-for-today/surpriseme/analysis/ho
 export const FIT_PATH = `${SKIN_TONE_PATH}/fit`;
 export const SUGGESTIONS_PATH = `${SKIN_TONE_PATH}/suggestions`;
 export const LOOK_PATH = `${SKIN_TONE_PATH}/look`;
+// The edit flow (Figma "Edit"): a new set of outfits built around one change.
+export const EDIT_LOOK_PATH = `${SKIN_TONE_PATH}/edit`;
 // Where the shop (and "Exit" in it) returns to: the look.
 export const RESULTS_PATH = LOOK_PATH;
 export const SHOP_PATH = "/shop";

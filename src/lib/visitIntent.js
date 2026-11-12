@@ -1,6 +1,7 @@
 /**
- * Turns what the visitor picked in onboarding (?category=..., ?q=voice text) into the backend's session
- * request: { style, gender }. The backend designs outfits for `style` (at most 120 characters).
+ * Turns what the visitor picked in onboarding (?category=..., and the voice text in router state) into the
+ * backend's session request: { style, gender }. The backend designs outfits for `style` (at most 120
+ * characters). The spoken words never go in the address: browsers keep addresses in their history.
  *
  * category: a piece id from the picks screens ("tops-male", "one-pieces-female", ...), or
  *           "somethingspecific", or nothing ("null" when an earlier screen had none).
@@ -36,7 +37,7 @@ export function visitIntent({ category, q } = {}) {
   return { style, gender, piece };
 }
 
-/** The category and voice text from a screen's location (router state first, then the query string). */
+/** The category and voice text from a screen's location (router state first; an old ?q= link still works). */
 export function intentFromLocation(location, params) {
   return {
     category: location?.state?.id ?? params.get("category"),
@@ -44,11 +45,10 @@ export function intentFromLocation(location, params) {
   };
 }
 
-/** Query string that carries the intent to the next screen. */
-export function intentQuery({ category, q }) {
+/** Query string that carries the category to the next screen (the voice text goes in router state). */
+export function intentQuery({ category }) {
   const query = new URLSearchParams();
   if (clean(category)) query.set("category", clean(category));
-  if (clean(q)) query.set("q", clean(q));
   const text = query.toString();
   return text ? `?${text}` : "";
 }

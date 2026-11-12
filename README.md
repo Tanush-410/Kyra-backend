@@ -71,6 +71,14 @@ Open it once with the token, `http://localhost:5173/Kyra-UI-V1/#token=<apiToken>
    (drag), the arrows or the keyboard switch outfits; a first-time hint shows how. Tapping the outfit opens
    Virtual try-on (renders it on the visitor; a look already rendered is reused, at no cost) and More like
    this (the backend designs a new round from it and renders its first look).
+   Edit outfit opens the edit flow (`screens/results/EditLookScreen`, Figma "Edit"): what to edit (the
+   design's categories for women, neutral ones otherwise), what's on your mind (Something similar /
+   different, or say it: Suggest changes, I know what I want, with presets for visitors who'd rather not
+   speak), then "Let's find what you're looking for". The backend can't swap one piece, so the edit is
+   sent as feedback that names the rest of the outfit to keep and the change (`src/lib/editFeedback.js`:
+   under 200 characters, only characters the backend's prompt cleaner keeps). Each edit is a new set of
+   three; Suggestions opens on it ("Is this what you were looking for?") and the earlier sets stay a swipe
+   away ("Set 1 of 2"). One edit or More like this at a time.
 8. **Virtual try-on** (`screens/results/TryOnScreen`, Figma "Virtual try on"): the visitor wearing the look,
    full height under the header. Tapping it (or "Options") offers Love it, Take it home (a QR code), Show
    another and Back to suggestions. While it renders: the Kyra star and what is happening, with a way back.
@@ -95,6 +103,9 @@ Open it once with the token, `http://localhost:5173/Kyra-UI-V1/#token=<apiToken>
   unaffected.
 - **Models are local:** `public/mediapipe/` holds the hand and pose models and the WASM files (from
   `npm run assets`). The splash screen no longer downloads a second copy from a CDN.
+- **Spoken words** stay in memory: they travel between screens in router state, never in the address (a
+  browser keeps addresses in its history), and aren't logged. The browser's speech service (Google, in
+  Chrome) turns them into text; the backend sends the text to OpenAI to design the looks.
 - **Shop demo** (`VITE_SHOP_DEMO=true`, off by default): the friend's products, cart, filter, checkout and
   piece edits, and the cart and filter buttons in the header. Their prices, sizes, brands and stock are
   placeholders (`src/data/shopPlaceholders.js`), so real visitors never see them unless it is turned on.

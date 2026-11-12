@@ -1,5 +1,6 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { kyraApi, openEvents } from "../api/kyraClient.js";
+import { moreLikeFeedback } from "../lib/editFeedback.js";
 import { activeOption, initialState, sessionReducer } from "../state/sessionReducer.js";
 
 const KyraSessionContext = createContext(null);
@@ -143,11 +144,7 @@ export function KyraSessionProvider({ children }) {
       redesign: (feedback) => oneRedesign((s) => kyraApi.redesign(s.id, { feedback })),
       /** "More like this": a new round built around this option's style and colours. */
       moreLike: (option) =>
-        oneRedesign((s) =>
-          kyraApi.redesign(s.id, {
-            feedback: `More like "${option.title}" (${option.summary}): keep its style and colours, with different pieces.`.slice(0, 200),
-          })
-        ),
+        oneRedesign((s) => kyraApi.redesign(s.id, { feedback: moreLikeFeedback(option) })),
       /** "Not for me": counts as a thumbs-down (it teaches the mirror), then shows the next look. */
       showAnother: () =>
         act(async (s) => {

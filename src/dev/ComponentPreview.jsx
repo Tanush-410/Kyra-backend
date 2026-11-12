@@ -10,6 +10,7 @@ import { FitAnalysisView } from "../screens/results/FitAnalysisScreen.jsx";
 import { SkinToneView } from "../screens/results/SkinToneScreen.jsx";
 import { SuggestionsView } from "../screens/results/SuggestionsScreen.jsx";
 import { TryOnView } from "../screens/results/TryOnScreen.jsx";
+import { EditView } from "../screens/results/EditLookScreen.jsx";
 import LookShortcut from "../components/LookShortcut.jsx";
 import { fitNotes } from "../lib/fitLevers.js";
 
@@ -20,7 +21,8 @@ const noop = () => {};
  * Figma. Not in the production build. Open /dev/<name>: header, toast, error, dialog, menu, loader;
  * whole screens: consent, consent-noqr, consent-error, too-far, out-of-frame, too-close, camera-loading,
  * hold, count, flash, allset, skin-tone, skin-analysing, fit, fit-guide, fit-outline, suggestions,
- * suggestions-2, suggestions-hint, suggestions-busy, tryon, tryon-loading, tryon-failed, tryon-text.
+ * suggestions-2, suggestions-hint, suggestions-busy, tryon, tryon-loading, tryon-failed, tryon-text,
+ * edit-piece, edit-piece-male, edit-intent, edit-voice, edit-working, edit-busy.
  */
 const PREVIEWS = {
   header: () => <AppHeader onBin={noop} onCart={noop} onFilter={noop} />,
@@ -90,6 +92,7 @@ const SAMPLE_OPTIONS = [
 ];
 
 const TRYON_ACTIONS = { onMenu: noop, onRetry: noop, onAnother: noop, onSuggestions: noop };
+const EDIT_ACTIONS = { onPiece: noop, onIntent: noop, onListen: noop, onWords: noop, onBack: noop };
 
 /** Whole screens (they draw their own .screen). */
 const SCREENS = {
@@ -116,6 +119,12 @@ const SCREENS = {
   "tryon-loading": () => <TryOnView view={{ kind: "loading", caption: "Your look is next in line…" }} actions={TRYON_ACTIONS} header={<AppHeader onBin={noop} />} />,
   "tryon-failed": () => <TryOnView view={{ kind: "failed", option: SAMPLE_OPTIONS[1], message: "I couldn’t create this picture. Try another look." }} actions={TRYON_ACTIONS} header={<AppHeader onBin={noop} />} />,
   "tryon-text": () => <TryOnView view={{ kind: "text", option: SAMPLE_OPTIONS[2], message: "Pictures are unavailable right now, so here is your look in words." }} actions={TRYON_ACTIONS} header={<AppHeader onBin={noop} />} />,
+  "edit-piece": () => <EditView step="piece" gender="female" outfit="Editing “Olive weekend”" {...EDIT_ACTIONS} />,
+  "edit-piece-male": () => <EditView step="piece" gender={null} outfit="Editing “Olive weekend”" {...EDIT_ACTIONS} />,
+  "edit-intent": () => <EditView step="intent" {...EDIT_ACTIONS} />,
+  "edit-voice": () => <EditView step="voice" {...EDIT_ACTIONS} />,
+  "edit-working": () => <EditView step="working" {...EDIT_ACTIONS} />,
+  "edit-busy": () => <EditView step="intent" busy {...EDIT_ACTIONS} />,
   "fit-outline": () => <FitAnalysisView goal="balance" onGoal={noop} notes={SAMPLE_FIT} female={false} shortcut={shortcut(true)} />,
 };
 

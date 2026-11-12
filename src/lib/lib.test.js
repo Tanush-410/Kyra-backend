@@ -4,6 +4,8 @@ import { ALL_SET_MS, FLASH_MS, captureStage } from "./captureSequence.js";
 import { chromaOf, clarityOf, colourChips, paletteRoles } from "./colourRoles.js";
 import { defaultGoal, fitNotes, GOALS, leversFor } from "./fitLevers.js";
 import { nextOptionOf, tryOnState } from "./tryOnView.js";
+import { editFeedback, editPieces, INTENTS, MAX_FEEDBACK, moreLikeFeedback } from "./editFeedback.js";
+import { allOutfits, outfitCount, setStart } from "./outfits.js";
 import { COPY, guidanceView } from "./guidanceCopy.js";
 import { createJpegSplitter } from "./mjpegStream.js";
 import { DEFAULT_STYLE, intentQuery, visitIntent } from "./visitIntent.js";
@@ -22,7 +24,7 @@ test("onboarding choices become the backend's style and gender", () => {
 });
 
 test("the intent travels between screens in the query string", () => {
-  assert.equal(intentQuery({ category: "tops-male", q: "date night" }), "?category=tops-male&q=date+night");
+  assert.equal(intentQuery({ category: "tops-male", q: "date night" }), "?category=tops-male", "spoken words never go in the address");
   assert.equal(intentQuery({ category: "null", q: "" }), "");
 });
 
@@ -140,4 +142,65 @@ test("try-on: another look is the round's next outfit, wrapping; none when there
   assert.deepEqual(nextOptionOf(looks()), { round: 1, option: 2 });
   assert.deepEqual(nextOptionOf(looks({}, { active: { round: 1, option: 3 } })), { round: 1, option: 1 });
   assert.equal(nextOptionOf({ rounds: { 1: [{ option: 1, items: [] }] }, currentRound: 1, active: { round: 1, option: 1 } }), null);
+});
+
+const OLIVE = {
+  title: "Olive weekend",
+  items: [
+    { category: "top", name: "Crew tee" },
+    { category: "bottom", name: "Wide-leg trousers" },
+    { category: "shoes", name: "Loafers" },
+  ],
+};
+
+// The backend's promptText keeps only these; anything else would turn into a space there.
+const PROMPT_SAFE = /^[\p{L}\p{M}\p{N} .,'&()/%+-]*$/u;
+
+test("an edit says what to keep (the rest, by name) and what to change", () => {
+  assert.equal(
+    editFeedback({ option: OLIVE, piece: "top", intent: "different" }),
+    "Keep the rest of the outfit 'Olive weekend' (Wide-leg trousers, Loafers). Change the top (something different)."
+  );
+  assert.equal(
+    editFeedback({ option: OLIVE, piece: "bottom", intent: "know", words: "  black   jeans! " }),
+    "Keep the rest of the outfit 'Olive weekend' (Crew tee, Loafers). Change the bottoms (black jeans)."
+  );
+  assert.match(editFeedback({ option: OLIVE, piece: "top", intent: "similar" }), /Change the top \(something similar\)\.$/);
+  assert.match(editFeedback({ option: OLIVE, piece: "accessory", intent: "suggest", words: "a gold watch" }), /\(Crew tee, Wide-leg trousers, Loafers\)\. Add the accessories \(a gold watch\)\.$/, "nothing to change: add");
+  assert.match(editFeedback({ option: OLIVE, piece: "top", intent: "suggest", words: "" }), /\(something different\)\.$/, "no words heard: something different");
+});
+
+test("edits and More like this survive the backend's prompt cleaner and its 200 characters", () => {
+  const long = { title: "A very long outfit title that goes on and on and on", items: Array.from({ length: 6 }, (_, i) => ({ category: i ? "accessory" : "top", name: `A long piece name number ${i}` })) };
+  const text = editFeedback({ option: long, piece: "top", intent: "know", words: "something in deep green: relaxed fit" });
+  assert.ok(text.length <= MAX_FEEDBACK, text.length);
+  assert.match(text, /Change the top \(something in deep green relaxed fit\)\.$/);
+  assert.match(text, /, \.\.\.\)/, "some kept pieces left out, and it says so");
+  const rambling = editFeedback({ option: OLIVE, piece: "top", intent: "know", words: "word ".repeat(80) });
+  assert.ok(rambling.length <= MAX_FEEDBACK, rambling.length);
+  const more = moreLikeFeedback({ title: "Olive weekend", summary: "Olive tee with cream: easy basics" });
+  assert.equal(more, "More like the outfit 'Olive weekend' (Olive tee with cream easy basics). Keep its style and colours, with different pieces.");
+  assert.ok(moreLikeFeedback({ title: "x", summary: "y ".repeat(150) }).length <= MAX_FEEDBACK);
+  for (const t of [text, rambling, more, editFeedback({ option: { title: "Smart \u201Cdate\u201D night; v2", items: OLIVE.items }, piece: "top", intent: "similar" })]) {
+    assert.match(t, PROMPT_SAFE, t);
+  }
+});
+
+test("edit choices: the design's categories for women, neutral ones otherwise", () => {
+  assert.deepEqual(editPieces("female").map((p) => p.key), ["top", "bottom", "shoes", "accessory", "onepiece"]);
+  for (const gender of ["male", null]) {
+    assert.ok(!editPieces(gender).some((p) => /women|dress|bag/.test(p.icon)), String(gender));
+  }
+  assert.deepEqual(INTENTS.map((i) => i.label), ["Something similar", "Something different", "Suggest changes", "I know what I want"]);
+});
+
+test("suggestions keep every set: oldest first, the newest set's start, and where you are", () => {
+  const session = { rounds: { 2: [{ option: 1, title: "D" }, { option: 2, title: "E" }, { option: 3, title: "F" }], 1: [{ option: 1, title: "A" }, { option: 2, title: "B" }, { option: 3, title: "C" }] } };
+  const outfits = allOutfits(session);
+  assert.deepEqual(outfits.map((o) => `${o.round}.${o.option}`), ["1.1", "1.2", "1.3", "2.1", "2.2", "2.3"]);
+  assert.equal(setStart(outfits, 2), 3);
+  assert.equal(setStart(outfits, 9), 0);
+  assert.equal(outfitCount(outfits, 4), "Set 2 of 2 · 2 of 3");
+  assert.equal(outfitCount(allOutfits({ rounds: { 1: session.rounds[1] } }), 1), "2 of 3", "one set: just the position");
+  assert.deepEqual(allOutfits({ rounds: { 1: [] } }), []);
 });
