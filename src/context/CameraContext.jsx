@@ -1,87 +1,85 @@
-// import React, { createContext, useContext, useEffect, useRef } from 'react';
-
-// const CameraContext = createContext();
-
-// export function CameraProvider({ children }) {
-//   const videoRef = useRef(null);
-//   const streamRef = useRef(null);
-
-//   useEffect(() => {
-//     let currentStream = null;
-
-//     const startCamera = async () => {
-//       try {
-//         currentStream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } });
-//         streamRef.current = currentStream;
-//         if (videoRef.current) {
-//           videoRef.current.srcObject = currentStream;
-//           await videoRef.current.play();
-//         }
-//       } catch (err) {
-//         console.error("Global camera access failed:", err);
-//       }
-//     };
-
-//     startCamera();
-
-//     return () => {
-//       if (currentStream) {
-//         currentStream.getTracks().forEach(track => track.stop());
-//       }
-//     };
-//   }, []);
-
-//   return (
-//     <CameraContext.Provider value={{ videoRef, streamRef }}>
-//       {/* Hidden global video element that stays alive across route changes */}
-//       <video ref={videoRef} style={{ display: "none" }} playsInline muted />
-//       {children}
-//     </CameraContext.Provider>
-//   );
-// }
-
-// export const useCamera = () => useContext(CameraContext);
-
-import React, { createContext, useContext, useEffect, useRef } from "react";
+import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import { API_BASE, CAMERA_SOURCE, getToken } from "../config.js";
+import { startMjpegStream } from "../lib/mjpegStream.js";
 
 const CameraContext = createContext(null);
 
-export function CameraProvider({ children }) {
+/**
+ * One camera stream for the whole app (hand tracking, wave detection, the camera feed), kept alive across
+ * screens in a hidden <video>.
+ *
+ * source "backend" (default): the KYRA backend owns the camera (its sidecar measures and captures the
+ *   visitor). This shows the backend's live preview, which is already mirrored. One owner means no
+ *   "camera in use" errors (Windows allows only one program per camera).
+ * source "browser": this browser's own webcam (VITE_CAMERA_SOURCE=browser). Not mirrored.
+ *
+ * value: { videoRef, streamRef, mirrored, source, status, error }
+ *   mirrored: the frames are already mirror images, so nothing should flip them again.
+ */
+export function CameraProvider({ children, source = CAMERA_SOURCE }) {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
+  const [status, setStatus] = useState("connecting");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     let cancelled = false;
+    let stop = () => {};
 
-    (async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: { width: 640, height: 480 },
-        });
-        if (cancelled) {
-          // StrictMode runs this effect twice in dev; don't leak the first stream.
-          stream.getTracks().forEach((t) => t.stop());
-          return;
-        }
-        streamRef.current = stream;
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          await videoRef.current.play();
-        }
-      } catch (err) {
-        console.error("Global camera access failed:", err);
+    const attach = async (stream) => {
+      streamRef.current = stream;
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+        await videoRef.current.play().catch(() => {});
       }
-    })();
+    };
+
+    if (source === "backend") {
+      const token = getToken();
+      const preview = startMjpegStream({
+        url: `${API_BASE}/api/v2/preview.mjpg`,
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        onStatus: (next, message = "") => {
+          if (cancelled) return;
+          setStatus(next);
+          setError(message);
+        },
+      });
+      stop = preview.stop;
+      attach(preview.stream);
+    } else {
+      (async () => {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 640, height: 480 } });
+          if (cancelled) {
+            // StrictMode runs this effect twice in dev; don't leak the first stream.
+            stream.getTracks().forEach((t) => t.stop());
+            return;
+          }
+          stop = () => stream.getTracks().forEach((t) => t.stop());
+          setStatus("running");
+          await attach(stream);
+        } catch (err) {
+          console.error("Global camera access failed:", err);
+          if (!cancelled) {
+            setStatus("error");
+            setError(err.message);
+          }
+        }
+      })();
+    }
 
     return () => {
       cancelled = true;
-      streamRef.current?.getTracks().forEach((t) => t.stop());
+      stop();
       streamRef.current = null;
     };
-  }, []);
+  }, [source]);
+
+  const value = { videoRef, streamRef, mirrored: source === "backend", source, status, error };
 
   return (
-    <CameraContext.Provider value={{ videoRef, streamRef }}>
+    <CameraContext.Provider value={value}>
       {/* Kept off-screen rather than display:none, which can stop frame decoding. */}
       <video
         ref={videoRef}

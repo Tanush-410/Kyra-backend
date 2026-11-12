@@ -18,6 +18,7 @@
   object-fit: cover;
   transform: scaleX(-1);
 }
+.camera-feed--mirrored { transform: none; }
 .camera-guide__header { position: relative; z-index: 1; }
 
 /* 898 x 2585 viewfinder, 466px from the top, centred */

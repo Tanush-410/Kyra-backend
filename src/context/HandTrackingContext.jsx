@@ -244,6 +244,8 @@ function clickAt(x, y) {
   let best = null;
   let bestDist = Infinity;
   document.querySelectorAll(CLICKABLE).forEach((el) => {
+    // Greyed-out buttons, and anything behind an open dialog (marked inert), can't be pinched.
+    if (el.disabled || el.closest("[inert]")) return;
     const r = el.getBoundingClientRect();
     if (r.width === 0 || r.height === 0) return;
     const dx = Math.max(r.left - x, 0, x - r.right);
@@ -303,8 +305,11 @@ async function createLandmarker(say) {
  * and outside <Routes>, so it keeps running when screens change.
  * It also renders the red/green hand cursor.
  */
-export function HandTrackingProvider({ children, mirror = true }) {
-  const { videoRef } = useCamera();
+// mirror: flip the pointer left-right. By default only when the camera frames aren't mirror images
+// already (the backend's preview is; a browser webcam isn't).
+export function HandTrackingProvider({ children, mirror }) {
+  const { videoRef, mirrored } = useCamera();
+  const flip = mirror ?? !mirrored;
   const cursorRef = useRef(null);
   const handlers = useRef(new Set());       // pinch listeners
   const frameHandlers = useRef(new Set());  // per-frame listeners (e.g. wave detection)
@@ -378,7 +383,7 @@ export function HandTrackingProvider({ children, mirror = true }) {
 
           // Pointer = midpoint of thumb and index tips, so it stays put while pinching.
           const nx = (thumb.x + index.x) / 2;
-          const px = mirror ? 1 - nx : nx;
+          const px = flip ? 1 - nx : nx;
           const py = (thumb.y + index.y) / 2;
           const tx = rect.left + px * rect.width;
           const ty = rect.top + py * rect.height;
@@ -456,7 +461,7 @@ export function HandTrackingProvider({ children, mirror = true }) {
       cancelAnimationFrame(raf);
       landmarker?.close();
     };
-  }, [videoRef, mirror]);
+  }, [videoRef, flip]);
 
   return (
     <HandTrackingContext.Provider value={{ register, registerFrame, status }}>

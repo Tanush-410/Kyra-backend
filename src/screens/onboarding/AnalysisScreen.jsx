@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import AppHeader from "../../components/AppHeader.jsx";
 import { useNavigate,useLocation, useSearchParams  } from "react-router-dom";
 const INTRO_MS = 3000; // 3 seconds
-const NEXT = "/welcome/looking-for-today/surpriseme/analysis/holdstill";
+// Next: ask before any photo is taken (ConsentScreen), then the camera (HoldStillScreen).
+const NEXT = "/welcome/looking-for-today/surpriseme/analysis/consent";
 
 /** Figma: Analysis / "Analysing" (2043:13245) */
 export default function AnalysisScreen() {

@@ -1,0 +1,14 @@
+.consent {
+  gap: 120px;
+  padding: 0 87px;
+}
+.consent__text { font-size: 60px; }
+.consent__text--quiet { font-size: 52px; opacity: 0.8; }
+.consent__error {
+  margin: 0;
+  width: 100%;
+  text-align: center;
+  font-size: 52px;
+  line-height: var(--type-line-height);
+  color: #ffb3c9;
+}

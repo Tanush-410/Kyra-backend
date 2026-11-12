@@ -5,10 +5,10 @@ import { useNavigate,useLocation, useSearchParams  } from "react-router-dom";
 
 // NOTE: both accessory cards are labelled "Accessories" in the Figma file.
 const OPTIONS = [
-  { id: "tops-male", label: "Tops", icon: `${import.meta.env.BASE_URL}/assets/icons/tops.png`, iconWidth: 200 },
-  { id: "bottoms-male", label: "Bottoms", icon: `${import.meta.env.BASE_URL}/assets/icons/bottoms.png`, iconWidth: 200 },
-  { id: "footwear-male", label: "Footwear", icon: `${import.meta.env.BASE_URL}/assets/icons/shoes.png`, iconWidth: 200 },
-  { id: "accessories-male", label: "Accessories", icon: `${import.meta.env.BASE_URL}/assets/icons/glasses.png`, iconWidth: 244 },
+  { id: "tops-male", label: "Tops", icon: `${import.meta.env.BASE_URL}assets/icons/tops.png`, iconWidth: 200 },
+  { id: "bottoms-male", label: "Bottoms", icon: `${import.meta.env.BASE_URL}assets/icons/bottoms.png`, iconWidth: 200 },
+  { id: "footwear-male", label: "Footwear", icon: `${import.meta.env.BASE_URL}assets/icons/shoes.png`, iconWidth: 200 },
+  { id: "accessories-male", label: "Accessories", icon: `${import.meta.env.BASE_URL}assets/icons/glasses.png`, iconWidth: 244 },
 ];
 
 

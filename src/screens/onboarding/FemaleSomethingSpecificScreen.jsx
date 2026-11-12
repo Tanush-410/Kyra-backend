@@ -4,10 +4,10 @@ import { useNavigate,useLocation, useSearchParams  } from "react-router-dom";
 // NOTE: both accessory cards are labelled "Accessories" in the Figma file (boots / bag icons).
 const OPTIONS = [
   { id: "tops-female", label: "Tops", icon: `${import.meta.env.BASE_URL}assets/icons/tops-women.png`, iconWidth: 200 },
-  { id: "bottoms-female", label: "Bottoms", icon: `${import.meta.env.BASE_URL}/assets/icons/bottom-women.png`, iconWidth: 253 },
-  { id: "footware-female", label: "Footwear", icon: `${import.meta.env.BASE_URL}/assets/icons/shoes-women.png`, iconWidth: 200 },
-  { id: "accessories-female", label: "Accessories", icon: `${import.meta.env.BASE_URL}/assets/icons/bag-women.png`, iconWidth: 200 },
-  { id: "one-pieces-female", label: "One-Pieces", icon: `${import.meta.env.BASE_URL}/assets/icons/dress-women.png`, iconWidth: 200 },
+  { id: "bottoms-female", label: "Bottoms", icon: `${import.meta.env.BASE_URL}assets/icons/bottom-women.png`, iconWidth: 253 },
+  { id: "footware-female", label: "Footwear", icon: `${import.meta.env.BASE_URL}assets/icons/shoes-women.png`, iconWidth: 200 },
+  { id: "accessories-female", label: "Accessories", icon: `${import.meta.env.BASE_URL}assets/icons/bag-women.png`, iconWidth: 200 },
+  { id: "one-pieces-female", label: "One-Pieces", icon: `${import.meta.env.BASE_URL}assets/icons/dress-women.png`, iconWidth: 200 },
 ];
 
 /** Figma: Onboarding / "Female Something specific" (2043:8334) */
