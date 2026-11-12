@@ -1,8 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppHeader from "../../components/AppHeader.jsx";
+import Dialog from "../../components/Dialog.jsx";
 import OptionCard from "../../components/OptionCard.jsx";
+import ShopHeader from "../../components/ShopHeader.jsx";
+import Toast from "../../components/Toast.jsx";
 import { useKyraSession } from "../../context/KyraSessionContext.jsx";
+import { useToast } from "../../hooks/useToast.js";
+import { EDIT_PATH, SHOP_PATH } from "../../lib/shopRoutes.js";
 import { activeOption, activeRender, keyOf, phaseOf, undertoneView } from "../../state/sessionReducer.js";
 import "./LookResultScreen.css";
 
@@ -115,10 +120,12 @@ function LookImage({ render, option, status, degraded }) {
  */
 export default function LookResultScreen() {
   const navigate = useNavigate();
-  const { state, like, showAnother, keep, confirmProfile, correctUndertone, end, clear } = useKyraSession();
+  const { state, like, showAnother, keep, confirmProfile, correctUndertone, end, clear, saveOutfit } = useKyraSession();
+  const { toast, showToast } = useToast();
   const session = state.session;
   const phase = phaseOf(session);
   const [closedQr, setClosedQr] = useState(null);
+  const [exitOpen, setExitOpen] = useState(false);
 
   useEffect(() => {
     if (phase !== "ended") return undefined;
@@ -166,16 +173,31 @@ export default function LookResultScreen() {
   const kept = session.kept && keyOf(session.kept.round, session.kept.option) === activeKey ? session.kept : null;
 
   const qrOpen = Boolean(kept?.qrDataUrl && closedQr !== kept.url);
+  const modalOpen = qrOpen || exitOpen;
 
   const finish = async () => {
     await end();
     navigate(HOME, { replace: true });
   };
 
+  const save = () => {
+    if (!option) return;
+    saveOutfit({
+      key: activeKey || keyOf(session.currentRound, option.option),
+      round: session.active?.round ?? session.currentRound,
+      option: option.option,
+      title: option.title,
+      summary: option.summary,
+      items: option.items,
+      imageDataUrl: render?.imageDataUrl || null,
+    });
+    showToast("Outfit saved successfully");
+  };
+
   return (
     <div className="screen">
-      <AppHeader />
-      <div className="screen__content look" inert={qrOpen ? "" : undefined}>
+      <ShopHeader onExit={() => setExitOpen(true)} />
+      <div className="screen__content look" inert={modalOpen ? "" : undefined}>
         <h1 className="title title--h4">{done ? "Here’s your look" : option ? "Your look is on its way" : "Building your profile"}</h1>
 
         <LookImage render={render} option={option} status={session.status} degraded={session.degraded} />
@@ -194,6 +216,11 @@ export default function LookResultScreen() {
           <OptionCard label="I’m done" width="w500" onClick={finish} />
         </div>
 
+        <div className="look__shop-row">
+          <OptionCard label="Shop this look" width="auto" onClick={() => navigate(SHOP_PATH)} disabled={!option} />
+          <OptionCard label="Edit this look" width="auto" onClick={() => navigate(EDIT_PATH)} disabled={!option} />
+        </div>
+
         {option && (
           <section className="look__card">
             {optionCount > 1 && (
@@ -201,7 +228,12 @@ export default function LookResultScreen() {
                 Look {option.option} of {optionCount}
               </p>
             )}
-            <h2 className="look__heading">{option.title}</h2>
+            <div className="look__heading-row">
+              <h2 className="look__heading">{option.title}</h2>
+              <button type="button" className="look__chip" onClick={save}>
+                Save outfit
+              </button>
+            </div>
             <p className="look__text">{option.summary}</p>
             <ul className="look__items">
               {option.items.map((item) => (
@@ -238,6 +270,20 @@ export default function LookResultScreen() {
           </div>
         </div>
       )}
+
+      {exitOpen && (
+        <Dialog
+          title="Exit"
+          actions={[
+            { label: "Continue shopping", onClick: () => setExitOpen(false) },
+            { label: "Exit", onClick: finish },
+          ]}
+        >
+          Leave the mirror and go back to the start?
+        </Dialog>
+      )}
+
+      <Toast toast={toast} />
     </div>
   );
 }

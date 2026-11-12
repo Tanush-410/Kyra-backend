@@ -1,6 +1,19 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { activeOption, activeRender, countdown, initialState, phaseOf, sessionReducer, undertoneView } from "./sessionReducer.js";
+import {
+  activeOption,
+  activeRender,
+  cartCount,
+  cartSubtotal,
+  countdown,
+  DEFAULT_PRICE_RANGE,
+  editsForLook,
+  emptyShop,
+  initialState,
+  phaseOf,
+  sessionReducer,
+  undertoneView,
+} from "./sessionReducer.js";
 
 const ID = "s1";
 const option = (n) => ({
@@ -137,4 +150,79 @@ test("connection and camera state", () => {
   assert.equal(state.camera, "error");
   state = sessionReducer(state, { type: "connection", status: "unauthorized" });
   assert.equal(state.connection, "unauthorized");
+});
+
+const product = (overrides = {}) => ({
+  id: "p1",
+  name: "Crew tee",
+  category: "top",
+  price: 1299,
+  stock: 3,
+  sizes: ["UK 6", "UK 8"],
+  outOfStockSizes: [],
+  ...overrides,
+});
+
+test("the cart adds, caps at stock, changes size, and totals", () => {
+  let state = sessionReducer(initialState, { type: "shop/cartAdded", product: product(), size: "UK 8", qty: 2 });
+  assert.equal(state.shop.cart.length, 1);
+  assert.equal(state.shop.cart[0].size, "UK 8");
+  assert.equal(cartCount(state.shop), 2);
+  state = sessionReducer(state, { type: "shop/cartAdded", product: product(), qty: 5 });
+  assert.equal(state.shop.cart[0].qty, 3, "never more than stock");
+  assert.equal(state.shop.cart[0].size, "UK 8", "keeps the chosen size when re-adding");
+  state = sessionReducer(state, { type: "shop/cartQty", id: "p1", qty: 99 });
+  assert.equal(state.shop.cart[0].qty, 3);
+  state = sessionReducer(state, { type: "shop/cartSize", id: "p1", size: "UK 6" });
+  assert.equal(state.shop.cart[0].size, "UK 6");
+  assert.equal(cartSubtotal(state.shop), 1299 * 3);
+  state = sessionReducer(state, { type: "shop/cartRemoved", id: "p1" });
+  assert.equal(state.shop.cart.length, 0);
+  assert.equal(cartCount(state.shop), 0);
+});
+
+test("an out-of-stock product can't be added", () => {
+  const state = sessionReducer(initialState, { type: "shop/cartAdded", product: product({ stock: 0 }) });
+  assert.equal(state.shop.cart.length, 0);
+});
+
+test("filters normalise the price range and clear", () => {
+  let state = sessionReducer(initialState, { type: "shop/filtersSet", from: 5000, to: 1500 });
+  assert.deepEqual(state.shop.filters, { from: 1500, to: 5000 });
+  state = sessionReducer(state, { type: "shop/filtersSet", from: -100, to: 0 });
+  assert.deepEqual(state.shop.filters, { from: 0, to: 0 });
+  state = sessionReducer(state, { type: "shop/filtersCleared" });
+  assert.deepEqual(state.shop.filters, DEFAULT_PRICE_RANGE);
+});
+
+test("saved outfits and piece edits stay in the visit", () => {
+  let state = sessionReducer(initialState, {
+    type: "shop/outfitSaved",
+    key: "1.2",
+    round: 1,
+    option: 2,
+    title: "Look 2",
+    items: [{ category: "top", name: "Crew tee" }],
+    imageDataUrl: "data:look",
+  });
+  assert.equal(state.shop.saved[0].imageDataUrl, "data:look");
+  state = sessionReducer(state, { type: "shop/pieceEdited", key: "1.2", category: "top", product: product({ id: "r1" }) });
+  assert.equal(editsForLook(state.shop, "1.2").top.id, "r1");
+  assert.equal(editsForLook(state.shop, "9.9").top, undefined);
+  state = sessionReducer(state, { type: "shop/pieceEdited", key: "1.2", category: "top", product: null });
+  assert.equal(editsForLook(state.shop, "1.2").top, undefined);
+});
+
+test("the shop is dropped when a visit starts, ends, or is cleared", () => {
+  const live = sessionReducer(initialState, { type: "session/started", sessionId: ID });
+  const shopping = sessionReducer(
+    sessionReducer(live, { type: "shop/cartAdded", product: product() }),
+    { type: "shop/outfitSaved", key: "1.1", title: "Look 1" },
+  );
+  const started = sessionReducer(shopping, { type: "session/started", sessionId: "s2" });
+  assert.deepEqual(started.shop, emptyShop());
+  const ended = run([{ type: "session.ended", reason: "done" }], shopping);
+  assert.deepEqual(ended.shop, emptyShop(), "privacy: nothing survives the visit");
+  const cleared = sessionReducer(shopping, { type: "session/cleared" });
+  assert.deepEqual(cleared.shop, emptyShop());
 });
