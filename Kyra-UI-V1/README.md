@@ -66,7 +66,12 @@ Open it once with the token, `http://localhost:5173/Kyra-UI-V1/#token=<apiToken>
    (the design's woman's figure for female visitors, its outlines only otherwise), a first-time guide, the
    outlines explaining what the camera measured (build, height), and styling levers for four goals
    (`src/lib/fitLevers.js`; the first goal follows the profile).
-7. **The look** (`LookResultScreen`): the look on the visitor, and Love it / Show another / Take it home
+7. **Suggestions** (`screens/results/SuggestionsScreen`, Figma "Suggestion to buy"): the round's outfits,
+   one at a time, each piece as a card with its colour swatch (the backend has no product photos). Swipe
+   (drag), the arrows or the keyboard switch outfits; a first-time hint shows how. Tapping the outfit opens
+   Virtual try-on (renders it on the visitor; a look already rendered is reused, at no cost) and More like
+   this (the backend designs a new round from it and renders its first look).
+8. **The look** (`LookResultScreen`): the look on the visitor, and Love it / Show another / Take it home
    (a QR code) / I'm done. It renders in the background from the moment of the photo: both analysis screens
    say how it is going and can skip straight to it. Leaving the mirror, or "I'm done", ends the visit and the
    photo is forgotten.

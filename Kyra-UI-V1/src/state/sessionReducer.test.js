@@ -248,3 +248,10 @@ test("a visitor's undertone correction counts as known, clears olive, and settle
   state = sessionReducer(state, profileEvent({ skinUndertone: "neutral", skinUndertoneSource: "fallback", olive: false, skinMeasurement: null }));
   assert.equal(undertoneView(state.session).sure, false, "a fallback is still unsure");
 });
+
+test("trying on an option makes it the look on screen straight away", () => {
+  let state = sessionReducer(initialState, { type: "session/started", sessionId: "s1" });
+  state = sessionReducer(state, { type: "session/activeSet", round: 1, option: 2 });
+  assert.deepEqual(state.session.active, { round: 1, option: 2 });
+  assert.equal(sessionReducer(initialState, { type: "session/activeSet", round: 1, option: 2 }).session, null, "no visit: nothing to do");
+});

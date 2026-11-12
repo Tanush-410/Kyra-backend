@@ -257,6 +257,9 @@ export function sessionReducer(state, action) {
       return state.session && state.session.id === action.snapshot.sessionId
         ? { ...state, session: mergeSnapshot(state.session, action.snapshot) }
         : state;
+    case "session/activeSet":
+      // The visitor chose this option (try-on): it is the look on screen, rendered or not yet.
+      return state.session ? { ...state, session: { ...state.session, active: { round: action.round, option: action.option } } } : state;
     case "session/actionFailed":
       return state.session ? { ...state, session: { ...state.session, actionError: action.message } } : state;
     case "session/actionCleared":

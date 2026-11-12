@@ -49,6 +49,8 @@ export const kyraApi = {
   getSession: (id) => request(session(id)),
   render: (id, round, option) => request(`${session(id)}/render`, { method: "POST", body: { round, option } }),
   next: (id) => request(`${session(id)}/next`, { method: "POST", body: {} }),
+  /** New looks from feedback ("more like this", an edit): the backend designs a new round and renders its first look. */
+  redesign: (id, { feedback, style } = {}) => request(`${session(id)}/redesign`, { method: "POST", body: { ...(feedback ? { feedback } : {}), ...(style ? { style } : {}) } }),
   rate: (id, { round, option, rating }) => request(`${session(id)}/rate`, { method: "POST", body: { round, option, rating } }),
   keep: (id, { round, option }) => request(`${session(id)}/keep`, { method: "POST", body: { round, option } }),
   confirmProfile: (id) => request(`${session(id)}/profile/confirm`, { method: "POST", body: {} }),

@@ -8,6 +8,7 @@ import { ConsentView } from "../screens/onboarding/ConsentScreen.jsx";
 import { HoldStillView } from "../screens/onboarding/HoldStillScreen.jsx";
 import { FitAnalysisView } from "../screens/results/FitAnalysisScreen.jsx";
 import { SkinToneView } from "../screens/results/SkinToneScreen.jsx";
+import { SuggestionsView } from "../screens/results/SuggestionsScreen.jsx";
 import LookShortcut from "../components/LookShortcut.jsx";
 import { fitNotes } from "../lib/fitLevers.js";
 
@@ -17,7 +18,8 @@ const noop = () => {};
  * Development only (npm run dev): the shared pieces on a blank screen, for screenshot checks against
  * Figma. Not in the production build. Open /dev/<name>: header, toast, error, dialog, menu, loader;
  * whole screens: consent, consent-noqr, consent-error, too-far, out-of-frame, too-close, camera-loading,
- * hold, count, flash, allset, skin-tone, skin-analysing, fit, fit-guide, fit-outline.
+ * hold, count, flash, allset, skin-tone, skin-analysing, fit, fit-guide, fit-outline, suggestions,
+ * suggestions-2, suggestions-hint, suggestions-busy.
  */
 const PREVIEWS = {
   header: () => <AppHeader onBin={noop} onCart={noop} onFilter={noop} />,
@@ -78,6 +80,14 @@ const SAMPLE_SESSION = { rounds: { 1: [{ option: 1, title: "Look 1", items: [] }
 const SAMPLE_FIT = fitNotes({ build: "medium", heightImpression: "average", heightCm: 168 }, ["Slim build: layers."]);
 const shortcut = (primary) => <LookShortcut session={SAMPLE_SESSION} primary={primary} label={primary ? "See my looks" : undefined} onOpen={noop} />;
 
+// Three outfits shaped like the backend's options (outfit-design.js).
+const item = (category, name, colorName, hex, fit, material) => ({ category, name, colorName, hex, fit, material });
+const SAMPLE_OPTIONS = [
+  { option: 1, title: "Terracotta casual", summary: "", items: [item("top", "Relaxed cotton shirt", "Terracotta", "#C8643B", "relaxed", "cotton"), item("bottom", "High-rise straight jeans", "Camel", "#C19A6B", "straight", "denim"), item("outerwear", "Light knit cardigan", "Chocolate", "#5B3A29", "regular", "knit"), item("shoes", "Clean leather sneakers", "Camel", "#C19A6B", "", "leather")] },
+  { option: 2, title: "Olive weekend", summary: "", items: [item("top", "Crew tee", "Olive", "#708238", "regular", "cotton"), item("bottom", "Wide-leg trousers", "Cream", "#EFE3C6", "wide", "linen"), item("shoes", "Loafers", "Brown", "#6B4423", "", "suede")] },
+  { option: 3, title: "Teal evening", summary: "", items: [item("onepiece", "Wrap dress", "Teal", "#1F7A7A", "fitted", "silk"), item("shoes", "Block heels", "Gold", "#C9A227", "", "leather"), item("accessory", "Small clutch", "Rust", "#B7410E", "", "leather")] },
+];
+
 /** Whole screens (they draw their own .screen). */
 const SCREENS = {
   consent: () => <ConsentView qr={SAMPLE_QR} onContinue={noop} />,
@@ -95,6 +105,10 @@ const SCREENS = {
   "skin-analysing": () => <SkinToneView view={null} shortcut={shortcut(false)} />,
   fit: () => <FitAnalysisView goal="longer" onGoal={noop} notes={SAMPLE_FIT} female shortcut={shortcut(true)} />,
   "fit-guide": () => <FitAnalysisView goal="longer" onGoal={noop} notes={SAMPLE_FIT} female guide onGuideDone={noop} shortcut={shortcut(true)} />,
+  suggestions: () => <SuggestionsView options={SAMPLE_OPTIONS} index={0} onIndex={noop} onOpenMenu={noop} header={<AppHeader onBin={noop} />} />,
+  "suggestions-2": () => <SuggestionsView options={SAMPLE_OPTIONS} index={1} onIndex={noop} onOpenMenu={noop} header={<AppHeader onBin={noop} />} />,
+  "suggestions-hint": () => <SuggestionsView options={SAMPLE_OPTIONS} index={0} hint onIndex={noop} onOpenMenu={noop} header={<AppHeader onBin={noop} />} />,
+  "suggestions-busy": () => <SuggestionsView options={SAMPLE_OPTIONS} index={0} busy="Finding more like this…" onIndex={noop} onOpenMenu={noop} header={<AppHeader onBin={noop} />} />,
   "fit-outline": () => <FitAnalysisView goal="balance" onGoal={noop} notes={SAMPLE_FIT} female={false} shortcut={shortcut(true)} />,
 };
 
