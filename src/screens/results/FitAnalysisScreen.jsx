@@ -72,7 +72,7 @@ function Hotspot({ note, style, onShow, label }) {
 export function FitAnalysisView({ goal, onGoal, notes, female, guide, onGuideDone, shortcut, background = null }) {
   const [active, setActive] = useState(null);
   const note = (active && notes[active]) || DEFAULT_NOTE;
-  const levers = leversFor(goal);
+  const levers = leversFor(goal, { female });
   return (
     <div className="screen">
       {background}
