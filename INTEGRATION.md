@@ -1,7 +1,9 @@
 # Integrating this repo with the existing KYRA frontend and backend
 
 This repo holds the KYRA mirror backend and the camera sidecar. This guide is for the engineers who connect
-it to the team's mirror frontend (the Tauri app) and to the backend the team built before. It covers:
+it to the team's mirror frontend and to the backend the team built before. The team's React kiosk UI
+([Kyra-UI-V1](https://github.com/minalkrishnadev-cpu/Kyra-UI-V1)) is included in this repo, in `Kyra-UI-V1/`,
+already connected: see [section 4.1](#41-the-teams-kiosk-ui-kyra-ui-v1). This guide covers:
 
 - getting it running on your machine (**start here**);
 - what this repo is;
@@ -28,7 +30,7 @@ cd Kyra-backend
 ```
 
 It installs the Node packages, a private Python 3.12 environment for the camera sidecar and the AI models,
-and creates `backend/.env`. When something is missing it says exactly what to do. The usual case: **"Python 3.12
+builds the kiosk UI, and creates `backend/.env`. When something is missing it says exactly what to do. The usual case: **"Python 3.12
 is not installed"**. Run the one-line `uv` install it prints, open a new terminal, and run `./setup.sh` again.
 
 **2. Add the OpenAI key** to `backend/.env` (`OPENAI_API_KEY=sk-...`), or pass it during setup:
@@ -45,9 +47,11 @@ npm run rehearse    # or: everything with a fake OpenAI, free, no key needed
 On the first start, macOS asks to let your terminal app (Terminal, iTerm or VS Code) use the camera: allow it,
 then stop (Ctrl+C) and start again. The camera takes up to **30 seconds** to come up the first time.
 
-**4. Open the console.** In a second terminal, run `cd backend && npm run links` and open the **Mirror console**
-link it prints. It should show **connected** and **camera running**. The link includes your access token, so
-there's nothing to paste.
+**4. Open the mirror.** In a second terminal, run `cd backend && npm run links` and open the **Kiosk UI** link
+it prints (`http://localhost:3000/Kyra-UI-V1/#token=…`): the team's screens, with the live camera behind the
+hold-still screen. Wave, or click, to start. The **Mirror console** link is the backend's own test page: it
+should show **connected** and **camera running**. Both links include your access token, so there's nothing to
+paste.
 
 **Something wrong?** Run `./setup.sh --check` (or `npm run doctor` in `backend/`). It checks every piece and
 prints the fix. Then see [Troubleshooting](#10-troubleshooting).
@@ -75,6 +79,7 @@ camera; use "Upload photo" in the console with a full-body picture.
 |---|---|
 | `backend/` | The API the frontend talks to: the **v2 mirror pipeline** (`/api/v2/*`) plus the **old v1 endpoints**, kept at the same paths. |
 | `backend/dev/` | `mirror.html` (a complete working frontend for the v2 flow: use it as the reference implementation), `dashboard.html` (operations). The backend serves both at `http://localhost:3000/console/`. |
+| `Kyra-UI-V1/` | The team's React kiosk UI, connected to this backend. The backend serves its build at `http://localhost:3000/Kyra-UI-V1/` (section 4.1). A copy of [the team's repo](https://github.com/minalkrishnadev-cpu/Kyra-UI-V1) with the integration added: send UI changes there too. |
 | `setup.sh` | One-command setup, and `--check` diagnostics. |
 | `sidecar/` | Camera and on-device perception. Started by the backend, so nothing else needs to launch it. |
 | `backend/reports/`, `sidecar/reports/` | Test evidence: token comparison, undertone benchmark workbook, security audit. |
@@ -128,6 +133,26 @@ Rules that now apply to **every** `/api/*` call:
   a public event.
 
 ## 4. Building the mirror flow in the frontend (v2)
+
+### 4.1 The team's kiosk UI (Kyra-UI-V1)
+
+The React UI already implements the whole flow below. Its README has the details; in short:
+
+| | |
+|---|---|
+| **Served by** | This backend, at `/Kyra-UI-V1/` (`FRONTEND_DIR`, default `Kyra-UI-V1/dist`). One origin: no CORS, and the token never sits in the build. |
+| **Token** | The kiosk link's `#token=…` (from `npm run links`) is stored once in the browser and removed from the address bar. |
+| **Camera** | The backend owns it. The UI turns `/api/v2/preview.mjpg` into the video its hand tracking and camera screens use, so pinch, wave and the hold-still view work unchanged. |
+| **Flow** | Splash (wave) → onboarding picks → analysis intro → **consent** (starts the session) → hold still (the camera's guidance, and a 3-2-1 from `holdMs`) → **results** (undertone, palette, the look, Love it / Show another / Take it home / I'm done). |
+| **Choices** | The picks and voice text become the session's `style` and `gender` (`src/lib/visitIntent.js`): "tops-female" becomes gender female, "…built around a top". |
+| **State** | `src/context/KyraSessionContext.jsx` (one event stream, scoped to the session) and the pure reducer `src/state/sessionReducer.js` (unit-tested). |
+| **Develop** | `npm run dev` in `Kyra-UI-V1/` forwards `/api` to this backend. `VITE_CAMERA_SOURCE=browser` uses the browser's webcam and uploads the photo instead (a UI on another machine). |
+| **Rebuild** | After changing the UI: `cd Kyra-UI-V1 && npm run build`, then reload. No backend restart needed. |
+
+The hold-still countdown matches the camera: `READY_HOLD_MS` (sidecar) now defaults to 3000, and `perception`
+events carry `holdMs` (how long to hold) next to `heldMs` (held so far).
+
+### 4.2 Any other frontend
 
 `backend/dev/mirror.html` does all of this in about 400 lines of plain JavaScript. Copy its patterns. The flow:
 
@@ -261,6 +286,10 @@ Install exactly as in the [Quick start](#quick-start-run-it-on-your-machine-abou
   and restart.
 - **Run it permanently:** `backend/deploy/launchd.sh install` (starts at login, restarts within seconds if it
   exits). Allow camera access for `node` when macOS asks.
+- **Camera on its side** (a portrait mount): stand facing it with the backend running, then
+  `cd backend && npm run camera-check -- --apply` and restart. It finds the face in the live picture and
+  writes the right `CAMERA_ROTATION` (90 or 270 depending on which way the camera was turned) to
+  `backend/.env`. Run it again after a restart: it should say "the right way up".
 - **Calibrate once on site:**
   - height: one person of known height;
   - grey card: a matte card kept in view, which makes undertone reliable (299 of 300 right in the benchmark);
@@ -269,6 +298,8 @@ Install exactly as in the [Quick start](#quick-start-run-it-on-your-machine-abou
   See [sidecar/README.md](sidecar/README.md#calibration-once-per-installation).
 - **Operations screen:** the Operations dashboard link from `npm run links` (`/console/dashboard.html`). Logs
   are in `backend/.runtime/logs/`.
+- **The screen:** open the Kiosk UI link full-screen in Chrome or Edge: `open -a "Google Chrome" --args --kiosk "<link>"`.
+  The UI is designed for a 1080 × 3840 portrait display and scales to fit. Allow the microphone for voice search.
 
 ## 8. Checklist for the integration
 
@@ -276,9 +307,10 @@ Install exactly as in the [Quick start](#quick-start-run-it-on-your-machine-abou
 - [ ] Confirm what the team's current backend and frontend contain beyond the 5 November `openday-develop`
       snapshot. This repo can't know.
 - [ ] Choose path A or B (section 2).
-- [ ] Frontend: send the kiosk token on every call; handle 401, 403, 422 `retake`, 429 and 503.
-- [ ] Frontend: move capture to the backend's camera flow (section 4) and stop opening the webcam itself.
-- [ ] Frontend: scope the event stream to the session; handle `session.degraded` and `session.ended`.
+- [x] Kiosk UI (Kyra-UI-V1): token on every call and error handling; capture by the backend's camera (it no
+      longer opens the webcam itself); stream scoped to the session; `session.degraded` and `session.ended`
+      handled (section 4.1).
+- [ ] Any other frontend (the Tauri app, if it is separate): the same three points, following section 4.2.
 - [ ] If `/api/outfit-suggestion` is still used: provide the `wardrobe/` images and set `WARDROBE_DIR`.
 - [ ] Set tokens, `CORS_ORIGINS` and `ALLOWED_HOSTS` for your setup; set up TLS if phones will scan QR codes.
 - [ ] Run `npm run check` (both test suites) and `npm run soak -- 30` (long run with failures injected).
@@ -287,7 +319,10 @@ Install exactly as in the [Quick start](#quick-start-run-it-on-your-machine-abou
 
 ## 9. Known limits
 
-- **Not seen by this repo:** the Tauri app, the wardrobe images, and any team backend changes after 5 November.
+- **Not seen by this repo:** the Tauri app (if separate from Kyra-UI-V1), the wardrobe images, and any team
+  backend changes after 5 November.
+- **Kiosk UI:** the "Pick a piece" choice steers the design ("built around a top"); there is no per-piece
+  catalogue yet. The profile icon in the header has no screen behind it.
 - **Undertone:** without a grey card, about 80% right in the benchmark, and less reliable for skin near the
   cool/neutral boundary. The mirror asks visitors to confirm unless it is sure.
 - **Image cost:** about $0.07 a look at medium quality. Medium-quality renders haven't been reviewed with real
@@ -309,6 +344,10 @@ see in the left column.
 | Console says **camera error**, or the preview stays black | macOS hasn't allowed the camera, or another app is using it. | System Settings → Privacy & Security → Camera: allow your terminal app (or `node` under launchd). Quit Zoom, FaceTime, Photo Booth, or a frontend that opens the webcam itself. Restart `npm start`. |
 | Console says **token needed** or **wrong token**; API calls return **401** | Every `/api` call needs the access token. | Open the console from `npm run links`. In your own frontend, send `Authorization: Bearer <apiToken>` (or `?token=` for `EventSource` and `<img>`). Tokens: `backend/.runtime/secrets.json`, or the values you set in `.env`. |
 | Metrics or calibration say they need the **operator token** | Staff-only routes. | Use the Operations dashboard link from `npm run links`. |
+| `/Kyra-UI-V1/` says "The kiosk UI is not built yet" | `Kyra-UI-V1/dist` doesn't exist. | `cd Kyra-UI-V1 && npm ci && npm run build` (or `./setup.sh`), then reload. If the UI lives elsewhere, set `FRONTEND_DIR`. |
+| Kiosk UI shows a red bar "This mirror needs its kiosk link" | The browser has no kiosk token (opened without `#token=…`, or the backend's tokens changed). | Open the Kiosk UI link from `npm run links` once; the browser keeps the token. |
+| Kiosk UI hold-still screen stays on "Getting ready…" or "Camera unavailable" | The backend camera isn't running. | `curl -s localhost:3000/ready`, then the camera rows below. The console's **camera** pill shows the same. |
+| Kiosk UI clicks things by itself | Hand tracking sees a hand (pinch = click) on the camera, often someone near the screen. | Expected on a busy camera. Keep hands down while testing with a mouse. |
 | `EADDRINUSE` / "port 3000 is used by another program" | Something else (often the old backend or a frontend dev server) is on port 3000. | Stop it, or `PORT=3100 npm start` (or put `PORT=3100` in `.env`). The console and `npm run links` follow the port. Point your frontend at the new port. |
 | **403** "Host not allowed" | The backend was reached by a name that isn't localhost (a LAN IP, a `.local` name, a proxy). | Add that name to `ALLOWED_HOSTS` in `.env`, or make the proxy send `Host: 127.0.0.1:3000`. |
 | Browser console shows a **CORS** error | The frontend's origin isn't allowed. | Add it to `CORS_ORIGINS`, for example `CORS_ORIGINS=http://localhost:5173,tauri://localhost`. Localhost on any port and Tauri are allowed by default. |

@@ -23,3 +23,5 @@ __pycache__/
 
 # Backend runtime state (daily spend ledger)
 backend/.runtime/
+
+# Kyra-UI-V1/ (the kiosk UI) is part of this repo; its node_modules/ and dist/ are ignored above.

@@ -1,0 +1,33 @@
+{
+  "name": "kyra-mirror-onboarding",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "homepage": "https://minalkrishnadev-cpu.github.io/Kyra-UI-V1",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "assets": "bash scripts/download-assets.sh",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
+    "test": "node --test \"src/**/*.test.js\""
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "^1.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.18.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "gh-pages": "^6.3.0",
+    "vite": "^5.4.0"
+  },
+  "overrides": {
+    "rollup": "npm:@rollup/wasm-node"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # One-command setup for the KYRA backend and camera sidecar. Safe to run again at any time.
 #
-#   ./setup.sh           install everything (Node packages, Python 3.12 environment, AI models, backend/.env)
+#   ./setup.sh           install everything (Node packages, Python 3.12 environment, AI models, backend/.env,
+#                        and the team's kiosk UI in Kyra-UI-V1/ when it is there)
 #   ./setup.sh --check   only diagnose: what is installed, what is missing, and how to fix it
 #
 # Needs: Node 22+ and Python 3.12 (3.11 also works). If Python 3.12 is missing, the script uses `uv` to get
@@ -12,6 +13,8 @@ set -uo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 BACKEND="$ROOT/backend"
 SIDECAR="$ROOT/sidecar"
+UI="$ROOT/Kyra-UI-V1"
+UI_REPO="https://github.com/minalkrishnadev-cpu/Kyra-UI-V1.git"
 VENV="$SIDECAR/.venv"
 MODELS="pose_landmarker_full.task face_landmarker.task gesture_recognizer.task face_detection_yunet_2023mar.onnx face_recognition_sface_2021dec.onnx"
 CHECK_ONLY=0
@@ -147,8 +150,25 @@ if [ -f "$BACKEND/.env" ]; then
   chmod 600 "$BACKEND/.env" 2>/dev/null
 fi
 
+# ---- Kiosk UI ---------------------------------------------------------------------------------------
+step "5. Kiosk UI (Kyra-UI-V1, served by the backend at /Kyra-UI-V1/)"
+if [ ! -f "$UI/package.json" ]; then
+  warn "Kyra-UI-V1/ is missing (the mirror screens, part of this repo; the backend's test console works without it)"
+  fix "git checkout -- Kyra-UI-V1   (or clone $UI_REPO as Kyra-UI-V1/), then run ./setup.sh again"
+elif [ "$CHECK_ONLY" = 0 ] && command -v npm >/dev/null 2>&1; then
+  if (cd "$UI" && npm ci --no-audit --no-fund --loglevel=error && npm run build --silent >/dev/null); then
+    ok "kiosk UI installed and built (Kyra-UI-V1/dist)"
+  else
+    bad "the kiosk UI did not build (see the error above)"; fix "cd Kyra-UI-V1 && npm ci && npm run build"
+  fi
+elif [ -f "$UI/dist/index.html" ]; then
+  ok "kiosk UI is built (Kyra-UI-V1/dist)"
+else
+  bad "the kiosk UI is not built yet"; fix "cd Kyra-UI-V1 && npm ci && npm run build   (or ./setup.sh)"
+fi
+
 # ---- Running state ----------------------------------------------------------------------------------
-step "5. Running state"
+step "6. Running state"
 PORT="$(grep -E '^PORT=' "$BACKEND/.env" 2>/dev/null | head -1 | cut -d= -f2 | tr -d ' ')"; PORT="${PORT:-3000}"
 if curl -s -o /dev/null --max-time 2 "http://localhost:$PORT/health"; then
   READY="$(curl -s --max-time 5 "http://localhost:$PORT/ready")"
@@ -173,7 +193,7 @@ if [ "$PROBLEMS" -gt 0 ]; then
 fi
 printf '%sReady.%s Next:\n' "$G" "$N"
 printf '  cd backend && npm start        start the backend and camera (first start: allow camera access; wait ~30 s)\n'
-printf '  cd backend && npm run links    links to the console and dashboard, tokens included\n'
+printf '  cd backend && npm run links    links to the kiosk UI, console and dashboard, tokens included\n'
 printf '  cd backend && npm run rehearse free run with a fake OpenAI (no key, no cost)\n'
 [ "$WARNINGS" -gt 0 ] && printf '%s%d warning(s) above.%s\n' "$Y" "$WARNINGS" "$N"
 exit 0
