@@ -226,3 +226,25 @@ test("the shop is dropped when a visit starts, ends, or is cleared", () => {
   const cleared = sessionReducer(shopping, { type: "session/cleared" });
   assert.deepEqual(cleared.shop, emptyShop());
 });
+
+test("the visit remembers the visitor's gender from their picks", () => {
+  const started = sessionReducer(initialState, { type: "session/started", sessionId: "s1", status: "waiting_for_capture", gender: "female" });
+  assert.equal(started.session.gender, "female");
+  assert.equal(sessionReducer(initialState, { type: "session/started", sessionId: "s2" }).session.gender, null);
+});
+
+test("a visitor's undertone correction counts as known, clears olive, and settles the question", () => {
+  let state = sessionReducer(initialState, { type: "session/started", sessionId: "s1" });
+  const measurement = { requireConfirmation: true, warmCool: { olive: true } };
+  const profileEvent = (profile) => ({ type: "event", event: { type: "session.profile", sessionId: "s1", profile, palette: [] } });
+  state = sessionReducer(state, profileEvent({ skinUndertone: "warm", skinUndertoneSource: "measured", olive: true, skinMeasurement: measurement }));
+  let view = undertoneView(state.session);
+  assert.equal(view.sure, true);
+  assert.equal(view.olive, true);
+  assert.equal(view.needsConfirmation, true, "an unsure reading asks");
+  state = sessionReducer(state, profileEvent({ skinUndertone: "cool", skinUndertoneSource: "visitor", olive: false, skinMeasurement: measurement }));
+  view = undertoneView(state.session);
+  assert.deepEqual([view.undertone, view.sure, view.olive, view.needsConfirmation], ["cool", true, false, false]);
+  state = sessionReducer(state, profileEvent({ skinUndertone: "neutral", skinUndertoneSource: "fallback", olive: false, skinMeasurement: null }));
+  assert.equal(undertoneView(state.session).sure, false, "a fallback is still unsure");
+});

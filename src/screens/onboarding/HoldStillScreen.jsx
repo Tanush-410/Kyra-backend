@@ -14,7 +14,10 @@ import { intentFromLocation, intentQuery, visitIntent } from "../../lib/visitInt
 import { countdown, phaseOf } from "../../state/sessionReducer.js";
 import { CONSENT } from "./ConsentScreen.jsx";
 
-export const RESULT = "/welcome/looking-for-today/surpriseme/analysis/holdstill/analysisres";
+import { SKIN_TONE_PATH } from "../../lib/shopRoutes.js";
+
+// After the photo: the Skin Tone Analysis (then Fit Analysis, then the look).
+export const RESULT = SKIN_TONE_PATH;
 
 const asset = (name) => `${import.meta.env.BASE_URL}assets/brand/${name}`;
 

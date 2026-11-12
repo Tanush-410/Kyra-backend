@@ -1,0 +1,162 @@
+/* Figma: "Fit analysis" and "Guide" (design/export-1). Positions measured from the exports, in px
+   within the card unless noted. The card: 1003 x 1679 at (42, 389) on the screen. */
+.fit { position: absolute; inset: 0; color: var(--colour-white-100); }
+.fit__card {
+  position: absolute;
+  top: 389px;
+  left: 42px;
+  width: 1003px;
+  height: 1679px;
+  border-radius: 48px;
+  background: #4b4b4b;
+}
+.fit__star { position: absolute; top: 101px; left: 83px; display: block; }
+.fit__title {
+  position: absolute;
+  top: 102px;
+  left: 210px;
+  margin: 0;
+  font-weight: 500;
+  font-size: 52px;
+  line-height: var(--type-line-height);
+  white-space: nowrap;
+}
+.fit__lede {
+  position: absolute;
+  top: 206px;
+  left: 196px;
+  width: 660px;
+  margin: 0;
+  text-align: center;
+  font-size: 22px;
+  line-height: 31px;
+}
+
+/* The silhouette (278 x 992 at (87, 744) on the screen) and its outlines */
+.fit__body { position: absolute; top: 355px; left: 45px; width: 278px; height: 992px; }
+.fit__body > img,
+.fit__outline { display: block; }
+.fit__hotspot {
+  position: absolute;
+  padding: 0;
+  border: 0;
+  border-radius: 24px;
+  background: transparent;
+  cursor: pointer;
+}
+.fit__hotspot:not(:disabled):hover,
+.fit__hotspot[data-hand-hovered="true"] { outline: 4px solid #7ec8f0; }
+.fit__hotspot:disabled { cursor: default; }
+
+/* "FIT ANALYSIS": 563 x 363 at (455, 780) on the screen */
+.fit__note,
+.fit__levers li {
+  border: 2px solid #56575b;
+  border-radius: 26px;
+  background: #434343;
+}
+.fit__note { position: absolute; top: 391px; left: 413px; width: 563px; height: 363px; margin: 0; }
+.fit__tag {
+  position: absolute;
+  top: 48px;
+  left: 39px;
+  height: 30px;
+  padding: 0 10px;
+  border: 1px solid #000;
+  border-radius: 15px;
+  background: #bbf38b;
+  color: #1a1a1a;
+  font-size: 20px;
+  line-height: 28px;
+}
+.fit__note-title { position: absolute; top: 117px; left: 39px; margin: 0; font-weight: 700; font-size: 20px; line-height: 30px; }
+.fit__note-text { position: absolute; top: 172px; left: 39px; width: 470px; margin: 0; font-size: 19.4px; line-height: 30px; }
+
+.fit__levers-title { position: absolute; top: 772px; left: 413px; margin: 0; font-weight: 400; font-size: 36px; line-height: var(--type-line-height); }
+.fit__levers {
+  position: absolute;
+  top: 841px;
+  left: 413px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.fit__levers li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 563px;
+  height: 138px;
+  padding-left: 135px;
+  font-weight: 600;
+  font-size: 20px;
+}
+.fit__lever-icon {
+  position: absolute;
+  top: 31px;
+  left: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 74px;
+  height: 74px;
+  border: 3px solid transparent;
+  border-radius: 50%;
+}
+.fit__lever-icon[data-ringed="true"] { border: 0; }
+.fit__lever-icon[data-ringed="true"] img { width: 74px; height: 74px; }
+.fit__lever-icon[data-ringed="false"] img { width: 42px; height: 42px; object-fit: contain; }
+
+/* Goals: 405 x 69 at (111, 1804), (552, 1804), (111, 1919), (552, 1919) on the screen */
+.fit__goals {
+  position: absolute;
+  top: 1415px;
+  left: 69px;
+  display: grid;
+  grid-template-columns: repeat(2, 405px);
+  gap: 46px 36px;
+}
+.fit__goal {
+  height: 69px;
+  padding: 0;
+  border: 2px solid #000;
+  border-radius: 30px;
+  background: #bbf38b;
+  color: #000;
+  font-family: var(--font-family);
+  font-size: 36px;
+  line-height: 1;
+  cursor: pointer;
+}
+.fit__goal--on { box-shadow: 0 0 0 5px #fff; }
+.fit__goal:hover,
+.fit__goal[data-hand-hovered="true"] { box-shadow: 0 0 0 5px #e74787; }
+
+/* Not in the frame: on to the looks, which render meanwhile */
+.fit__shortcut { position: absolute; top: 2150px; left: 120px; width: 840px; }
+
+/* The guide: everything dimmed, the outlines highlighted, a hand (Figma "Guide") */
+.fit__guide {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  padding: 0;
+  border: 0;
+  background: rgba(10, 10, 10, 0.9);
+  cursor: pointer;
+}
+.fit__guide > img,
+.fit__guide-outline { position: absolute; top: 744px; left: 87px; display: block; }
+.fit__guide-text {
+  position: absolute;
+  top: 1279px;
+  left: 71px;
+  color: #fff;
+  font-family: var(--font-family);
+  font-size: 36px;
+  line-height: var(--type-line-height);
+  white-space: nowrap;
+}

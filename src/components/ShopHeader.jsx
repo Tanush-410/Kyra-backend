@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { SHOP_DEMO } from "../config.js";
 import { useKyraSession } from "../context/KyraSessionContext.jsx";
 import { ACCOUNT_PATH, CART_PATH, FILTER_PATH, RESULTS_PATH } from "../lib/shopRoutes.js";
 import { cartCount } from "../state/sessionReducer.js";
@@ -7,9 +8,9 @@ import AppHeader from "./AppHeader.jsx";
 /**
  * The shop's top bar: the Figma header (AppHeader) wired to the kiosk routes. Bin = exit (onExit),
  * cart and filter go to their screens, profile to the account screen. The cart shows how many items
- * it holds and shakes when that changes.
+ * it holds and shakes when that changes. Cart and filter appear only in the shop demo (VITE_SHOP_DEMO).
  */
-export default function ShopHeader({ onExit, onCart, onFilter, showCart = true, showFilter = true }) {
+export default function ShopHeader({ onExit, onCart, onFilter, showCart = SHOP_DEMO, showFilter = SHOP_DEMO }) {
   const navigate = useNavigate();
   const { state } = useKyraSession();
   const count = cartCount(state.shop);
@@ -18,8 +19,8 @@ export default function ShopHeader({ onExit, onCart, onFilter, showCart = true, 
       onKyraClick={() => navigate("/")}
       onProfileClick={() => navigate(ACCOUNT_PATH)}
       onBin={onExit || (() => navigate(RESULTS_PATH))}
-      onCart={showCart ? onCart || (() => navigate(CART_PATH)) : undefined}
-      onFilter={showFilter ? onFilter || (() => navigate(FILTER_PATH)) : undefined}
+      onCart={SHOP_DEMO && showCart ? onCart || (() => navigate(CART_PATH)) : undefined}
+      onFilter={SHOP_DEMO && showFilter ? onFilter || (() => navigate(FILTER_PATH)) : undefined}
       cartCount={count}
       cartPulse={count}
     />

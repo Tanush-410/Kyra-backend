@@ -109,7 +109,7 @@ export function KyraSessionProvider({ children }) {
           ...(imageDataUrl ? { imageDataUrl } : {}),
           consent: true,
         });
-        dispatch({ type: "session/started", sessionId: created.sessionId, status: created.status });
+        dispatch({ type: "session/started", sessionId: created.sessionId, status: created.status, gender: gender || null });
         return created;
       },
       next: () => act((s) => kyraApi.next(s.id)),
