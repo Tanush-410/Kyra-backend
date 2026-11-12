@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
+import { ALL_SET_MS, FLASH_MS, captureStage } from "./captureSequence.js";
 import { COPY, guidanceView } from "./guidanceCopy.js";
 import { createJpegSplitter } from "./mjpegStream.js";
 import { DEFAULT_STYLE, intentQuery, visitIntent } from "./visitIntent.js";
@@ -28,6 +29,7 @@ test("camera guidance maps to the team's screen copy", () => {
   assert.deepEqual(guidanceView({ perception: { state: "ready" }, camera: "running", count: 2 }), { kind: "hold", count: 2 });
   assert.deepEqual(guidanceView({ perception: { state: "moving" }, camera: "running", count: 2 }), { kind: "hold", count: null });
   assert.equal(guidanceView({ perception: null, camera: "running" }).copy, COPY.loading);
+  assert.equal(guidanceView({ perception: null, camera: "running" }).kind, "loading");
   assert.equal(guidanceView({ perception: { state: "ready" }, camera: "unavailable" }).copy, COPY["camera-unavailable"]);
   assert.deepEqual(guidanceView({ perception: { state: "new_state", message: "Do the new thing" }, camera: "running" }).copy, { title: "Do the new thing" });
 });
@@ -42,4 +44,14 @@ test("the MJPEG reader finds whole JPEGs, however the bytes arrive", () => {
     for (let i = 0; i < stream.length; i += size) frames.push(...split(stream.slice(i, i + size)));
     assert.deepEqual(frames.map((f) => Array.from(f)), [jpeg(1), jpeg(2), jpeg(3)], `chunks of ${size}`);
   }
+});
+
+test("after the photo: a flash, then All set, then the next screen", () => {
+  assert.equal(captureStage(null, 5000), "live", "no photo yet");
+  assert.equal(captureStage(1000, 1000), "flash");
+  assert.equal(captureStage(1000, 1000 + FLASH_MS - 1), "flash");
+  assert.equal(captureStage(1000, 1000 + FLASH_MS), "allset");
+  assert.equal(captureStage(1000, 1000 + FLASH_MS + ALL_SET_MS - 1), "allset");
+  assert.equal(captureStage(1000, 1000 + FLASH_MS + ALL_SET_MS), "done");
+  assert.equal(captureStage(1000, 900), "flash", "a clock that steps back doesn't skip the flash");
 });

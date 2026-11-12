@@ -69,10 +69,12 @@ const CAMERA_DOWN = ["unavailable", "error", "failed", "stopped"];
 /**
  * kind "hold": in position (the green frame); count is 3, 2, 1 once the capture is counting down.
  * kind "guide": a COPY entry telling the visitor what to change.
+ * kind "loading": the camera hasn't reported yet.
  */
 export function guidanceView({ perception, camera, count }) {
   if (CAMERA_DOWN.includes(camera)) return { kind: "guide", copy: COPY["camera-unavailable"] };
-  if (!perception) return { kind: "guide", copy: COPY.loading };
+  // Before the camera's first report (Figma: the "Loading" state, the screen without guidance).
+  if (!perception) return { kind: "loading", copy: COPY.loading };
   if (perception.state === "ready" || perception.state === "moving" || perception.state === "blurry") {
     return { kind: "hold", count: perception.state === "ready" ? count : null };
   }

@@ -31,6 +31,7 @@
   box-shadow: 1.125px 1.125px 0 0 #000;
 }
 .toast--success .toast__icon { background: var(--colour-green-confirm); }
+.toast__tick { display: block; margin: -2.25px; flex: none; }
 .toast--error .toast__icon { background: rgba(255, 87, 87, 0.8); }
 
 /* Figma: MR/Secondary/Light/P3 */
