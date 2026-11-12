@@ -1,0 +1,19 @@
+/* Figma: 251px star at x 414, y 1191 of the screen. */
+.kyra-loader {
+  position: absolute;
+  top: 1191px;
+  left: 50%;
+  width: 251px;
+  height: 251px;
+  margin-left: -126px;
+  pointer-events: none;
+}
+.kyra-loader img { display: block; animation: kyra-loader-breathe 1.8s ease-in-out infinite; }
+@keyframes kyra-loader-breathe {
+  0%, 100% { transform: scale(1) rotate(0); opacity: 1; }
+  50% { transform: scale(0.82) rotate(45deg); opacity: 0.7; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .kyra-loader img { animation: kyra-loader-fade 2.4s ease-in-out infinite; }
+  @keyframes kyra-loader-fade { 50% { opacity: 0.55; } }
+}

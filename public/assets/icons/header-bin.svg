@@ -1,0 +1,26 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="156.6" height="156.6" viewBox="0 0 156.6 156.6" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="Bin">
+<g id="Ellipse 2" filter="url(#filter0_d_0_264)">
+<use xlink:href="#stroke0_0_264" fill="#FF5757"/>
+<mask id="stroke1_0_264" fill="white">
+<use xlink:href="#stroke0_0_264"/>
+</mask>
+<path d="M138.28 78.5908C138.28 111.557 111.556 138.281 78.5898 138.281C45.6239 138.281 18.8998 111.557 18.8998 78.5908C18.8998 45.6249 45.6239 18.9008 78.5898 18.9008C111.556 18.9008 138.28 45.6249 138.28 78.5908Z" stroke-width="5.969" stroke="black" mask="url(#stroke1_0_264)"/>
+</g>
+<g id="mdi:delete-empty">
+<path id="Vector" d="M109.8 69.3747L106.293 75.4423L63.7489 50.8912L67.2562 44.8235L77.9184 50.9613L82.6883 49.6636L97.875 58.4319L99.1727 63.2369L109.8 69.3747ZM59.3998 104.763V62.6757H77.1819L101.487 76.705V104.763C101.487 106.624 100.748 108.408 99.433 109.723C98.1175 111.039 96.3333 111.778 94.4729 111.778H66.4144C64.554 111.778 62.7698 111.039 61.4543 109.723C60.1388 108.408 59.3998 106.624 59.3998 104.763Z" fill="black"/>
+</g>
+</g>
+<defs>
+<filter id="filter0_d_0_264" x="18.8998" y="18.9008" width="122.365" height="122.365" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="2.9845" dy="2.9845"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_0_264"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_0_264" result="shape"/>
+</filter>
+<path id="stroke0_0_264" d="M138.28 78.5908C138.28 111.557 111.556 138.281 78.5898 138.281C45.6239 138.281 18.8998 111.557 18.8998 78.5908C18.8998 45.6249 45.6239 18.9008 78.5898 18.9008C111.556 18.9008 138.28 45.6249 138.28 78.5908Z"/>
+</defs>
+</svg>

@@ -1,3 +1,4 @@
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ScreenFrame from "./components/ScreenFrame.jsx";
 import StaffNotice from "./components/StaffNotice.jsx";
@@ -18,6 +19,9 @@ import SplashScreen from "./screens/onboarding/SplashScreen.jsx";
 import SurpriseMeScreen from "./screens/onboarding/SurpriseMeScreen.jsx";
 import TellUsWhatYouHaveInMindScreen from "./screens/onboarding/TellUsWhatYouHaveInMindScreen.jsx";
 import WelcomeScreen from "./screens/onboarding/WelcomeScreen.jsx";
+
+// Development only: the shared components on their own, for screenshot checks (src/dev/). Not built for production.
+const ComponentPreview = import.meta.env.DEV ? lazy(() => import("./dev/ComponentPreview.jsx")) : null;
 
 // The router's base is the build's base path (vite.config.js): "/Kyra-UI-V1" by default.
 const BASENAME = import.meta.env.BASE_URL.replace(/\/+$/, "") || "/";
@@ -52,6 +56,16 @@ export default function App() {
                 <Route path="/welcome/looking-for-today/specificscreen/voicesearch/listening" element={<ListeningScreen />} />
                 <Route path="/welcome/looking-for-today/surpriseme/analysis/holdstill" element={<HoldStillScreen />} />
                 <Route path="/welcome/looking-for-today/surpriseme/analysis/holdstill/analysisres" element={<LookResultScreen />} />
+                {ComponentPreview && (
+                  <Route
+                    path="/dev/:name"
+                    element={
+                      <Suspense fallback={null}>
+                        <ComponentPreview />
+                      </Suspense>
+                    }
+                  />
+                )}
               </Routes>
             </ScreenFrame>
             <StaffNotice />
