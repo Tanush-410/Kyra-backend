@@ -5,7 +5,7 @@ import CameraFeed from "../../components/CameraFeed.jsx";
 import LookShortcut from "../../components/LookShortcut.jsx";
 import { useResultsSession } from "../../hooks/useResultsSession.js";
 import { defaultGoal, fitNotes, GOALS, leversFor } from "../../lib/fitLevers.js";
-import { LOOK_PATH } from "../../lib/shopRoutes.js";
+import { SUGGESTIONS_PATH } from "../../lib/shopRoutes.js";
 import "./FitAnalysisScreen.css";
 
 const asset = (path) => `${import.meta.env.BASE_URL}assets/${path}`;
@@ -163,7 +163,7 @@ export default function FitAnalysisScreen() {
       guide={guide}
       onGuideDone={() => setGuide(false)}
       background={<CameraFeed />}
-      shortcut={<LookShortcut session={session} primary label="See my looks" onOpen={() => navigate(LOOK_PATH)} />}
+      shortcut={<LookShortcut session={session} primary label="See my looks" onOpen={() => navigate(SUGGESTIONS_PATH)} />}
     />
   );
 }

@@ -113,6 +113,22 @@ export function KyraSessionProvider({ children }) {
         return created;
       },
       next: () => act((s) => kyraApi.next(s.id)),
+      /** Puts this option on the visitor (renders it unless it already is, or is being, rendered). */
+      // The backend reuses a look already rendered or rendering (no new picture), so this always asks it.
+      tryOn: (round, option) =>
+        act(async (s) => {
+          dispatch({ type: "session/activeSet", round, option });
+          return kyraApi.render(s.id, round, option);
+        }),
+      /** New looks from the visitor's words: a new round of options, and its first look rendered. */
+      redesign: (feedback) => act((s) => kyraApi.redesign(s.id, { feedback })),
+      /** "More like this": a new round built around this option's style and colours. */
+      moreLike: (option) =>
+        act((s) =>
+          kyraApi.redesign(s.id, {
+            feedback: `More like "${option.title}" (${option.summary}): keep its style and colours, with different pieces.`.slice(0, 200),
+          })
+        ),
       /** "Not for me": counts as a thumbs-down (it teaches the mirror), then shows the next look. */
       showAnother: () =>
         act(async (s) => {

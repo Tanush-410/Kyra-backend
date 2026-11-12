@@ -6,7 +6,7 @@ import { CameraProvider } from "./context/CameraContext.jsx";
 import { HandTrackingProvider } from "./context/HandTrackingContext.jsx";
 import { SHOP_DEMO } from "./config.js";
 import { KyraSessionProvider } from "./context/KyraSessionContext.jsx";
-import { FIT_PATH, LOOK_PATH, RESULTS_PATH, SKIN_TONE_PATH } from "./lib/shopRoutes.js";
+import { FIT_PATH, LOOK_PATH, RESULTS_PATH, SKIN_TONE_PATH, SUGGESTIONS_PATH } from "./lib/shopRoutes.js";
 import AnalysisScreen from "./screens/onboarding/AnalysisScreen.jsx";
 import ConsentScreen from "./screens/onboarding/ConsentScreen.jsx";
 import FemaleSomethingSpecificScreen from "./screens/onboarding/FemaleSomethingSpecificScreen.jsx";
@@ -16,6 +16,7 @@ import LookingForTodayScreen from "./screens/onboarding/LookingForTodayScreen.js
 import LookResultScreen from "./screens/onboarding/LookResultScreen.jsx";
 import FitAnalysisScreen from "./screens/results/FitAnalysisScreen.jsx";
 import SkinToneScreen from "./screens/results/SkinToneScreen.jsx";
+import SuggestionsScreen from "./screens/results/SuggestionsScreen.jsx";
 import MaleSomethingSpecificScreen from "./screens/onboarding/MaleSomethingSpecificScreen.jsx";
 import ShoppingForScreen from "./screens/onboarding/ShoppingForScreen.jsx";
 import SpecificScreen from "./screens/onboarding/SpecificScreen.jsx";
@@ -74,9 +75,10 @@ export default function App() {
                 <Route path="/welcome/looking-for-today/specificscreen/voicesearch" element={<TellUsWhatYouHaveInMindScreen />} />
                 <Route path="/welcome/looking-for-today/specificscreen/voicesearch/listening" element={<ListeningScreen />} />
                 <Route path="/welcome/looking-for-today/surpriseme/analysis/holdstill" element={<HoldStillScreen />} />
-                {/* After the photo: Skin Tone Analysis -> Fit Analysis -> the look (rendering meanwhile). */}
+                {/* After the photo: Skin Tone -> Fit -> Suggestions -> the look (the first renders meanwhile). */}
                 <Route path={SKIN_TONE_PATH} element={<SkinToneScreen />} />
                 <Route path={FIT_PATH} element={<FitAnalysisScreen />} />
+                <Route path={SUGGESTIONS_PATH} element={<SuggestionsScreen />} />
                 <Route path={LOOK_PATH} element={<LookResultScreen />} />
                 <Route path="/account" element={<AccountScreen />} />
                 {SHOP_DEMO ? (
