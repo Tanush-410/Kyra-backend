@@ -10,3 +10,6 @@ dist/
 
 .DS_Store
 *.log
+
+# Figma exports (reference for building screens, ~MBs; copy the icons the app uses into public/assets/)
+design/
