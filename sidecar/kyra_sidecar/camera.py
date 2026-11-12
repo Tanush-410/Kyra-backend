@@ -28,6 +28,24 @@ EARLY_PROFILE_MIN_FRAMES = 8
 EARLY_PROFILE_MIN_INTERVAL_S = 1.5
 READY_BUFFER = 12
 ROTATIONS = {90: cv2.ROTATE_90_CLOCKWISE, 180: cv2.ROTATE_180, 270: cv2.ROTATE_90_COUNTERCLOCKWISE}
+PREVIEW_CROP_QUALITY = 85
+
+
+def crop_to_aspect(image: np.ndarray, aspect: float, max_height: int) -> np.ndarray:
+    """The centre of the image in the shape of a screen (width / height = aspect), at most max_height tall.
+    A portrait kiosk shows only a strip of a landscape camera: cut from the full-resolution frame, that strip
+    keeps its detail instead of being a few hundred pixels stretched to fill the screen. Never upscales."""
+    h, w = image.shape[:2]
+    if w / h > aspect:  # wider than the screen: keep the full height, cut the sides
+        cw, ch = max(1, round(h * aspect)), h
+    else:  # taller: keep the full width, cut top and bottom
+        cw, ch = w, max(1, round(w / aspect))
+    x, y = (w - cw) // 2, (h - ch) // 2
+    crop = image[y:y + ch, x:x + cw]
+    if ch > max_height:
+        scale = max_height / ch
+        crop = cv2.resize(crop, (max(1, round(cw * scale)), max_height), interpolation=cv2.INTER_AREA)
+    return crop
 
 
 class CameraLoop:
@@ -46,6 +64,9 @@ class CameraLoop:
         self._latest_frame: np.ndarray | None = None
         self._latest_analysis = None
         self._preview_jpeg: bytes | None = None
+        self._preview_bgr: np.ndarray | None = None  # the latest full-resolution frame, for cropped previews
+        self._preview_seq = 0
+        self._crop_cache: dict = {}
         self.state: dict = {"state": "no_person", "message": "", "ready": False}
 
         self._armed_for: str | None = None
@@ -110,6 +131,23 @@ class CameraLoop:
 
     def preview_jpeg(self) -> bytes | None:
         return self._preview_jpeg
+
+    def preview_crop_jpeg(self, aspect: float, max_height: int) -> tuple[int, bytes] | None:
+        """(frame number, JPEG) of the latest frame cropped to a screen's shape (crop_to_aspect). Each frame is
+        encoded once per shape, however many screens show it."""
+        bgr, seq = self._preview_bgr, self._preview_seq
+        if bgr is None:
+            return None
+        key = (round(aspect, 4), int(max_height))
+        cached = self._crop_cache.get(key)
+        if cached and cached[0] == seq:
+            return cached
+        jpeg = cv2.imencode(".jpg", crop_to_aspect(bgr, aspect, max_height),
+                            [cv2.IMWRITE_JPEG_QUALITY, PREVIEW_CROP_QUALITY])[1].tobytes()
+        entry = (seq, jpeg)
+        # Replaced, not updated in place: stream threads may be reading it.
+        self._crop_cache = {**{k: v for k, v in self._crop_cache.items() if v[0] == seq}, key: entry}
+        return entry
 
     def capture_now(self) -> dict | None:
         """Capture immediately from the latest frame (used by the manual capture endpoint)."""
@@ -254,13 +292,17 @@ class CameraLoop:
                 self._face_sent_score = face_ref["score"] if face_ref else 0.0
                 self._armed_for = None
 
-        guidance = {**guidance, "heldMs": int(held_ms), "armed": bool(self._armed_for) or capture_due}
+        # holdMs lets a frontend show an exact countdown (the kiosk UI shows 3, 2, 1).
+        guidance = {**guidance, "heldMs": int(held_ms), "holdMs": self.config.ready_hold_ms,
+                    "armed": bool(self._armed_for) or capture_due}
         changed = guidance["state"] != self.state.get("state")
         self.state = guidance
         if changed or now - self._last_state_sent > STATE_HEARTBEAT_S:
             self._last_state_sent = now
             self.publish({"type": "state", **guidance, "skinFrames": len(self._skin)})
 
+        self._preview_bgr = bgr
+        self._preview_seq += 1
         self._preview_jpeg = cv2.imencode(".jpg", cv2.resize(bgr, None, fx=min(1.0, 720 / bgr.shape[1]),
                                                               fy=min(1.0, 720 / bgr.shape[1])),
                                           [cv2.IMWRITE_JPEG_QUALITY, 70])[1].tobytes()

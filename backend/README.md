@@ -173,7 +173,7 @@ with `?sessionId=` when it starts a session and fills any gap from `GET /api/v2/
 | type | data |
 |---|---|
 | `hello` | `sidecar`: camera status |
-| `perception` | `state`, `message`, `ready`, `heldMs`, `armed`. States: `no_person`, `multiple_people`, `too_dark`, `too_close`, `too_far`, `move_left`, `move_right`, `not_standing`, `face_hidden`, `moving`, `blurry`, `ready` |
+| `perception` | `state`, `message`, `ready`, `heldMs` (held so far), `holdMs` (how long to hold: a UI's countdown), `armed`. States: `no_person`, `too_dark`, `too_close`, `too_far`, `move_left`, `move_right`, `not_standing`, `face_hidden`, `moving`, `blurry`, `ready` |
 | `presence` | `present` |
 | `camera` / `sidecar` | camera or sidecar connection status |
 | `session.status` | `status` (`waiting_for_capture`, `designing`, `options_ready`, `rendering`, `ready`, `error`) and `message` |
@@ -221,7 +221,7 @@ disable). Photos are sent to OpenAI, so the UI must ask first.
 | `POST /api/v2/sessions/:id/redesign {feedback?, style?, preferences?}` | Three new options in one call; avoids repeats; renders option 1 |
 | `POST /api/v2/sessions/:id/keep {round, option}` | Saves that look for `KEEP_HOURS`. Returns `{ url, qrDataUrl, expiresAt }` |
 | `DELETE /api/v2/sessions/:id` | End now and forget the visitor |
-| `GET /api/v2/preview.mjpg` | Live camera preview (proxied from the sidecar) |
+| `GET /api/v2/preview.mjpg` | Live camera preview (proxied from the sidecar). Add `?aspect=0.28125&height=1080` to get the part a 1080×3840 screen shows, cut from the full-resolution frame |
 | `GET` / `DELETE /api/v2/calibration`, `POST /api/v2/calibrate/height {heightCm}`, `POST /api/v2/calibrate/white-balance {roi}`, `POST /api/v2/calibrate/undertone {save?}` | Calibration (see sidecar README). The undertone fit uses the logged confirmations and corrections |
 | `GET /api/v2/metrics` | Today's spend, queue, per-step timings (avg, p50, p90), counters, and `insights`: approval per undertone and measured hue angle by corrected undertone |
 | `GET /looks/:token` | Public page for a kept look (the token is the access control), plus `/looks/:token.png` |

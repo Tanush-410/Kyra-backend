@@ -9,7 +9,7 @@ import cv2
 import numpy as np
 import pytest
 
-from kyra_sidecar.camera import CameraLoop
+from kyra_sidecar.camera import CameraLoop, crop_to_aspect
 from kyra_sidecar.perception import refine_mask
 
 MODELS = Path(__file__).resolve().parent.parent / "models"
@@ -37,6 +37,30 @@ def loop_for_test(**overrides):
     loop._gesture_candidate, loop._gesture_cooldown_until, loop._armed_for = None, 0.0, None
     loop._last_thumb, loop._unchanged_since = None, None
     return loop, events
+
+
+def test_preview_crop_keeps_the_centre_strip_at_full_resolution():
+    frame = np.zeros((1080, 1920, 3), np.uint8)
+    frame[:, 950:970] = 255  # a line down the middle
+    strip = crop_to_aspect(frame, 1080 / 3840, 1920)
+    assert strip.shape[:2] == (1080, 304), "a portrait strip of a landscape camera, full height, never upscaled"
+    assert strip[:, 140:160].mean() > 200, "cut from the centre"
+    assert crop_to_aspect(frame, 1080 / 3840, 720).shape[:2] == (720, 203), "scaled down to the height asked for"
+    tall = crop_to_aspect(np.zeros((1920, 1080, 3), np.uint8), 16 / 9, 4000)
+    assert tall.shape[:2] == (608, 1080), "a portrait camera on a landscape screen keeps the full width"
+
+
+def test_preview_crop_is_encoded_once_per_frame_and_shape():
+    loop = CameraLoop.__new__(CameraLoop)
+    loop._preview_bgr, loop._preview_seq, loop._crop_cache = None, 0, {}
+    assert loop.preview_crop_jpeg(0.28, 1080) is None, "nothing before the first frame"
+    loop._preview_bgr, loop._preview_seq = np.full((1080, 1920, 3), 128, np.uint8), 1
+    first = loop.preview_crop_jpeg(0.28, 1080)
+    assert loop.preview_crop_jpeg(0.28, 1080) is first, "two screens on the same frame share one encoding"
+    assert cv2.imdecode(np.frombuffer(first[1], np.uint8), cv2.IMREAD_COLOR).shape[:2] == (1080, 302)
+    loop._preview_seq = 2
+    assert loop.preview_crop_jpeg(0.28, 1080)[0] == 2, "a new frame is encoded again"
+    assert all(entry[0] == 2 for entry in loop._crop_cache.values()), "old frames are dropped"
 
 
 def test_gesture_must_be_held_then_cools_down():

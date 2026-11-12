@@ -162,8 +162,15 @@ export default async function mirrorRoutes(app, { config, mirror, sidecar, event
     }
   });
 
+  // ?aspect=width/height&height=px: a screen that shows only part of the camera's view (the portrait kiosk)
+  // gets that part at full resolution instead of a stretched piece of the small preview.
   app.get('/api/v2/preview.mjpg', async (request, reply) => {
-    const upstream = await sidecar.preview().catch(() => null);
+    const aspect = Number(request.query?.aspect);
+    const height = Math.round(Number(request.query?.height));
+    const crop = Number.isFinite(aspect) && aspect >= 0.1 && aspect <= 10
+      ? { aspect: Math.round(aspect * 10000) / 10000, height: Number.isFinite(height) && height > 0 ? Math.min(2160, Math.max(120, height)) : null }
+      : null;
+    const upstream = await sidecar.preview(crop).catch(() => null);
     if (!upstream?.ok || !upstream.body) {
       return reply.code(503).send({ error: 'Camera preview unavailable.' });
     }
@@ -173,6 +180,8 @@ export default async function mirrorRoutes(app, { config, mirror, sidecar, event
   });
 
   app.get('/api/v2/calibration', async (request, reply) => sidecar.calibration().catch((error) => fail(reply, error)));
+  // Operator only (under /calibration): npm run camera-check.
+  app.get('/api/v2/calibration/orientation', async (request, reply) => sidecar.orientation().catch((error) => fail(reply, error)));
   app.delete('/api/v2/calibration', async (request, reply) => sidecar.resetCalibration().catch((error) => fail(reply, error)));
   app.post('/api/v2/calibrate/height', async (request, reply) =>
     sidecar.calibrateHeight({ heightCm: Number(request.body?.heightCm) }).catch((error) => fail(reply, error))

@@ -181,6 +181,11 @@ export function loadConfig(env = process.env) {
     shutdownGraceMs: numberFrom(env.SHUTDOWN_GRACE_MS, 30_000),
 
     keepHours: numberFrom(env.KEEP_HOURS, 24),
-    publicBaseUrl: env.PUBLIC_BASE_URL || ''
+    publicBaseUrl: env.PUBLIC_BASE_URL || '',
+
+    // The team's kiosk UI (Kyra-UI-V1), built with `npm run build`, served at FRONTEND_PATH. FRONTEND_DIR=''
+    // turns it off (for example when the UI is served some other way).
+    frontendDir: env.FRONTEND_DIR === '' ? '' : path.resolve(projectRoot, env.FRONTEND_DIR || 'Kyra-UI-V1/dist'),
+    frontendPath: env.FRONTEND_PATH || '/Kyra-UI-V1/'
   };
 }

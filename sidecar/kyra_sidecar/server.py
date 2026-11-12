@@ -24,6 +24,7 @@ from .config import Config
 from . import undertone_adapter
 from .capture import skin_config
 from .perception import Perception, skin_sample
+from .orientation import suggest_rotation
 from .vendor.undertone import evaluate_warm_cool, fit_warm_cool
 
 log = logging.getLogger("kyra.sidecar")
@@ -256,15 +257,29 @@ def create_app(config: Config | None = None, perception: Perception | None = Non
         return StreamingResponse(stream(), media_type="text/event-stream", headers={"Cache-Control": "no-cache"})
 
     @app.get("/preview.mjpg")
-    async def preview(request: Request):
+    async def preview(request: Request, aspect: float | None = None, height: int | None = None):
+        """The live camera. Plain: a small whole-frame preview (720 px wide). With ?aspect=width/height (and
+        optionally &height=pixels): the centre of the full-resolution frame in that shape, for a screen that
+        shows only part of the camera's view (a portrait kiosk)."""
         cam = camera()
+        crop = None
+        if aspect is not None:
+            if not 0.1 <= aspect <= 10:
+                raise HTTPException(400, "aspect must be between 0.1 and 10")
+            crop = (aspect, max(120, min(2160, height or 1920)))
 
         async def stream():
             last = None
             while not await request.is_disconnected():
-                jpeg = cam.preview_jpeg()
-                if jpeg is not None and jpeg is not last:
-                    last = jpeg
+                if crop:
+                    entry = cam.preview_crop_jpeg(*crop)
+                    jpeg, fresh = (entry[1], entry[0] != last) if entry else (None, False)
+                    marker = entry[0] if entry else last
+                else:
+                    jpeg = marker = cam.preview_jpeg()
+                    fresh = jpeg is not last  # a new frame is a new bytes object
+                if jpeg is not None and fresh:
+                    last = marker
                     yield b"--frame\r\nContent-Type: image/jpeg\r\n\r\n" + jpeg + b"\r\n"
                 await asyncio.sleep(1 / 15)
 
@@ -386,6 +401,20 @@ def create_app(config: Config | None = None, perception: Perception | None = Non
         ok, png = cv2.imencode(".png", cv2.cvtColor(image, cv2.COLOR_RGB2BGR))
         return {"applied": report["applied"], "report": report,
                 "imageDataUrl": "data:image/png;base64," + base64.b64encode(png.tobytes()).decode() if report["applied"] else None}
+
+    @app.get("/camera/orientation")
+    def camera_orientation():
+        """Which CAMERA_ROTATION makes the picture upright, from a face in view (orientation.py)."""
+        cam = camera()
+        frame, _ = cam.latest()
+        if frame is None:
+            raise HTTPException(409, "No camera frame yet")
+        if state.get("orientation_detector") is None:
+            # Its own detector: the camera loop uses the shared one from another thread.
+            state["orientation_detector"] = cv2.FaceDetectorYN.create(
+                str(config.models_dir / "face_detection_yunet_2023mar.onnx"), "", (320, 320), 0.6, 0.3, 5000)
+        return suggest_rotation(cv2.cvtColor(frame, cv2.COLOR_RGB2BGR), config.camera_rotation,
+                                config.camera_mirror, state["orientation_detector"])
 
     @app.get("/calibration")
     def get_calibration():

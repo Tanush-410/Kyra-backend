@@ -1,7 +1,7 @@
 // Production hardening: secrets out of logs, operator-only routes, readiness, graceful drain, per-session
 // rate limits, text-only fallback when images fail, subject changes, alerts, log files, metrics persistence.
 import assert from 'node:assert/strict';
-import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { Writable } from 'node:stream';
 import { test } from 'node:test';
@@ -417,6 +417,105 @@ test('the backend serves the test consoles itself, on whatever port it runs', as
   assert.equal((await app.inject('/console/../.env')).statusCode, 404);
   assert.equal((await app.inject('/console/secrets.json')).statusCode, 404);
   await app.close();
+});
+
+// ---- the team's kiosk UI (Kyra-UI-V1), served by the backend ------------------------------------------
+
+test('the backend serves the built kiosk UI: files, client-side routes, and nothing outside the build', async () => {
+  const dist = tempDir();
+  mkdirSync(path.join(dist, 'assets'), { recursive: true });
+  mkdirSync(path.join(dist, 'mediapipe', 'wasm'), { recursive: true });
+  writeFileSync(path.join(dist, 'index.html'), '<!doctype html><div id="root"></div>');
+  writeFileSync(path.join(dist, 'assets', 'index-B2x9KfQa.js'), 'console.log(1)');
+  writeFileSync(path.join(dist, 'assets', 'logo.png'), 'png');
+  writeFileSync(path.join(dist, 'mediapipe', 'wasm', 'vision.wasm'), 'wasm');
+  writeFileSync(path.join(dist, '.env'), 'SECRET=1');
+  writeFileSync(path.join(path.dirname(dist), 'outside.txt'), 'no');
+  const { app } = await mirrorApp({ openai: openaiFake(), sidecar: fakeSidecar({ bundle: () => bundleFor() }), env: { FRONTEND_DIR: dist } });
+
+  assert.equal((await app.inject('/Kyra-UI-V1')).headers.location, '/Kyra-UI-V1/');
+  const page = await app.inject('/Kyra-UI-V1/');
+  assert.equal(page.statusCode, 200);
+  assert.match(page.headers['content-type'], /text\/html/);
+  assert.match(page.headers['content-security-policy'], /script-src 'self' 'wasm-unsafe-eval'/);
+  assert.match(page.headers['content-security-policy'], /connect-src 'self'/);
+  assert.equal(page.headers['cache-control'], 'no-cache');
+  // A screen's address loads the app, which routes on the client.
+  assert.match((await app.inject('/Kyra-UI-V1/welcome/looking-for-today')).body, /id="root"/);
+
+  const script = await app.inject('/Kyra-UI-V1/assets/index-B2x9KfQa.js');
+  assert.match(script.headers['content-type'], /text\/javascript/);
+  assert.match(script.headers['cache-control'], /immutable/);
+  assert.equal((await app.inject('/Kyra-UI-V1/mediapipe/wasm/vision.wasm')).headers['content-type'], 'application/wasm');
+  assert.equal((await app.inject('/Kyra-UI-V1//assets/logo.png')).statusCode, 200, 'a doubled slash still finds the file');
+  assert.equal((await app.inject('/Kyra-UI-V1/assets/missing.png')).statusCode, 404, 'a missing asset is a 404, not the app');
+
+  for (const url of ['/Kyra-UI-V1/../outside.txt', '/Kyra-UI-V1/%2e%2e/outside.txt', '/Kyra-UI-V1/..%2Foutside.txt', '/Kyra-UI-V1/.env']) {
+    const response = await app.inject(url);
+    assert.ok([400, 404].includes(response.statusCode), `${url}: ${response.statusCode}`);
+    assert.ok(response.body !== 'no' && !response.body.includes('SECRET'), url);
+  }
+  await app.close();
+});
+
+test('before the UI is built, its address says how to build it; FRONTEND_DIR="" turns it off', async () => {
+  const empty = await mirrorApp({ openai: openaiFake(), sidecar: fakeSidecar({ bundle: () => bundleFor() }), env: { FRONTEND_DIR: tempDir() } });
+  const response = await empty.app.inject('/Kyra-UI-V1/');
+  assert.equal(response.statusCode, 404);
+  assert.match(response.body, /npm ci && npm run build/);
+  await empty.app.close();
+
+  const off = await mirrorApp({ openai: openaiFake(), sidecar: fakeSidecar({ bundle: () => bundleFor() }), env: { FRONTEND_DIR: '' } });
+  assert.doesNotMatch((await off.app.inject('/Kyra-UI-V1/')).body, /npm run build/);
+  await off.app.close();
+});
+
+test('the kiosk can ask for the camera preview cropped to its screen, and only with valid numbers', async () => {
+  const sidecar = fakeSidecar({ bundle: () => bundleFor() });
+  const urls = [];
+  const fetchImpl = sidecar.fetchImpl;
+  sidecar.fetchImpl = (url, init) => {
+    urls.push(String(url));
+    return fetchImpl(url, init);
+  };
+  const { app } = await mirrorApp({ openai: openaiFake(), sidecar });
+  const preview = () => urls.filter((u) => u.includes('/preview.mjpg')).at(-1);
+  await app.inject('/api/v2/preview.mjpg?aspect=0.28125&height=1670');
+  assert.match(preview(), /\/preview\.mjpg\?aspect=0\.2813&height=1670$/);
+  await app.inject('/api/v2/preview.mjpg?aspect=0.28125&height=99999');
+  assert.match(preview(), /height=2160$/, 'height is capped');
+  await app.inject('/api/v2/preview.mjpg?aspect=abc&extra=1');
+  assert.match(preview(), /\/preview\.mjpg$/, 'nonsense falls back to the plain preview; nothing else is forwarded');
+  await app.inject('/api/v2/preview.mjpg');
+  assert.match(preview(), /\/preview\.mjpg$/);
+  await app.close();
+});
+
+test('the camera orientation check is for staff only and passes the sidecar\'s answer through', async () => {
+  const sidecar = fakeSidecar({ bundle: () => bundleFor() });
+  const fetchImpl = sidecar.fetchImpl;
+  sidecar.fetchImpl = async (url, init) =>
+    new URL(url).pathname === '/camera/orientation'
+      ? new Response(JSON.stringify({ found: true, current: 0, suggested: 270, correct: false }), { headers: { 'content-type': 'application/json' } })
+      : fetchImpl(url, init);
+  const { app } = await mirrorApp({ openai: openaiFake(), sidecar, env: { API_TOKEN: 'kiosk-token', OPERATOR_TOKEN: 'staff-token' } });
+  const ask = (token) => app.inject({ url: '/api/v2/calibration/orientation', headers: { authorization: `Bearer ${token}` } });
+  assert.equal((await ask('kiosk-token')).statusCode, 401, 'the kiosk token cannot use it');
+  const staff = await ask('staff-token');
+  assert.equal(staff.statusCode, 200);
+  assert.equal(staff.json().suggested, 270);
+  await app.close();
+});
+
+test('perception events tell the UI how long to hold still, for its 3-2-1 countdown', async (t) => {
+  const sidecar = fakeSidecar({ bundle: () => bundleFor() });
+  const { app } = await mirrorApp({ openai: openaiFake(), sidecar });
+  const { seen } = await listenWithEvents(app, t);
+  await waitFor(() => sidecar.connected());
+  sidecar.emit({ type: 'state', state: 'ready', message: 'Perfect — hold that pose', ready: true, heldMs: 1200, holdMs: 3000, armed: true });
+  const event = await waitFor(() => seen.find((e) => e.type === 'perception' && e.state === 'ready'));
+  assert.equal(event.holdMs, 3000);
+  assert.equal(event.heldMs, 1200);
 });
 
 test('the .env.example placeholder key counts as no key, so /ready says so', async () => {

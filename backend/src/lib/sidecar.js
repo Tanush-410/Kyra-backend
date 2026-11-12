@@ -119,12 +119,16 @@ export function createSidecar({ url, token, timeoutMs = 20_000, fetchImpl = (...
     getCapture: (captureId) => call('GET', `/captures/${captureId}`),
     deleteCapture: (captureId) => call('DELETE', `/captures/${captureId}`),
     calibration: () => call('GET', '/calibration'),
+    // Which CAMERA_ROTATION makes the picture upright, from a face in view.
+    orientation: () => call('GET', '/camera/orientation'),
     resetCalibration: () => call('DELETE', '/calibration'),
     calibrateHeight: (body) => call('POST', '/calibrate/height', body),
     calibrateWhiteBalance: (body) => call('POST', '/calibrate/white-balance', body),
     calibrateUndertone: (body) => call('POST', '/calibrate/undertone', body),
     setToken,
-    preview: () => fetchImpl(`${url}/preview.mjpg`, { headers }),
+    // crop: { aspect, height } asks for the centre of the full-resolution frame in a screen's shape.
+    preview: (crop = null) =>
+      fetchImpl(`${url}/preview.mjpg${crop ? `?${new URLSearchParams({ aspect: String(crop.aspect), ...(crop.height ? { height: String(crop.height) } : {}) })}` : ''}`, { headers }),
     subscribe,
     close() {
       subscription?.stop();

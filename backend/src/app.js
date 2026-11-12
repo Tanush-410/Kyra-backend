@@ -8,6 +8,7 @@ import { createAlerts } from './lib/alerts.js';
 import { createBudget } from './lib/budget.js';
 import { createCatalogue } from './lib/catalogue.js';
 import { createEventHub } from './lib/events.js';
+import { registerFrontend } from './lib/frontend.js';
 import { createInsights } from './lib/insights.js';
 import { createJobStore } from './lib/jobs.js';
 import { createLogStream, requestSerializer } from './lib/logfile.js';
@@ -194,6 +195,9 @@ export async function buildApp(config, { logger = true, fetchImpl, sidecarFetch,
   app.get('/console', async (request, reply) => reply.redirect('/console/'));
   app.get('/console/', serveConsole);
   app.get('/console/:file', serveConsole);
+  if (config.frontendDir) {
+    registerFrontend(app, { dir: config.frontendDir, basePath: config.frontendPath });
+  }
 
   app.get('/health', async () => {
     const sidecarHealth = await sidecar.health().catch(() => null);

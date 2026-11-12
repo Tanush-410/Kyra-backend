@@ -312,6 +312,11 @@
       const res = await fetch(`${API}/api/v2/sessions/${sessionId}`, { headers: headers(false) });
       if (!res.ok || !session || session.id !== sessionId) return;
       const snapshot = await res.json();
+      // An upload is measured before this stream opens: its profile event went by unseen.
+      if (snapshot.profile && !session.profiled) {
+        session.profiled = true;
+        renderProfile({ profile: snapshot.profile, palette: snapshot.palette || [], fitGuidance: snapshot.fitGuidance || [] });
+      }
       const done = snapshot.renders.find((r) => r.key === snapshot.activeKey && r.status === 'done');
       if (done?.imageDataUrl) {
         session.done.add(done.key); session.active = { round: done.round, option: done.option };

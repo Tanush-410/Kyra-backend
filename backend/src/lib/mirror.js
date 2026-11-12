@@ -1023,7 +1023,7 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
 
   function onSidecarEvent(event) {
     if (event.type === 'state' || event.type === 'hello') {
-      events.publish({ type: 'perception', state: event.state, message: event.message, ready: event.ready, heldMs: event.heldMs, armed: event.armed });
+      events.publish({ type: 'perception', state: event.state, message: event.message, ready: event.ready, heldMs: event.heldMs, holdMs: event.holdMs, armed: event.armed });
     } else if (event.type === 'profile') {
       onEarlyProfile(event.sessionId, event.profile);
     } else if (event.type === 'presence') {

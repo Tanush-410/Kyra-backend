@@ -14,6 +14,7 @@
     "soak": "node --expose-gc scripts/soak.mjs",
     "compare": "node scripts/compare-pipelines.mjs",
     "links": "node scripts/links.mjs",
+    "camera-check": "node scripts/camera-check.mjs",
     "rehearse": "node scripts/rehearse.mjs",
     "doctor": "bash ../setup.sh --check"
   },

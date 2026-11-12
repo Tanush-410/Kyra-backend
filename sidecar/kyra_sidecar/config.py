@@ -43,7 +43,8 @@ class Config:
     target_fps: float = field(default_factory=lambda: _number("TARGET_FPS", 15))
 
     # Auto-capture: how long the visitor must hold a "ready" pose, and how many frames feed skin averaging.
-    ready_hold_ms: int = field(default_factory=lambda: int(_number("READY_HOLD_MS", 900)))
+    # 3 s matches the kiosk UI's 3-2-1 countdown (Kyra-UI-V1). The sharpest ready frame is still the one captured.
+    ready_hold_ms: int = field(default_factory=lambda: int(_number("READY_HOLD_MS", 3000)))
     skin_frames: int = field(default_factory=lambda: int(_number("SKIN_FRAMES", 15)))
     # Skin measurement: "detector" (vendored undertone detector on face-mesh regions) or "legacy"
     # (the original single cheek/forehead patch).

@@ -98,10 +98,10 @@ app that launches it (Terminal, VS Code or the Tauri app) needs camera permissio
 | `SIDECAR_MAX_BODY_MB` | `32` | Larger request bodies are refused before they are read. Images over 40 megapixels (`OPENCV_IO_MAX_IMAGE_PIXELS`) are refused from their header, before decoding. |
 | `CAMERA` | `true` | `false` disables the camera, leaving only the still-image endpoints. |
 | `CAMERA_INDEX`, `CAMERA_WIDTH`, `CAMERA_HEIGHT` | `0`, `1920`, `1080` | Capture device and resolution. |
-| `CAMERA_ROTATION` | `0` | Clockwise rotation (90, 180 or 270) for a portrait-mounted camera. |
+| `CAMERA_ROTATION` | `0` | Clockwise rotation (90, 180 or 270) for a camera mounted on its side or upside down. Don't work it out by eye: `npm run camera-check -- --apply` in `backend/` reads it from a face in view (`GET /camera/orientation`). |
 | `CAMERA_MIRROR` | `true` | Flip frames horizontally, like a mirror. Left/right guidance follows this. |
 | `ANALYSIS_WIDTH`, `TARGET_FPS` | `960`, `15` | Analysis resolution and frame rate. Captures use full resolution. |
-| `READY_HOLD_MS` | `900` | How long a ready pose must be held before auto-capture. |
+| `READY_HOLD_MS` | `3000` | How long a ready pose must be held before auto-capture (the kiosk UI counts 3, 2, 1). |
 | `SKIN_FRAMES` | `15` | Frames averaged for skin tone. |
 | `ABSENT_AFTER_MS` | `12000` | How long nobody (no body and no face) can be in frame before the visitor counts as gone. |
 | `GESTURES`, `GESTURE_HOLD_MS`, `GESTURE_COOLDOWN_MS` | `true`, `600`, `2000` | Hands-free control. |
@@ -135,7 +135,7 @@ are refused. Every response carries `nosniff`, `no-referrer`, `DENY` framing and
 | `GET /health` | Camera status, armed session, calibration summary |
 | `GET /state` | Latest guidance |
 | `GET /events` | SSE events: `state`, `capture` (`captureId`), `presence`, `subject` (a different person became the subject), `gesture`, `camera` (incl. `reconnecting`), `armed` |
-| `GET /preview.mjpg` | Live MJPEG preview |
+| `GET /preview.mjpg` | Live MJPEG preview (720 px wide). `?aspect=w/h&height=px`: the centre of the full-resolution frame in a screen's shape (the portrait kiosk), sharp instead of stretched |
 | `POST /arm {sessionId}` / `POST /disarm` | Arm or disarm auto-capture for a session |
 | `POST /capture` | Capture now (manual) |
 | `GET` / `DELETE /captures/{id}` | Fetch or delete a capture bundle (deleted after 5 min regardless) |
