@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { test } from 'node:test';
 import sharp from 'sharp';
@@ -142,6 +142,9 @@ test('ratings are stored anonymously and summarised per undertone', async () => 
   assert.equal(insights.approvalPercent, 50);
   assert.equal(insights.byUndertone.warm.ratings, 2);
   assert.ok(existsSync(path.join(runtime, 'ratings.jsonl')));
+  for (const line of readFileSync(path.join(runtime, 'ratings.jsonl'), 'utf8').trim().split('\n')) {
+    assert.equal(JSON.parse(line).style, undefined, 'no free text (it can be what the visitor said) in the notes kept on disk');
+  }
   await app.close();
 });
 

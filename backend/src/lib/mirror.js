@@ -840,7 +840,7 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
     }
     insights?.recordRating({
       rating,
-      style: session.style,
+      // No style: it can be the visitor's own words (voice search), and these notes are kept on disk.
       // A fallback "neutral" is not a measurement, so it must not teach the neutral palette.
       undertone: session.profile?.skinUndertoneSource === 'fallback' ? null : session.profile?.skinUndertone || null,
       depth: session.profile?.skinDepth || null,

@@ -43,6 +43,7 @@ h1{font-size:26px;line-height:1.25;margin:0 0 20px}h2{font-size:18px;margin:28px
 <p>The camera is on while the mirror runs, so it can guide you and notice when you arrive. Until you agree on its screen, nothing it sees is saved or sent anywhere, and it is dropped when you leave.</p>
 <h2>What the photo is for</h2>
 <p>The mirror reads your skin tone and build from the camera, then sends your photo to OpenAI, our AI partner, to create your looks: pictures of you wearing the outfits it suggests.</p>
+<p>If you use voice search, your words are turned into text by your browser's speech service (Google, in Chrome); the mirror sends the text to OpenAI to design your looks, and keeps it only for this visit.</p>
 <h2>How long it is kept</h2>
 <ul><li>During your visit your photo and results are held in the mirror's memory only.</li>
 <li>When you finish, or about ${escapeHtml(away)} after you step away from the mirror, they are forgotten.</li>

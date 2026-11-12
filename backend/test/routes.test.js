@@ -262,6 +262,8 @@ test('privacy: /privacy is public and says how long a kept look stays', async ()
   assert.match(page.body, /OpenAI/);
   assert.match(page.body, /about 30 seconds after you step away/, 'ABSENT_AFTER_MS default');
   assert.match(page.body, /Until you agree on its screen, nothing it sees is saved or sent anywhere/);
+  assert.match(page.body, /voice search, your words are turned into text by your browser's speech service \(Google, in Chrome\)/);
+  assert.match(page.body, /keeps it only for this visit/);
   assert.doesNotMatch(page.body, /takes no photo/, 'the camera runs before consent (it guides, keeps a face crop in memory)');
   await app.close();
   const none = await testApp({ env: { KEEP_HOURS: '0', ABSENT_AFTER_MS: '120000' } });
