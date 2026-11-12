@@ -25,10 +25,9 @@ export default function ListeningScreen() {
   const { finalText, interim, status, error } = useSpeechToText({
     // 3 seconds of silence after speaking: input is done.
     onDone: (text) => {
-      console.log("Voice input:", text);
         const query = new URLSearchParams();
       if (searchid) query.set("category", searchid);
-      if (text) query.set("q", text);
+      // The words stay in router state only: an address ends up in the browser's history.
 
       navigate(`${ANALYSIS}?${query.toString()}`, {
         state: { id: searchid, text },

@@ -1,0 +1,38 @@
+/* Figma: "Edit" (2043:13659), laid out like the onboarding picks it reuses. */
+.edit-wrap { position: relative; width: 1080px; height: 3840px; overflow: hidden; }
+.edit__content { gap: 100px; }
+.edit__outfit {
+  margin: -60px 0 0;
+  text-align: center;
+  font-weight: 300;
+  font-size: var(--type-p3-size);
+  line-height: var(--type-line-height);
+  color: #aaa;
+}
+.edit__presets { display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; width: 900px; }
+.edit .listening__transcript ~ .edit__presets { position: absolute; top: 2500px; left: 90px; }
+.edit__preset {
+  padding: 14px 40px;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  background: #3a3a3a;
+  color: var(--colour-white-100);
+  font-family: var(--font-family);
+  font-size: 44px;
+  cursor: pointer;
+}
+.edit__preset:hover,
+.edit__preset[data-hand-hovered="true"] { border-color: #e74787; }
+.edit__preset:disabled { opacity: 0.4; cursor: default; }
+.edit__busy {
+  position: absolute;
+  top: 2900px;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  font-weight: 300;
+  font-size: var(--type-p3-size);
+  color: #aaa;
+}
+.edit__back { position: absolute; top: 3060px; left: 174.5px; }

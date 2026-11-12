@@ -125,7 +125,8 @@ function BackendHoldStill() {
 
   // Opened directly, or the visit ended (the visitor walked away): ask again, with the same choices.
   if (phase === "none" || phase === "ended") {
-    return <Navigate to={`${CONSENT}${intentQuery(intentFromLocation(location, params))}`} replace />;
+    const intent = intentFromLocation(location, params);
+    return <Navigate to={`${CONSENT}${intentQuery(intent)}`} state={{ id: intent.category, text: intent.q }} replace />;
   }
   if (stage === "flash" || stage === "allset" || stage === "done") return <HoldStillView view={{ kind: stage === "flash" ? "flash" : "allset" }} />;
 
@@ -181,7 +182,7 @@ function BrowserHoldStill() {
     if (stage === "done" && uploaded) navigate(RESULT, { replace: true });
   }, [stage, uploaded, navigate]);
 
-  if (!consented) return <Navigate to={`${CONSENT}${intentQuery(raw)}`} replace />;
+  if (!consented) return <Navigate to={`${CONSENT}${intentQuery(raw)}`} state={{ id: raw.category, text: raw.q }} replace />;
   // "All set!" stays until the photo has reached the backend.
   if (stage !== "live") return <HoldStillView view={{ kind: stage === "flash" ? "flash" : "allset" }} />;
 

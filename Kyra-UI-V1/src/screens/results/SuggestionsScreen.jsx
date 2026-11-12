@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import CameraFeed from "../../components/CameraFeed.jsx";
 import Dialog from "../../components/Dialog.jsx";
 import KyraLoader from "../../components/KyraLoader.jsx";
@@ -8,7 +8,8 @@ import Toast from "../../components/Toast.jsx";
 import { useKyraSession } from "../../context/KyraSessionContext.jsx";
 import { useResultsSession } from "../../hooks/useResultsSession.js";
 import { useToast } from "../../hooks/useToast.js";
-import { LOOK_PATH } from "../../lib/shopRoutes.js";
+import { allOutfits, outfitCount, setStart } from "../../lib/outfits.js";
+import { EDIT_LOOK_PATH, LOOK_PATH } from "../../lib/shopRoutes.js";
 import { isDesigning } from "../../state/sessionReducer.js";
 import "./SuggestionsScreen.css";
 
@@ -87,7 +88,7 @@ export function OutfitItems({ items }) {
  * Figma: "Suggestion to buy" / Suggestion (2043:8093, 8133, 8151) and its menu (2043:8110).
  * options: this round's outfits; index: the one shown. busy: a message while new looks are designed.
  */
-export function SuggestionsView({ options, index, onIndex, onOpenMenu, busy, hint, background = null, header }) {
+export function SuggestionsView({ options, index, onIndex, onOpenMenu, busy, hint, count, lede = "Swipe for more options", background = null, header }) {
   const option = options[index];
   const drag = useRef(null);
   const go = (step) => {
@@ -121,7 +122,7 @@ export function SuggestionsView({ options, index, onIndex, onOpenMenu, busy, hin
         </div>
       ) : (
         <>
-          {options.length > 1 && <p className="suggest__hint">Swipe for more options</p>}
+          {(options.length > 1 || lede !== "Swipe for more options") && <p className="suggest__hint">{lede}</p>}
           <h1 className="suggest__title">{option.title}</h1>
           {index > 0 && <span className="suggest__shade suggest__shade--left" aria-hidden="true" />}
           {index < options.length - 1 && <span className="suggest__shade suggest__shade--right" aria-hidden="true" />}
@@ -137,7 +138,7 @@ export function SuggestionsView({ options, index, onIndex, onOpenMenu, busy, hin
             <OutfitItems items={option.items} />
           </button>
           <p className="suggest__count" aria-live="polite">
-            {index + 1} of {options.length}
+            {count || `${index + 1} of ${options.length}`}
           </p>
           <button type="button" className="suggest__arrow suggest__arrow--left" aria-label="Previous outfit" onClick={() => go(-1)} disabled={index === 0}>
             <img src={icon("arrow-left.svg")} alt="" width="74" height="74" />
@@ -159,6 +160,7 @@ export function SuggestionsView({ options, index, onIndex, onOpenMenu, busy, hin
 
 export default function SuggestionsScreen() {
   const navigate = useNavigate();
+  const location = useLocation();
   const session = useResultsSession();
   const { state, redesigning, tryOn, moreLike, end } = useKyraSession();
   const { toast, showToast } = useToast();
@@ -169,28 +171,30 @@ export default function SuggestionsScreen() {
   const [hint, setHint] = useState(() => Boolean(session && !hintedSessions.has(session.id)));
 
   const round = session?.currentRound || 0;
-  const options = session?.rounds[round] || [];
+  const outfits = allOutfits(session);
+  const edited = Boolean(location.state?.edited);
 
-  // A new round (More like this) starts at its first outfit.
-  useEffect(() => setIndex(0), [round]);
+  // A new set (an edit, More like this) opens at its first outfit; earlier sets stay a swipe away.
+  useEffect(() => setIndex(setStart(allOutfits(session), round)), [round]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (asked != null && round > asked) setAsked(null);
   }, [asked, round]);
   useEffect(() => {
-    if (!hint || !session || options.length < 2) return undefined;
+    if (!hint || !session || outfits.length < 2) return undefined;
     hintedSessions.add(session.id);
     const timer = setTimeout(() => setHint(false), HINT_MS);
     return () => clearTimeout(timer);
-  }, [hint, session, options.length]);
+  }, [hint, session, outfits.length]);
 
   if (!session) return null;
-  const option = options[Math.min(index, options.length - 1)];
+  const at = Math.min(index, Math.max(0, outfits.length - 1));
+  const option = outfits[at];
   const designing = isDesigning(state.session, redesigning);
   const busy = asked != null ? "Finding more like this…" : "";
 
   const virtualTryOn = async () => {
     setMenu(false);
-    await tryOn(round, option.option);
+    await tryOn(option.round, option.option);
     navigate(LOOK_PATH);
   };
   const more = async () => {
@@ -208,8 +212,11 @@ export default function SuggestionsScreen() {
     <div className="suggest-wrap">
       <div inert={menu || exitOpen ? "" : undefined}>
         <SuggestionsView
-          options={options}
-          index={Math.min(index, Math.max(0, options.length - 1))}
+          options={outfits}
+          index={at}
+          count={outfitCount(outfits, at)}
+          // Figma "Extra" (2043:18385): after an edit, the new set asks.
+          lede={edited && option?.round === round ? "Is this what you were looking for?" : "Swipe for more options"}
           onIndex={(i) => {
             setIndex(i);
             setHint(false);
@@ -245,6 +252,15 @@ export default function SuggestionsScreen() {
           top={860}
           actions={[
             { label: "Virtual try-on", onClick: virtualTryOn },
+            // An edit designs a new set of three around the change (one at a time, like More like this).
+            {
+              label: "Edit outfit",
+              disabled: designing,
+              onClick: () => {
+                setMenu(false);
+                navigate(EDIT_LOOK_PATH, { state: { round: option.round, option: option.option } });
+              },
+            },
             // One design call and one picture each: never while a round is being designed.
             { label: designing ? "Designing new looks…" : "More like this", onClick: more, disabled: designing },
             { label: "Back", onClick: () => setMenu(false) },
