@@ -25,6 +25,7 @@ import { createUsageLog, DEFAULT_PRICES } from './lib/usage.js';
 import handheldRoutes from './routes/handheld.js';
 import jobRoutes from './routes/jobs.js';
 import mirrorRoutes from './routes/mirror.js';
+import privacyRoutes from './routes/privacy.js';
 import reviewRoutes from './routes/review.js';
 import styleMeRoutes from './routes/style-me.js';
 import suggestionRoutes from './routes/suggestion.js';
@@ -242,6 +243,7 @@ export async function buildApp(config, { logger = true, fetchImpl, sidecarFetch,
   await app.register(styleMeRoutes, deps);
   await app.register(jobRoutes, deps);
   await app.register(mirrorRoutes, deps);
+  await app.register(privacyRoutes, deps);
 
   const sweepDisk = () => {
     const deleted = storage.sweepExpired() + looks.sweep();

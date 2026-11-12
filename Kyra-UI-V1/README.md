@@ -50,11 +50,14 @@ Open it once with the token, `http://localhost:5173/Kyra-UI-V1/#token=<apiToken>
 1. **Splash:** a wave (the shared hand detector, `useWaveDetector`) or a click starts. Returning here ends any
    previous visit.
 2. **Onboarding picks**, unchanged.
-3. **Analysis intro**, then **Consent** (`ConsentScreen`): the photo goes to OpenAI, so the backend won't
-   start a visit without consent. "I agree" starts the session.
-4. **Hold still:** the live camera with the backend's guidance. The 3, 2, 1 follows the backend's hold time,
-   and the screen moves on when the camera captures. There is no "multiple people" message: the backend
-   follows the nearest person.
+3. **Analysis intro**, then **Consent** (`ConsentScreen`, Figma "Concnt"): the photo goes to OpenAI, so the
+   backend won't start a visit without consent. "Continue" starts the session. The QR code opens the privacy
+   page (the backend's `PRIVACY_URL`, or its own `/privacy`); it is left out when phones couldn't open it
+   (neither `PRIVACY_URL` nor `PUBLIC_BASE_URL` set).
+4. **Hold still:** the live camera with the backend's guidance (red brackets), then "Great, hold still!"
+   (green), then the 3, 2, 1 on its own, timed by the backend's hold time. When the camera captures: a white
+   flash, "All set! Let's find your perfect fit" for 2 s, then on (`src/lib/captureSequence.js`). There is
+   no "multiple people" message: the backend follows the nearest person.
 5. **Results** (`LookResultScreen`): the undertone and palette (with "Does this sound like you?" when the
    reading was unsure), the look on the visitor, and Love it / Show another / Take it home (a QR code) /
    I'm done. Leaving the mirror, or "I'm done", ends the visit and the photo is forgotten.
@@ -74,6 +77,9 @@ Open it once with the token, `http://localhost:5173/Kyra-UI-V1/#token=<apiToken>
   unaffected.
 - **Models are local:** `public/mediapipe/` holds the hand and pose models and the WASM files (from
   `npm run assets`). The splash screen no longer downloads a second copy from a CDN.
+- **Design checks:** `npm run dev`, then `/Kyra-UI-V1/dev/<name>` shows a piece or screen on its own (header,
+  toast, dialog, consent, too-far, hold, count, flash, allset…; the list is in `src/dev/ComponentPreview.jsx`).
+  These pages are left out of the production build. The team's Figma exports go in `design/` (git ignores it).
 - **`OptionCard` has a `disabled` prop.** A pinch skips disabled buttons and anything behind an open dialog
   (`inert`).
 - **Routes are unchanged**, plus `…/analysis/consent`. The results route is still `…/holdstill/analysisres`.

@@ -94,6 +94,7 @@ body { font-family: var(--font-family); }
   background-color: var(--colour-gray-light-text) !important;
 }
 .option-card--w500 { width: 500px; }
+.option-card--w840 { width: 840px; }
 .option-card--auto { width: auto; }
 .option-card__icon { display: block; height: 200px; }
 

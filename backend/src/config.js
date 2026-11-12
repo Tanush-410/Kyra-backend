@@ -182,6 +182,9 @@ export function loadConfig(env = process.env) {
 
     keepHours: numberFrom(env.KEEP_HOURS, 24),
     publicBaseUrl: env.PUBLIC_BASE_URL || '',
+    // Where the consent screen's QR code leads: the venue's own privacy notice. Empty: this backend's
+    // /privacy page, when PUBLIC_BASE_URL says how phones reach it; otherwise the screen shows no QR.
+    privacyUrl: env.PRIVACY_URL || '',
 
     // The team's kiosk UI (Kyra-UI-V1), built with `npm run build`, served at FRONTEND_PATH. FRONTEND_DIR=''
     // turns it off (for example when the UI is served some other way).

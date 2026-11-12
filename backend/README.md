@@ -225,6 +225,8 @@ disable). Photos are sent to OpenAI, so the UI must ask first.
 | `GET` / `DELETE /api/v2/calibration`, `POST /api/v2/calibrate/height {heightCm}`, `POST /api/v2/calibrate/white-balance {roi}`, `POST /api/v2/calibrate/undertone {save?}` | Calibration (see sidecar README). The undertone fit uses the logged confirmations and corrections |
 | `GET /api/v2/metrics` | Today's spend, queue, per-step timings (avg, p50, p90), counters, and `insights`: approval per undertone and measured hue angle by corrected undertone |
 | `GET /looks/:token` | Public page for a kept look (the token is the access control), plus `/looks/:token.png` |
+| `GET /api/v2/privacy` | The consent screen's QR code: `{ url, qrDataUrl }` for `PRIVACY_URL`, or for this backend's `/privacy` when `PUBLIC_BASE_URL` is set; `{ url: null }` otherwise (a phone couldn't open `localhost`) |
+| `GET /privacy` | Public page: what the mirror does with a visitor's photo, in plain words (the kept-look hours come from `KEEP_HOURS`) |
 | `GET /health` | Always `200` while the process is up, with sidecar, budget and session details |
 | `GET /ready` | `200` when the mirror can take visitors, else `503 { problems: [...] }`: `openai_not_configured`, `sidecar_unavailable`, `camera_<status>`, `daily_budget_spent`, `draining`. Point uptime monitors here |
 

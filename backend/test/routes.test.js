@@ -235,3 +235,33 @@ test('retention 0: nothing is written to disk', async () => {
   assert.equal(existsSync(path.join(artifactsDir, 'outfit-flow')), false);
   await app.close();
 });
+
+test('privacy: the consent QR leads to PRIVACY_URL, else to /privacy when phones can reach it, else nowhere', async () => {
+  const qrFor = async (env) => {
+    const { app } = await testApp({ env: { API_TOKEN: 'kiosk', ...env } });
+    const response = await app.inject({ url: '/api/v2/privacy', headers: { authorization: 'Bearer kiosk' } });
+    const unauthorised = (await app.inject('/api/v2/privacy')).statusCode;
+    await app.close();
+    return { ...response.json(), unauthorised };
+  };
+  const own = await qrFor({ PRIVACY_URL: 'https://shop.example/privacy' });
+  assert.equal(own.url, 'https://shop.example/privacy');
+  assert.match(own.qrDataUrl, /^data:image\/png;base64,/);
+  assert.equal(own.unauthorised, 401, 'the API needs the kiosk token like every /api route');
+  assert.equal((await qrFor({ PUBLIC_BASE_URL: 'https://mirror.example:3000' })).url, 'https://mirror.example:3000/privacy');
+  assert.deepEqual((await qrFor({})).url, null, 'localhost is no use to a phone: no QR');
+  assert.equal((await qrFor({ PRIVACY_URL: 'javascript:alert(1)' })).url, null, 'only web addresses');
+});
+
+test('privacy: /privacy is public and says how long a kept look stays', async () => {
+  const { app } = await testApp({ env: { API_TOKEN: 'kiosk', KEEP_HOURS: '24', ALLOWED_HOSTS: 'mirror.example' } });
+  const page = await app.inject({ url: '/privacy', headers: { host: 'mirror.example' } });
+  assert.equal(page.statusCode, 200, 'phones open it without the kiosk token');
+  assert.match(page.headers['content-type'], /text\/html/);
+  assert.match(page.body, /deleted after 24 hours/);
+  assert.match(page.body, /OpenAI/);
+  await app.close();
+  const none = await testApp({ env: { KEEP_HOURS: '0' } });
+  assert.match((await none.app.inject('/privacy')).body, /cannot be taken home/);
+  await none.app.close();
+});

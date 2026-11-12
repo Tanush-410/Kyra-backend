@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { kyraApi } from "../../api/kyraClient.js";
 import AppHeader from "../../components/AppHeader.jsx";
 import OptionCard from "../../components/OptionCard.jsx";
 import { CAMERA_SOURCE } from "../../config.js";
@@ -9,14 +10,69 @@ import "./ConsentScreen.css";
 
 export const CONSENT = "/welcome/looking-for-today/surpriseme/analysis/consent";
 const HOLD_STILL = "/welcome/looking-for-today/surpriseme/analysis/holdstill";
+const icon = (name) => `${import.meta.env.BASE_URL}assets/icons/${name}`;
+
+/** The QR code to the privacy page (backend GET /api/v2/privacy); null when phones couldn't open one. */
+function usePrivacyQr() {
+  const [qr, setQr] = useState(null);
+  useEffect(() => {
+    let live = true;
+    kyraApi
+      .privacy()
+      .then((answer) => live && answer?.url && setQr(answer))
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
+  return qr;
+}
 
 /**
- * Asks before any photo is taken. The visitor's photo goes to OpenAI to design their looks, so the
- * backend refuses to start a visit without consent (REQUIRE_CONSENT, on by default).
+ * Figma: Analysis / "Concnt" (2043:13252). Asks before any photo is taken. The visitor's photo goes to
+ * OpenAI to design their looks, so the backend refuses to start a visit without consent
+ * (REQUIRE_CONSENT, on by default).
  *
- * With the backend camera, agreeing starts the visit: the camera then captures when the visitor holds
+ * With the backend camera, Continue starts the visit: the camera then captures when the visitor holds
  * still. With the browser camera, the visit starts once the photo is taken (on the next screen).
+ * The QR code opens the privacy page (PRIVACY_URL, or the backend's /privacy); without one it is left out.
  */
+export function ConsentView({ qr, busy = false, error = "", onContinue }) {
+  return (
+    <div className="screen">
+      <AppHeader />
+      <div className="consent">
+        <h1 className="title consent__title">By continuing</h1>
+        <div className="consent__row">
+          <img className="consent__camera" src={icon("consent-camera.svg")} alt="" width="175.5" height="175.5" />
+          <p className="consent__text">
+            By continuing, you consent to Kyra capturing an image of you to analyze your skin tone and fit and provide
+            personalized recommendations.
+          </p>
+        </div>
+        <p className="consent__note">
+          <img src={icon("asterisk.svg")} alt="" width="23" height="23" />
+          <span>Kyra needs to capture your image to analyze your skin tone and fit.</span>
+        </p>
+        <div className="consent__continue">
+          <OptionCard label={busy ? "One moment…" : error ? "Try again" : "Continue"} width="w840" onClick={onContinue} />
+        </div>
+        {error && (
+          <p className="consent__error" role="alert">
+            {error}
+          </p>
+        )}
+        {qr && (
+          <div className="consent__qr">
+            <img src={qr.qrDataUrl} alt="QR code: how the mirror uses your information" width="300" height="300" />
+            <p className="screen__text">Scan to know more about how your information is used</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 export default function ConsentScreen() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -24,6 +80,7 @@ export default function ConsentScreen() {
   const { start } = useKyraSession();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const qr = usePrivacyQr();
   const raw = intentFromLocation(location, params);
 
   const agree = async () => {
@@ -45,28 +102,5 @@ export default function ConsentScreen() {
     }
   };
 
-  return (
-    <div className="screen">
-      <AppHeader />
-      <div className="screen__content consent">
-        <h1 className="title">Before we begin</h1>
-        <p className="screen__text consent__text">
-          To match colours and fit to you, I’ll take a photo when you hold still. It’s sent to OpenAI, our AI
-          partner, to create your looks.
-        </p>
-        <p className="screen__text consent__text consent__text--quiet">
-          The mirror doesn’t save it: it’s forgotten when you leave, unless you choose to take a look home.
-        </p>
-        {error && (
-          <p className="consent__error" role="alert">
-            {error}
-          </p>
-        )}
-        <div className="button-row">
-          <OptionCard label={busy ? "One moment…" : error ? "Try again" : "I agree"} width="w500" onClick={agree} />
-          <OptionCard label="No thanks" width="w500" onClick={() => navigate("/")} />
-        </div>
-      </div>
-    </div>
-  );
+  return <ConsentView qr={qr} busy={busy} error={error} onContinue={agree} />;
 }
