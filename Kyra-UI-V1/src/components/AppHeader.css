@@ -1,7 +1,7 @@
+/* Figma: "Frame 1410126071" (2043:13424): 18px padding, rows 1044px wide, each overlapping the next by 4px. */
 .app-header {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   width: 100%;
   padding-block: 18px;
 }
@@ -14,37 +14,54 @@
   background: none;
   cursor: pointer;
 }
-.app-header__actions {
+.app-header__row {
   display: flex;
   align-items: center;
-  gap: 18px;
+  justify-content: space-between;
+  width: 100%;
 }
+.app-header--tools .app-header__row:not(:last-child) { margin-bottom: -4px; }
+.app-header__row--tools { padding-inline: 12px; }
+
 .app-header__kyra { width: 164px; height: 164px; }
 .app-header__kyra img { width: 106px; height: 106px; display: block; }
-.app-header__icon {
-  position: relative;
-  width: 116px;
-  height: 116px;
-  border-radius: 50%;
-}
-.app-header__icon svg { width: 68px; height: 68px; display: block; }
-.app-header__icon--cart { color: #8fce6e; }
-.app-header__icon--filter { color: #6aa9ff; }
-.app-header__icon--exit { color: #ff6b6b; }
-.app-header__badge {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  min-width: 38px;
-  height: 38px;
-  padding: 0 8px;
-  border-radius: 19px;
-  background: #8fce6e;
-  color: #1a1a1a;
-  font-size: 26px;
-  font-weight: 700;
-  line-height: 38px;
-  text-align: center;
-}
 .app-header__profile { width: 174px; height: 174px; }
 .app-header__profile img { width: 174px; height: 174px; display: block; }
+
+.app-header__tool { width: 156.6px; height: 156.6px; border-radius: 50%; }
+.app-header__tool img { display: block; }
+.app-header__tool--end { margin-left: auto; }
+.app-header__tool[data-hand-hovered="true"],
+.app-header__tool:hover { outline: 6px solid #e74787; outline-offset: 4px; }
+
+/* "The cart icon starts vibrating to catch attention" when something is added. */
+.app-header__tool--pulse { animation: app-header-shake 0.6s ease-in-out 2; }
+@keyframes app-header-shake {
+  0%, 100% { transform: rotate(0); }
+  20% { transform: rotate(-12deg); }
+  40% { transform: rotate(10deg); }
+  60% { transform: rotate(-8deg); }
+  80% { transform: rotate(6deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-header__tool--pulse { animation: none; outline: 6px solid #d1ffab; outline-offset: 4px; }
+}
+
+/* How many items are in the cart (on the cart button). */
+.app-header__tool { position: relative; }
+.app-header__badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 52px;
+  height: 52px;
+  padding: 0 12px;
+  border-radius: 26px;
+  background: #d1ffab;
+  color: #1a1a1a;
+  font-family: var(--font-family);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 52px;
+  text-align: center;
+}

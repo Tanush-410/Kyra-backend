@@ -1,73 +1,67 @@
 import "./AppHeader.css";
 
-function CartIcon() {
-  return (
-    <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-      <path d="M8 12h7l7 30h28l6-21H20" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx="27" cy="51" r="4.5" fill="currentColor" />
-      <circle cx="45" cy="51" r="4.5" fill="currentColor" />
-    </svg>
-  );
-}
-
-function FilterIcon() {
-  return (
-    <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-      <path d="M8 16h48M8 32h48M8 48h48" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
-      <circle cx="22" cy="16" r="7" fill="currentColor" />
-      <circle cx="43" cy="32" r="7" fill="currentColor" />
-      <circle cx="28" cy="48" r="7" fill="currentColor" />
-    </svg>
-  );
-}
-
-function TrashIcon() {
-  return (
-    <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
-      <path d="M12 18h40M26 18v-6h12v6M20 18l3 34h18l3-34M28 27v17M36 27v17" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
+const icon = (name) => `${import.meta.env.BASE_URL}assets/icons/${name}`;
 
 /**
- * Top bar: Kyra star (left); optional cart, filter and exit icons plus the profile icon (right).
- * Figma: "Frame 1410126071". Every icon is a real button so pinch clicks work.
+ * Top bar. Figma: "Frame 1410126071" (2043:13424).
+ *
+ * Onboarding screens show only the Kyra star (left) and the profile icon (right). Screens after the
+ * analysis add the round tools under them: bin (end the visit) on the left, cart and filter on the right.
+ * Each tool appears only when its handler is passed, so a screen shows just what works there.
+ *
+ * cartPulse: the cart shakes once to show something was just added to it (Figma note: "the cart icon
+ * starts vibrating to catch attention"). Change the value (a counter) to shake it again.
+ * cartCount: a badge with the number of items in the cart (hidden at 0).
  */
 export default function AppHeader({
   onKyraClick,
   onProfileClick,
-  onCartClick,
-  onFilterClick,
-  onExitClick,
+  onBin,
+  onCart,
+  onFilter,
+  cartPulse = 0,
   cartCount = 0,
   paddingX = 18,
 }) {
+  const tools = Boolean(onBin || onCart || onFilter);
   return (
-    <header className="app-header" style={{ paddingInline: paddingX }}>
-      <button type="button" className="app-header__kyra" onClick={onKyraClick} aria-label="Kyra">
-        <img src={`${import.meta.env.BASE_URL}assets/icons/kyra-star.png`} alt="" />
-      </button>
-      <div className="app-header__actions">
-        {onCartClick && (
-          <button type="button" className="app-header__icon app-header__icon--cart" onClick={onCartClick} aria-label={`Cart${cartCount ? `, ${cartCount} items` : ""}`}>
-            <CartIcon />
-            {cartCount > 0 && <span className="app-header__badge">{cartCount}</span>}
-          </button>
-        )}
-        {onFilterClick && (
-          <button type="button" className="app-header__icon app-header__icon--filter" onClick={onFilterClick} aria-label="Filter">
-            <FilterIcon />
-          </button>
-        )}
-        {onExitClick && (
-          <button type="button" className="app-header__icon app-header__icon--exit" onClick={onExitClick} aria-label="Exit">
-            <TrashIcon />
-          </button>
-        )}
-        <button type="button" className="app-header__profile" onClick={onProfileClick} aria-label="Account">
-          <img src={`${import.meta.env.BASE_URL}assets/icons/user-profile.png`} alt="" />
+    <header className={`app-header${tools ? " app-header--tools" : ""}`} style={{ paddingInline: paddingX }}>
+      <div className="app-header__row app-header__row--top">
+        <button type="button" className="app-header__kyra" onClick={onKyraClick} aria-label="Kyra">
+          <img src={icon("kyra-star.png")} alt="" />
+        </button>
+        <button type="button" className="app-header__profile" onClick={onProfileClick} aria-label="Profile">
+          <img src={icon("user-profile.png")} alt="" />
         </button>
       </div>
+      {(onBin || onCart) && (
+        <div className="app-header__row app-header__row--tools">
+          {onBin && (
+            <button type="button" className="app-header__tool" onClick={onBin} aria-label="End my visit">
+              <img src={icon("header-bin.svg")} alt="" width="156.6" height="156.6" />
+            </button>
+          )}
+          {onCart && (
+            <button
+              type="button"
+              key={cartPulse}
+              className={`app-header__tool app-header__tool--end${cartPulse ? " app-header__tool--pulse" : ""}`}
+              onClick={onCart}
+              aria-label={cartCount ? `Cart, ${cartCount} items` : "Cart"}
+            >
+              <img src={icon("header-cart.svg")} alt="" width="156.6" height="156.6" />
+              {cartCount > 0 && <span className="app-header__badge">{cartCount}</span>}
+            </button>
+          )}
+        </div>
+      )}
+      {onFilter && (
+        <div className="app-header__row app-header__row--tools">
+          <button type="button" className="app-header__tool app-header__tool--end" onClick={onFilter} aria-label="Filters">
+            <img src={icon("header-filter.svg")} alt="" width="156.6" height="156.6" />
+          </button>
+        </div>
+      )}
     </header>
   );
 }

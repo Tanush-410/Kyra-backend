@@ -4,18 +4,24 @@ import { ACCOUNT_PATH, CART_PATH, FILTER_PATH, RESULTS_PATH } from "../lib/shopR
 import { cartCount } from "../state/sessionReducer.js";
 import AppHeader from "./AppHeader.jsx";
 
-/** The shop's top bar: the five entry points from the Figma header, wired to the kiosk routes. */
+/**
+ * The shop's top bar: the Figma header (AppHeader) wired to the kiosk routes. Bin = exit (onExit),
+ * cart and filter go to their screens, profile to the account screen. The cart shows how many items
+ * it holds and shakes when that changes.
+ */
 export default function ShopHeader({ onExit, onCart, onFilter, showCart = true, showFilter = true }) {
   const navigate = useNavigate();
   const { state } = useKyraSession();
+  const count = cartCount(state.shop);
   return (
     <AppHeader
       onKyraClick={() => navigate("/")}
       onProfileClick={() => navigate(ACCOUNT_PATH)}
-      onCartClick={showCart ? onCart || (() => navigate(CART_PATH)) : undefined}
-      onFilterClick={showFilter ? onFilter || (() => navigate(FILTER_PATH)) : undefined}
-      onExitClick={onExit || (() => navigate(RESULTS_PATH))}
-      cartCount={cartCount(state.shop)}
+      onBin={onExit || (() => navigate(RESULTS_PATH))}
+      onCart={showCart ? onCart || (() => navigate(CART_PATH)) : undefined}
+      onFilter={showFilter ? onFilter || (() => navigate(FILTER_PATH)) : undefined}
+      cartCount={count}
+      cartPulse={count}
     />
   );
 }

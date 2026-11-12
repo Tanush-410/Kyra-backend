@@ -103,7 +103,7 @@ export default function EditScreen() {
 
   const pick = () => {
     if (!lookKey || !category || !replacement) {
-      showToast("This look isn't ready yet");
+      showToast("This look isn't ready yet", "error");
       return;
     }
     editPiece({ key: lookKey, category, product: replacement });

@@ -212,7 +212,7 @@ listen(sessionId);                              // now this visitor's images arr
 
 **Visitor behaviour the frontend can rely on:**
 - A visitor walking up to the screen to look at their result keeps it.
-- The session ends after 12 seconds with no body *and* no face in view (`ABSENT_AFTER_MS`, set on the
+- The session ends after 30 seconds with no body *and* no face in view (`ABSENT_AFTER_MS`, set on the
   sidecar), or when they press done.
 
 ## 5. If the old backend stays (path B)
@@ -355,4 +355,4 @@ see in the left column.
 | Renders fail with an OpenAI **401/403** | The key is wrong, or its organisation can't use the image model (OpenAI has required organisation verification for its image models). | Check the key, and the organisation's verification and model access, in the OpenAI dashboard. |
 | A change in `.env` has no effect | The backend reads `.env` only at start, and a value given on the command line wins. | Restart. Check you aren't also setting it on the command line or in your shell profile. |
 | `npm ci` fails, or Node says a feature is missing | Node is older than 22. | Install Node 24 LTS (`nvm install 24`, or nodejs.org). |
-| The visitor's look disappears | They were out of view (no body and no face) for 12 s, or pressed done. | Expected. Raise `ABSENT_AFTER_MS` (sidecar setting) for a slower kiosk flow. |
+| The visitor's look disappears | They were out of view (no body and no face) for 30 s, or pressed done. | Expected. Raise `ABSENT_AFTER_MS` (sidecar setting) for a slower kiosk flow. |

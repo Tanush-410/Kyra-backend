@@ -142,3 +142,13 @@ def test_silhouette_matching_survives_a_noisy_webcam_outline():
     assert np.abs(np.diff(left)).max() <= 4 and np.abs(np.diff(right)).max() <= 4, "no stair-steps"
     assert (right - left).min() > 0.9 * 100, "no notches cut into the leg"
     assert 100 <= np.median(right - left) <= 113, "matched to the visitor's width, garment up to 12% looser"
+
+
+def test_a_visitor_counts_as_gone_after_30_seconds_out_of_view(monkeypatch):
+    # 12 Nov 2026: the kiosk design asks "Still here? We'll delete your session in 30 seconds."
+    from kyra_sidecar.config import Config
+
+    monkeypatch.delenv("ABSENT_AFTER_MS", raising=False)
+    assert Config().absent_after_ms == 30000
+    monkeypatch.setenv("ABSENT_AFTER_MS", "12000")
+    assert Config().absent_after_ms == 12000

@@ -1,29 +1,32 @@
-import OptionCard from "./OptionCard.jsx";
 import "./Dialog.css";
 
 /**
- * A modal that sits inside the 1080px screen. The parent marks the rest of the screen `inert`, so
- * the only pinch targets are these real buttons.
+ * A question over the screen: "Discard item?", "Exit?", "Still here?". Figma: "Bracelet Info card"
+ * (2043:13577, in "Saved outfits" 2043:13563). What is behind it is blurred.
+ *
+ * The screen must also mark its own content inert while this is open (<div inert="">), so a pinch
+ * can't press anything behind the dialog (HandTrackingContext skips [inert]).
+ *
+ * actions: [{ label, onClick }], top to bottom. Without a title it is just the stack of buttons
+ * (Figma "Customize": Edit Outfit / Virtual try-on / More like this).
  */
 export default function Dialog({ title, children, actions = [], label }) {
   return (
-    <div className="dialog" role="dialog" aria-modal="true" aria-label={label || title || "Dialog"}>
-      <div className="dialog__card">
-        {title && <h2 className="dialog__title">{title}</h2>}
-        {children && <div className="dialog__body">{children}</div>}
-        {actions.length > 0 && (
-          <div className="dialog__actions">
-            {actions.map((action) => (
-              <OptionCard
-                key={action.label}
-                label={action.label}
-                width="auto"
-                onClick={action.onClick}
-                disabled={action.disabled}
-              />
-            ))}
+    <div className="dialog" role="dialog" aria-modal="true" aria-label={label || title}>
+      <div className={`dialog__card${title || children ? "" : " dialog__card--bare"}`}>
+        {(title || children) && (
+          <div className="dialog__body">
+            {title && <h2 className="dialog__title">{title}</h2>}
+            {children && <div className="dialog__text">{children}</div>}
           </div>
         )}
+        <div className="dialog__actions">
+          {actions.map((action) => (
+            <button key={action.label} type="button" className="dialog__button" onClick={action.onClick} disabled={action.disabled}>
+              {action.label}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -74,7 +74,7 @@ export default function AccountScreen() {
             type="button"
             className="shop-button shop-button--ghost"
             onClick={() => {
-              showToast("This QR code is only available during your visit");
+              showToast("This QR code is only available during your visit", "error");
             }}
           >
             What is this?
