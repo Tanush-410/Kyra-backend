@@ -9,6 +9,7 @@ import { HoldStillView } from "../screens/onboarding/HoldStillScreen.jsx";
 import { FitAnalysisView } from "../screens/results/FitAnalysisScreen.jsx";
 import { SkinToneView } from "../screens/results/SkinToneScreen.jsx";
 import { SuggestionsView } from "../screens/results/SuggestionsScreen.jsx";
+import { TryOnView } from "../screens/results/TryOnScreen.jsx";
 import LookShortcut from "../components/LookShortcut.jsx";
 import { fitNotes } from "../lib/fitLevers.js";
 
@@ -19,7 +20,7 @@ const noop = () => {};
  * Figma. Not in the production build. Open /dev/<name>: header, toast, error, dialog, menu, loader;
  * whole screens: consent, consent-noqr, consent-error, too-far, out-of-frame, too-close, camera-loading,
  * hold, count, flash, allset, skin-tone, skin-analysing, fit, fit-guide, fit-outline, suggestions,
- * suggestions-2, suggestions-hint, suggestions-busy.
+ * suggestions-2, suggestions-hint, suggestions-busy, tryon, tryon-loading, tryon-failed, tryon-text.
  */
 const PREVIEWS = {
   header: () => <AppHeader onBin={noop} onCart={noop} onFilter={noop} />,
@@ -88,6 +89,8 @@ const SAMPLE_OPTIONS = [
   { option: 3, title: "Teal evening", summary: "", items: [item("onepiece", "Wrap dress", "Teal", "#1F7A7A", "fitted", "silk"), item("shoes", "Block heels", "Gold", "#C9A227", "", "leather"), item("accessory", "Small clutch", "Rust", "#B7410E", "", "leather")] },
 ];
 
+const TRYON_ACTIONS = { onMenu: noop, onRetry: noop, onAnother: noop, onSuggestions: noop };
+
 /** Whole screens (they draw their own .screen). */
 const SCREENS = {
   consent: () => <ConsentView qr={SAMPLE_QR} onContinue={noop} />,
@@ -109,6 +112,10 @@ const SCREENS = {
   "suggestions-2": () => <SuggestionsView options={SAMPLE_OPTIONS} index={1} onIndex={noop} onOpenMenu={noop} header={<AppHeader onBin={noop} />} />,
   "suggestions-hint": () => <SuggestionsView options={SAMPLE_OPTIONS} index={0} hint onIndex={noop} onOpenMenu={noop} header={<AppHeader onBin={noop} />} />,
   "suggestions-busy": () => <SuggestionsView options={SAMPLE_OPTIONS} index={0} busy="Finding more like this…" onIndex={noop} onOpenMenu={noop} header={<AppHeader onBin={noop} />} />,
+  "tryon": () => <TryOnView view={{ kind: "ready", option: SAMPLE_OPTIONS[0], render: { imageDataUrl: `${import.meta.env.BASE_URL}assets/brand/fit-silhouette.png` } }} actions={TRYON_ACTIONS} header={<AppHeader onBin={noop} />} />,
+  "tryon-loading": () => <TryOnView view={{ kind: "loading", caption: "Your look is next in line…" }} actions={TRYON_ACTIONS} header={<AppHeader onBin={noop} />} />,
+  "tryon-failed": () => <TryOnView view={{ kind: "failed", option: SAMPLE_OPTIONS[1], message: "I couldn’t create this picture. Try another look." }} actions={TRYON_ACTIONS} header={<AppHeader onBin={noop} />} />,
+  "tryon-text": () => <TryOnView view={{ kind: "text", option: SAMPLE_OPTIONS[2], message: "Pictures are unavailable right now, so here is your look in words." }} actions={TRYON_ACTIONS} header={<AppHeader onBin={noop} />} />,
   "fit-outline": () => <FitAnalysisView goal="balance" onGoal={noop} notes={SAMPLE_FIT} female={false} shortcut={shortcut(true)} />,
 };
 

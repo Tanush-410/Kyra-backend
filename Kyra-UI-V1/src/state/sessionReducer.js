@@ -399,3 +399,8 @@ export function phaseOf(session) {
   if (session.status === "waiting_for_capture") return "capture";
   return "results";
 }
+
+/** New looks are being designed (More like this, an edit, a correction): don't ask for more meanwhile. */
+export function isDesigning(session, redesigning = false) {
+  return Boolean(redesigning || session?.status === "designing");
+}

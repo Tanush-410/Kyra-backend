@@ -13,10 +13,10 @@ import FemaleSomethingSpecificScreen from "./screens/onboarding/FemaleSomethingS
 import HoldStillScreen from "./screens/onboarding/HoldStillScreen.jsx";
 import ListeningScreen from "./screens/onboarding/ListeningScreen.jsx";
 import LookingForTodayScreen from "./screens/onboarding/LookingForTodayScreen.jsx";
-import LookResultScreen from "./screens/onboarding/LookResultScreen.jsx";
 import FitAnalysisScreen from "./screens/results/FitAnalysisScreen.jsx";
 import SkinToneScreen from "./screens/results/SkinToneScreen.jsx";
 import SuggestionsScreen from "./screens/results/SuggestionsScreen.jsx";
+import TryOnScreen from "./screens/results/TryOnScreen.jsx";
 import MaleSomethingSpecificScreen from "./screens/onboarding/MaleSomethingSpecificScreen.jsx";
 import ShoppingForScreen from "./screens/onboarding/ShoppingForScreen.jsx";
 import SpecificScreen from "./screens/onboarding/SpecificScreen.jsx";
@@ -79,7 +79,7 @@ export default function App() {
                 <Route path={SKIN_TONE_PATH} element={<SkinToneScreen />} />
                 <Route path={FIT_PATH} element={<FitAnalysisScreen />} />
                 <Route path={SUGGESTIONS_PATH} element={<SuggestionsScreen />} />
-                <Route path={LOOK_PATH} element={<LookResultScreen />} />
+                <Route path={LOOK_PATH} element={<TryOnScreen />} />
                 <Route path="/account" element={<AccountScreen />} />
                 {SHOP_DEMO ? (
                   <>

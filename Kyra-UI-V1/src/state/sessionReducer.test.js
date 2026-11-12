@@ -13,6 +13,7 @@ import {
   phaseOf,
   sessionReducer,
   undertoneView,
+  isDesigning,
 } from "./sessionReducer.js";
 
 const ID = "s1";
@@ -254,4 +255,11 @@ test("trying on an option makes it the look on screen straight away", () => {
   state = sessionReducer(state, { type: "session/activeSet", round: 1, option: 2 });
   assert.deepEqual(state.session.active, { round: 1, option: 2 });
   assert.equal(sessionReducer(initialState, { type: "session/activeSet", round: 1, option: 2 }).session, null, "no visit: nothing to do");
+});
+
+test("while new looks are designed, More like this waits", () => {
+  assert.equal(isDesigning({ status: "designing" }), true);
+  assert.equal(isDesigning({ status: "ready" }, true), true, "a request on its way");
+  assert.equal(isDesigning({ status: "ready" }), false);
+  assert.equal(isDesigning(null), false);
 });

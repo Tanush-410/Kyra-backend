@@ -1,0 +1,81 @@
+/* Figma: "Virtual try on" (2043:13475), "Splash state" (13484) and "Error" (13400). Positions are the
+   frame's, in px from the top left of the screen. */
+.tryon-wrap { position: relative; width: 1080px; height: 3840px; overflow: hidden; }
+.tryon { color: var(--colour-white-100); }
+.tryon .app-header { position: relative; z-index: 2; }
+
+/* The visitor wearing the look: "image 37", 1155 x 3555 at (-37, 294), under the header's tools */
+.tryon__look,
+.tryon__preview {
+  position: absolute;
+  top: 294px;
+  left: -37px;
+  width: 1155px;
+  height: 3555px;
+}
+.tryon__look {
+  overflow: hidden;
+  padding: 0;
+  border: 0;
+  background: #000;
+  cursor: pointer;
+}
+/* The render is 1024 x 1536 (2:3, on black). Filling this tall box would keep only its middle half and
+   could cut off arms or a bag, so 70% of its width shows (only background is lost) and the black
+   continues below it. */
+.tryon__look img {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  display: block;
+  width: 1650px;
+  height: 2475px;
+  object-fit: cover;
+  transform: translateX(-50%);
+}
+.tryon__look[data-hand-hovered="true"] { outline: 6px solid #e74787; outline-offset: -6px; }
+.tryon__preview { object-fit: cover; filter: blur(18px); opacity: 0.6; }
+
+/* Not in the frame: the actions are a tap away (the design uses gestures and a menu) */
+.tryon__options { position: absolute; top: 3060px; left: 174.5px; z-index: 1; }
+
+/* Waiting: the star, what is happening, and a way back */
+.tryon__caption { position: absolute; top: 1520px; left: 0; padding: 0 87px; }
+.tryon__way { position: absolute; top: 1800px; left: 0; width: 100%; display: flex; justify-content: center; }
+
+/* Failed, or pictures off: the outfit in words ("suggestion cards" at (124, 718), 831 x 1917) */
+.tryon__title {
+  position: absolute;
+  top: 480px;
+  left: 124px;
+  width: 831px;
+  margin: 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: var(--type-p2-size);
+  line-height: var(--type-line-height);
+}
+.tryon__reason {
+  position: absolute;
+  top: 560px;
+  left: 124px;
+  width: 831px;
+  margin: 0;
+  text-align: center;
+  font-weight: 300;
+  font-size: var(--type-p3-size);
+  line-height: var(--type-line-height);
+  color: #ccc;
+}
+.tryon__outfit { position: absolute; top: 718px; left: 124px; width: 831px; height: 1917px; }
+.tryon__actions {
+  position: absolute;
+  top: 2690px;
+  left: 120px;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+}
+
+.tryon__ended { gap: 120px; margin-top: 600px; padding: 0 87px; }
+.tryon__qr { display: block; margin: 24px auto; background: #fff; border-radius: 24px; image-rendering: pixelated; }
