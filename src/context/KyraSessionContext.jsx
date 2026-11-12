@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef } from "react";
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { kyraApi, openEvents } from "../api/kyraClient.js";
 import { activeOption, initialState, sessionReducer } from "../state/sessionReducer.js";
 
@@ -24,6 +24,9 @@ export function KyraSessionProvider({ children }) {
   const sessionId = state.session?.id || null;
   const sessionRef = useRef(state.session);
   sessionRef.current = state.session;
+  // A redesign (More like this, an edit) costs a design call and a picture: only one at a time.
+  const redesignRef = useRef(false);
+  const [redesigning, setRedesigning] = useState(false);
 
   const backfill = useCallback(async (id) => {
     try {
@@ -93,6 +96,22 @@ export function KyraSessionProvider({ children }) {
     }
   }, []);
 
+  // Runs a redesign unless one is already on its way (then returns null).
+  const oneRedesign = useCallback(
+    async (fn) => {
+      if (redesignRef.current) return null;
+      redesignRef.current = true;
+      setRedesigning(true);
+      try {
+        return await act(fn);
+      } finally {
+        redesignRef.current = false;
+        setRedesigning(false);
+      }
+    },
+    [act]
+  );
+
   const actions = useMemo(
     () => ({
       /**
@@ -121,10 +140,10 @@ export function KyraSessionProvider({ children }) {
           return kyraApi.render(s.id, round, option);
         }),
       /** New looks from the visitor's words: a new round of options, and its first look rendered. */
-      redesign: (feedback) => act((s) => kyraApi.redesign(s.id, { feedback })),
+      redesign: (feedback) => oneRedesign((s) => kyraApi.redesign(s.id, { feedback })),
       /** "More like this": a new round built around this option's style and colours. */
       moreLike: (option) =>
-        act((s) =>
+        oneRedesign((s) =>
           kyraApi.redesign(s.id, {
             feedback: `More like "${option.title}" (${option.summary}): keep its style and colours, with different pieces.`.slice(0, 200),
           })
@@ -163,10 +182,10 @@ export function KyraSessionProvider({ children }) {
       editPiece: ({ key, category, product }) => dispatch({ type: "shop/pieceEdited", key, category, product }),
       clearShop: () => dispatch({ type: "shop/cleared" }),
     }),
-    [act]
+    [act, oneRedesign]
   );
 
-  const value = useMemo(() => ({ state, ...actions }), [state, actions]);
+  const value = useMemo(() => ({ state, redesigning, ...actions }), [state, redesigning, actions]);
   return <KyraSessionContext.Provider value={value}>{children}</KyraSessionContext.Provider>;
 }
 

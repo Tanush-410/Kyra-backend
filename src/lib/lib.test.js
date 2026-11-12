@@ -3,6 +3,7 @@ import { test } from "node:test";
 import { ALL_SET_MS, FLASH_MS, captureStage } from "./captureSequence.js";
 import { chromaOf, clarityOf, colourChips, paletteRoles } from "./colourRoles.js";
 import { defaultGoal, fitNotes, GOALS, leversFor } from "./fitLevers.js";
+import { nextOptionOf, tryOnState } from "./tryOnView.js";
 import { COPY, guidanceView } from "./guidanceCopy.js";
 import { createJpegSplitter } from "./mjpegStream.js";
 import { DEFAULT_STYLE, intentQuery, visitIntent } from "./visitIntent.js";
@@ -111,4 +112,32 @@ test("fit analysis: the outlines only explain what the camera measured", () => {
   assert.match(notes.height.text, /petite \(about 158 cm\)\. High-rise bottoms/);
   assert.deepEqual(fitNotes({ build: null, heightImpression: null }), { shoulders: null, height: null });
   assert.match(fitNotes({ build: "medium" }).shoulders.text, /balanced frame\.$/, "no guidance line: just the reading");
+});
+
+const looks = (renders = {}, extra = {}) => ({
+  rounds: { 1: [{ option: 1, title: "A", items: [] }, { option: 2, title: "B", items: [] }, { option: 3, title: "C", items: [] }] },
+  currentRound: 1,
+  active: { round: 1, option: 1 },
+  renders,
+  degraded: null,
+  ...extra,
+});
+
+test("try-on: the picture, the star while waiting, cards when it failed or pictures are off", () => {
+  assert.equal(tryOnState({ rounds: {}, currentRound: 0, renders: {} }).kind, "loading", "no outfits yet");
+  assert.equal(tryOnState(looks({ "1.1": { status: "queued" } })).caption, "Your look is next in line…");
+  assert.equal(tryOnState(looks({ "1.1": { status: "rendering" } })).caption, "Creating your look…");
+  assert.equal(tryOnState(looks({ "1.1": { status: "done", imageDataUrl: null } })).kind, "loading", "done but the picture not here yet");
+  assert.equal(tryOnState(looks({ "1.1": { status: "done", imageDataUrl: "data:x" } })).kind, "ready");
+  const failed = tryOnState(looks({ "1.1": { status: "failed", error: "The picture service is busy." } }));
+  assert.deepEqual([failed.kind, failed.message], ["failed", "The picture service is busy."]);
+  const text = tryOnState(looks({}, { degraded: { message: "Pictures are paused." } }));
+  assert.deepEqual([text.kind, text.message, text.option.title], ["text", "Pictures are paused.", "A"]);
+  assert.equal(tryOnState(looks({ "1.1": { status: "done", imageDataUrl: "data:x" } }, { degraded: { message: "" } })).kind, "ready", "a picture made before still shows");
+});
+
+test("try-on: another look is the round's next outfit, wrapping; none when there is only one", () => {
+  assert.deepEqual(nextOptionOf(looks()), { round: 1, option: 2 });
+  assert.deepEqual(nextOptionOf(looks({}, { active: { round: 1, option: 3 } })), { round: 1, option: 1 });
+  assert.equal(nextOptionOf({ rounds: { 1: [{ option: 1, items: [] }] }, currentRound: 1, active: { round: 1, option: 1 } }), null);
 });

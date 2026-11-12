@@ -9,6 +9,7 @@ import { useKyraSession } from "../../context/KyraSessionContext.jsx";
 import { useResultsSession } from "../../hooks/useResultsSession.js";
 import { useToast } from "../../hooks/useToast.js";
 import { LOOK_PATH } from "../../lib/shopRoutes.js";
+import { isDesigning } from "../../state/sessionReducer.js";
 import "./SuggestionsScreen.css";
 
 const icon = (name) => `${import.meta.env.BASE_URL}assets/icons/${name}`;
@@ -42,7 +43,7 @@ const categoryOf = (item) => CATEGORY[item.category] || { label: item.category |
  * no product images), then what it is. Figma: the "suggestion cards" items (2043:8144); styled like the
  * design's info cards until the Cart frames (export-2) give the exact item card.
  */
-function ItemCard({ item }) {
+export function ItemCard({ item }) {
   const category = categoryOf(item);
   const tags = [item.fit, item.material].filter(Boolean);
   return (
@@ -68,6 +69,17 @@ function ItemCard({ item }) {
         )}
       </div>
     </li>
+  );
+}
+
+/** The outfit's pieces as cards (also the try-on screen's text-only and failed views). */
+export function OutfitItems({ items }) {
+  return (
+    <ul className="suggest__items">
+      {items.map((item) => (
+        <ItemCard key={`${item.category}-${item.name}`} item={item} />
+      ))}
+    </ul>
   );
 }
 
@@ -122,11 +134,7 @@ export function SuggestionsView({ options, index, onIndex, onOpenMenu, busy, hin
             onPointerCancel={() => (drag.current = null)}
             onClick={(e) => e.detail === 0 && onOpenMenu()}
           >
-            <ul className="suggest__items">
-              {option.items.map((item) => (
-                <ItemCard key={`${item.category}-${item.name}`} item={item} />
-              ))}
-            </ul>
+            <OutfitItems items={option.items} />
           </button>
           <p className="suggest__count" aria-live="polite">
             {index + 1} of {options.length}
@@ -152,7 +160,7 @@ export function SuggestionsView({ options, index, onIndex, onOpenMenu, busy, hin
 export default function SuggestionsScreen() {
   const navigate = useNavigate();
   const session = useResultsSession();
-  const { tryOn, moreLike, end } = useKyraSession();
+  const { state, redesigning, tryOn, moreLike, end } = useKyraSession();
   const { toast, showToast } = useToast();
   const [index, setIndex] = useState(0);
   const [menu, setMenu] = useState(false);
@@ -177,6 +185,7 @@ export default function SuggestionsScreen() {
 
   if (!session) return null;
   const option = options[Math.min(index, options.length - 1)];
+  const designing = isDesigning(state.session, redesigning);
   const busy = asked != null ? "Finding more like this…" : "";
 
   const virtualTryOn = async () => {
@@ -186,6 +195,7 @@ export default function SuggestionsScreen() {
   };
   const more = async () => {
     setMenu(false);
+    if (designing) return;
     setAsked(round);
     const answer = await moreLike(option);
     if (!answer) {
@@ -235,7 +245,8 @@ export default function SuggestionsScreen() {
           top={860}
           actions={[
             { label: "Virtual try-on", onClick: virtualTryOn },
-            { label: "More like this", onClick: more },
+            // One design call and one picture each: never while a round is being designed.
+            { label: designing ? "Designing new looks…" : "More like this", onClick: more, disabled: designing },
             { label: "Back", onClick: () => setMenu(false) },
           ]}
         />

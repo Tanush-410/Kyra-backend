@@ -71,10 +71,14 @@ Open it once with the token, `http://localhost:5173/Kyra-UI-V1/#token=<apiToken>
    (drag), the arrows or the keyboard switch outfits; a first-time hint shows how. Tapping the outfit opens
    Virtual try-on (renders it on the visitor; a look already rendered is reused, at no cost) and More like
    this (the backend designs a new round from it and renders its first look).
-8. **The look** (`LookResultScreen`): the look on the visitor, and Love it / Show another / Take it home
-   (a QR code) / I'm done. It renders in the background from the moment of the photo: both analysis screens
-   say how it is going and can skip straight to it. Leaving the mirror, or "I'm done", ends the visit and the
-   photo is forgotten.
+8. **Virtual try-on** (`screens/results/TryOnScreen`, Figma "Virtual try on"): the visitor wearing the look,
+   full height under the header. Tapping it (or "Options") offers Love it, Take it home (a QR code), Show
+   another and Back to suggestions. While it renders: the Kyra star and what is happening, with a way back.
+   If the picture can't be made, or pictures are off (text-only mode): the outfit as cards, "Please try
+   again" or the reason, and Try again / Try another look / Back to suggestions, so the visitor is never
+   stuck (`src/lib/tryOnView.js`). The look starts rendering at the photo, so it is often ready on arrival.
+   The bin asks, then ends the visit; leaving the mirror ends it too, and the photo is forgotten.
+   "More like this" (Suggestions) is off while a round is being designed: one design call and picture each.
 
 ### Camera source
 
