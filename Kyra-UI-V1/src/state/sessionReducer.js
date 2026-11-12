@@ -25,9 +25,10 @@ export const initialState = {
 
 export const keyOf = (round, option) => `${round}.${option}`;
 
-function newSession(sessionId, status) {
+function newSession(sessionId, status, gender = null) {
   return {
     id: sessionId,
+    gender, // "male" | "female" | null: from the visitor's picks (the Fit Analysis silhouette is female)
     status: status || "waiting_for_capture",
     message: "",
     skin: null, // the early undertone reading (from the face, before the body capture)
@@ -249,7 +250,7 @@ export function sessionReducer(state, action) {
     case "connection":
       return { ...state, connection: action.status };
     case "session/started":
-      return { ...state, session: newSession(action.sessionId, action.status), shop: emptyShop() };
+      return { ...state, session: newSession(action.sessionId, action.status, action.gender || null), shop: emptyShop() };
     case "session/cleared":
       return { ...state, session: null, shop: emptyShop() };
     case "session/snapshot":
@@ -334,7 +335,8 @@ export function activeRender(session) {
 
 /**
  * What to say about the visitor's colouring. The full profile once it exists, else the early reading.
- * sure: the undertone was measured clearly (not a neutral fallback).
+ * sure: the undertone is known: measured clearly, or told by the visitor (not a neutral fallback).
+ * A visitor's correction also settles the "Does this sound like you?" question.
  */
 export function undertoneView(session) {
   if (!session) return null;
@@ -346,12 +348,13 @@ export function undertoneView(session) {
   const measurement = profile?.skinMeasurement || skin?.skinMeasurement || null;
   return {
     undertone,
-    sure: source === "measured",
-    olive: Boolean(measurement?.warmCool?.olive ?? skin?.olive),
+    sure: source === "measured" || source === "visitor",
+    // The profile's own flag once there is one (a correction clears it); else the early reading.
+    olive: Boolean(profile ? profile.olive : measurement?.warmCool?.olive ?? skin?.olive),
     skinHex: measurement?.skinHex || null,
     statement: measurement?.statement || "",
     metals: measurement?.styling?.best_metals || [],
-    needsConfirmation: Boolean(profile && measurement?.requireConfirmation && !session.profileConfirmed),
+    needsConfirmation: Boolean(profile && measurement?.requireConfirmation && !session.profileConfirmed && source !== "visitor"),
     palette: session.palette || [],
   };
 }

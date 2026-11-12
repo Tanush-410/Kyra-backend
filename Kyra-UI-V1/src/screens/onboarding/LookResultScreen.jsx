@@ -7,6 +7,7 @@ import ShopHeader from "../../components/ShopHeader.jsx";
 import Toast from "../../components/Toast.jsx";
 import { useKyraSession } from "../../context/KyraSessionContext.jsx";
 import { useToast } from "../../hooks/useToast.js";
+import { SHOP_DEMO } from "../../config.js";
 import { EDIT_PATH, SHOP_PATH } from "../../lib/shopRoutes.js";
 import { activeOption, activeRender, keyOf, phaseOf, undertoneView } from "../../state/sessionReducer.js";
 import "./LookResultScreen.css";
@@ -216,10 +217,13 @@ export default function LookResultScreen() {
           <OptionCard label="I’m done" width="w500" onClick={finish} />
         </div>
 
-        <div className="look__shop-row">
-          <OptionCard label="Shop this look" width="auto" onClick={() => navigate(SHOP_PATH)} disabled={!option} />
-          <OptionCard label="Edit this look" width="auto" onClick={() => navigate(EDIT_PATH)} disabled={!option} />
-        </div>
+        {/* The shop demo only: its products have placeholder prices (VITE_SHOP_DEMO). */}
+        {SHOP_DEMO && (
+          <div className="look__shop-row">
+            <OptionCard label="Shop this look" width="auto" onClick={() => navigate(SHOP_PATH)} disabled={!option} />
+            <OptionCard label="Edit this look" width="auto" onClick={() => navigate(EDIT_PATH)} disabled={!option} />
+          </div>
+        )}
 
         {option && (
           <section className="look__card">
@@ -230,9 +234,12 @@ export default function LookResultScreen() {
             )}
             <div className="look__heading-row">
               <h2 className="look__heading">{option.title}</h2>
-              <button type="button" className="look__chip" onClick={save}>
-                Save outfit
-              </button>
+              {/* Saved outfits are listed in the shop demo's cart. */}
+              {SHOP_DEMO && (
+                <button type="button" className="look__chip" onClick={save}>
+                  Save outfit
+                </button>
+              )}
             </div>
             <p className="look__text">{option.summary}</p>
             <ul className="look__items">

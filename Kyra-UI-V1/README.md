@@ -58,9 +58,18 @@ Open it once with the token, `http://localhost:5173/Kyra-UI-V1/#token=<apiToken>
    (green), then the 3, 2, 1 on its own, timed by the backend's hold time. When the camera captures: a white
    flash, "All set! Let's find your perfect fit" for 2 s, then on (`src/lib/captureSequence.js`). There is
    no "multiple people" message: the backend follows the nearest person.
-5. **Results** (`LookResultScreen`): the undertone and palette (with "Does this sound like you?" when the
-   reading was unsure), the look on the visitor, and Love it / Show another / Take it home (a QR code) /
-   I'm done. Leaving the mirror, or "I'm done", ends the visit and the photo is forgotten.
+5. **Skin Tone Analysis** (`screens/results/SkinToneScreen`, Figma "Colour Result"): undertone, depth and
+   clarity chips, and five colours with a role each (Core, Supporting, Accent; worked out from the palette in
+   `src/lib/colourRoles.js`, as the backend sends neither). "Know more" explains the undertone and lets the
+   visitor correct it; an unsure reading asks "Does this sound like you?" first.
+6. **Fit Analysis** (`screens/results/FitAnalysisScreen`, Figma "Fit analysis" and "Guide"): the silhouette
+   (the design's woman's figure for female visitors, its outlines only otherwise), a first-time guide, the
+   outlines explaining what the camera measured (build, height), and styling levers for four goals
+   (`src/lib/fitLevers.js`; the first goal follows the profile).
+7. **The look** (`LookResultScreen`): the look on the visitor, and Love it / Show another / Take it home
+   (a QR code) / I'm done. It renders in the background from the moment of the photo: both analysis screens
+   say how it is going and can skip straight to it. Leaving the mirror, or "I'm done", ends the visit and the
+   photo is forgotten.
 
 ### Camera source
 
@@ -77,6 +86,9 @@ Open it once with the token, `http://localhost:5173/Kyra-UI-V1/#token=<apiToken>
   unaffected.
 - **Models are local:** `public/mediapipe/` holds the hand and pose models and the WASM files (from
   `npm run assets`). The splash screen no longer downloads a second copy from a CDN.
+- **Shop demo** (`VITE_SHOP_DEMO=true`, off by default): the friend's products, cart, filter, checkout and
+  piece edits, and the cart and filter buttons in the header. Their prices, sizes, brands and stock are
+  placeholders (`src/data/shopPlaceholders.js`), so real visitors never see them unless it is turned on.
 - **Design checks:** `npm run dev`, then `/Kyra-UI-V1/dev/<name>` shows a piece or screen on its own (header,
   toast, dialog, consent, too-far, hold, count, flash, allset…; the list is in `src/dev/ComponentPreview.jsx`).
   These pages are left out of the production build. The team's Figma exports go in `design/` (git ignores it).

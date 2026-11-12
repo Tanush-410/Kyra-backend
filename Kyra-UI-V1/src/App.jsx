@@ -1,10 +1,12 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import ScreenFrame from "./components/ScreenFrame.jsx";
 import StaffNotice from "./components/StaffNotice.jsx";
 import { CameraProvider } from "./context/CameraContext.jsx";
 import { HandTrackingProvider } from "./context/HandTrackingContext.jsx";
+import { SHOP_DEMO } from "./config.js";
 import { KyraSessionProvider } from "./context/KyraSessionContext.jsx";
+import { FIT_PATH, LOOK_PATH, RESULTS_PATH, SKIN_TONE_PATH } from "./lib/shopRoutes.js";
 import AnalysisScreen from "./screens/onboarding/AnalysisScreen.jsx";
 import ConsentScreen from "./screens/onboarding/ConsentScreen.jsx";
 import FemaleSomethingSpecificScreen from "./screens/onboarding/FemaleSomethingSpecificScreen.jsx";
@@ -12,6 +14,8 @@ import HoldStillScreen from "./screens/onboarding/HoldStillScreen.jsx";
 import ListeningScreen from "./screens/onboarding/ListeningScreen.jsx";
 import LookingForTodayScreen from "./screens/onboarding/LookingForTodayScreen.jsx";
 import LookResultScreen from "./screens/onboarding/LookResultScreen.jsx";
+import FitAnalysisScreen from "./screens/results/FitAnalysisScreen.jsx";
+import SkinToneScreen from "./screens/results/SkinToneScreen.jsx";
 import MaleSomethingSpecificScreen from "./screens/onboarding/MaleSomethingSpecificScreen.jsx";
 import ShoppingForScreen from "./screens/onboarding/ShoppingForScreen.jsx";
 import SpecificScreen from "./screens/onboarding/SpecificScreen.jsx";
@@ -20,14 +24,23 @@ import SurpriseMeScreen from "./screens/onboarding/SurpriseMeScreen.jsx";
 import TellUsWhatYouHaveInMindScreen from "./screens/onboarding/TellUsWhatYouHaveInMindScreen.jsx";
 import WelcomeScreen from "./screens/onboarding/WelcomeScreen.jsx";
 import AccountScreen from "./screens/shop/AccountScreen.jsx";
-import CartScreen from "./screens/shop/CartScreen.jsx";
-import CheckoutScreen from "./screens/shop/CheckoutScreen.jsx";
-import EditScreen from "./screens/shop/EditScreen.jsx";
-import FilterScreen from "./screens/shop/FilterScreen.jsx";
-import ProductsScreen from "./screens/shop/ProductsScreen.jsx";
 
 // Development only: the shared components on their own, for screenshot checks (src/dev/). Not built for production.
 const ComponentPreview = import.meta.env.DEV ? lazy(() => import("./dev/ComponentPreview.jsx")) : null;
+
+// The shop demo (VITE_SHOP_DEMO=true) has placeholder prices: without it these screens have no route (their
+// addresses go back to the results) and are never loaded.
+const shopScreen = (load) => (SHOP_DEMO ? lazy(load) : null);
+const ProductsScreen = shopScreen(() => import("./screens/shop/ProductsScreen.jsx"));
+const CartScreen = shopScreen(() => import("./screens/shop/CartScreen.jsx"));
+const CheckoutScreen = shopScreen(() => import("./screens/shop/CheckoutScreen.jsx"));
+const FilterScreen = shopScreen(() => import("./screens/shop/FilterScreen.jsx"));
+const EditScreen = shopScreen(() => import("./screens/shop/EditScreen.jsx"));
+const lazyRoute = (Screen) => (
+  <Suspense fallback={null}>
+    <Screen />
+  </Suspense>
+);
 
 // The router's base is the build's base path (vite.config.js): "/Kyra-UI-V1" by default.
 const BASENAME = import.meta.env.BASE_URL.replace(/\/+$/, "") || "/";
@@ -38,7 +51,7 @@ const BASENAME = import.meta.env.BASE_URL.replace(/\/+$/, "") || "/";
  * else PICK A PIECE (male/female)"). Anything marked TODO needs confirming.
  *
  * The visit with the KYRA backend: analysis -> consent (starts the visit) -> hold still (the camera
- * captures) -> results (the looks). See README.md, "Connecting to the KYRA backend".
+ * captures) -> Skin Tone Analysis -> Fit Analysis -> the look. See README.md, "Connecting to the KYRA backend".
  */
 export default function App() {
   return (
@@ -61,13 +74,25 @@ export default function App() {
                 <Route path="/welcome/looking-for-today/specificscreen/voicesearch" element={<TellUsWhatYouHaveInMindScreen />} />
                 <Route path="/welcome/looking-for-today/specificscreen/voicesearch/listening" element={<ListeningScreen />} />
                 <Route path="/welcome/looking-for-today/surpriseme/analysis/holdstill" element={<HoldStillScreen />} />
-                <Route path="/welcome/looking-for-today/surpriseme/analysis/holdstill/analysisres" element={<LookResultScreen />} />
-                <Route path="/shop" element={<ProductsScreen />} />
-                <Route path="/shop/cart" element={<CartScreen />} />
-                <Route path="/shop/checkout" element={<CheckoutScreen />} />
-                <Route path="/shop/filter" element={<FilterScreen />} />
+                {/* After the photo: Skin Tone Analysis -> Fit Analysis -> the look (rendering meanwhile). */}
+                <Route path={SKIN_TONE_PATH} element={<SkinToneScreen />} />
+                <Route path={FIT_PATH} element={<FitAnalysisScreen />} />
+                <Route path={LOOK_PATH} element={<LookResultScreen />} />
                 <Route path="/account" element={<AccountScreen />} />
-                <Route path="/edit" element={<EditScreen />} />
+                {SHOP_DEMO ? (
+                  <>
+                    <Route path="/shop" element={lazyRoute(ProductsScreen)} />
+                    <Route path="/shop/cart" element={lazyRoute(CartScreen)} />
+                    <Route path="/shop/checkout" element={lazyRoute(CheckoutScreen)} />
+                    <Route path="/shop/filter" element={lazyRoute(FilterScreen)} />
+                    <Route path="/edit" element={lazyRoute(EditScreen)} />
+                  </>
+                ) : (
+                  <>
+                    <Route path="/shop/*" element={<Navigate to={RESULTS_PATH} replace />} />
+                    <Route path="/edit" element={<Navigate to={RESULTS_PATH} replace />} />
+                  </>
+                )}
                 {ComponentPreview && (
                   <Route
                     path="/dev/:name"

@@ -1,0 +1,123 @@
+/* Figma: Skin Tone Analysis (2043:13274) and its card (design/export-1, Component 80).
+   Positions are the frame's, in px from the top left of the screen. */
+.skin-screen { position: relative; width: 1080px; height: 3840px; overflow: hidden; }
+.skin { position: absolute; inset: 0; color: var(--colour-white-100); }
+
+/* "Skin Tone Analysis": 1002 x 117 at y 376 (".skin" in front: global.css loads after this file) */
+.skin .skin__title { position: absolute; top: 376px; left: 39px; width: 1002px; }
+
+/* The card: 854 x 963 at (113, 613) */
+.skin__card {
+  position: absolute;
+  top: 613px;
+  left: 113px;
+  width: 854px;
+  height: 963px;
+  border-radius: var(--radius-card);
+  background: #494949;
+}
+.skin__eyebrow {
+  position: absolute;
+  top: 39px;
+  left: 56px;
+  margin: 0;
+  font-size: 23px;
+  line-height: var(--type-line-height);
+}
+.skin__heading {
+  position: absolute;
+  top: 70px;
+  left: 56px;
+  width: 706px;
+  margin: 0;
+  font-weight: 400;
+  font-size: var(--type-p2-size);
+  line-height: var(--type-line-height);
+}
+
+/* Undertone, depth, clarity: 47px pills with a 25px dot */
+.skin__chips {
+  position: absolute;
+  top: 243px;
+  left: 56px;
+  display: flex;
+  gap: 17px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.skin__chip {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  height: 47px;
+  padding: 0 24px 0 17px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 24px;
+  background: #3a3a3a;
+  font-size: 24px;
+}
+.skin__chip i { width: 25px; height: 25px; flex: none; border-radius: 50%; }
+/* The design's widths; a longer word just makes its chip wider */
+.skin__chip:nth-child(1) { min-width: 206px; padding-left: 19px; gap: 24px; }
+.skin__chip:nth-child(2) { min-width: 154px; font-size: 21px; padding-right: 20px; }
+.skin__chip:nth-child(3) { min-width: 153px; font-size: 21px; padding-right: 20px; }
+
+.skin__rule { position: absolute; left: 56px; width: 742px; height: 2px; margin: 0; border: 0; background: #5b5b5b; }
+.skin__rule--top { top: 327px; }
+.skin__rule--bottom { top: 820px; }
+
+/* Five colours: the name, then its role in a pill. Columns are the design's (110, 110, 142, 142,
+   121 wide, 29 apart, from (57, 363)); a long name wraps inside its column. */
+.skin__names,
+.skin__roles {
+  position: absolute;
+  left: 57px;
+  display: grid;
+  grid-template-columns: 110px 110px 142px 142px 121px;
+  column-gap: 29px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.skin__names { bottom: calc(963px - 394px); align-items: end; }
+.skin__roles { top: 405px; justify-items: center; }
+.skin__name {
+  font-weight: 700;
+  font-size: 24px;
+  line-height: var(--type-line-height);
+  text-align: center;
+  /* Up to 20px past the column on each side, so "Terracotta" stays whole; two-word names wrap. */
+  margin: 0 -20px;
+}
+.skin__roles li { display: flex; justify-content: center; }
+.skin__role {
+  padding: 3px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 20px;
+  background: #3a3a3a;
+  font-size: 22px;
+  line-height: var(--type-line-height);
+  white-space: nowrap;
+}
+
+/* The fan of swatches (Figma "Component 69", 698 x 388 at (78, 419)) */
+/* isolation: the cards' z-order stays inside the fan, under any dialog */
+.skin__fan { position: absolute; top: 419px; left: 78px; width: 698px; height: 388px; isolation: isolate; }
+.skin__fan span {
+  position: absolute;
+  top: 65px;
+  width: 181px;
+  height: 285px;
+  border-radius: 26px;
+  box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.35);
+}
+
+.skin .skin__more { position: absolute; top: 844px; left: 56px; font-size: 36px; }
+
+/* "Know my fit": 840 x 112 at (113, 1672) */
+.skin__fit { position: absolute; top: 1672px; left: 113px; }
+
+/* Not in the frame: the look renders meanwhile; skip straight to it */
+.skin__shortcut { position: absolute; top: 1860px; left: 120px; width: 840px; }
+.skin__analysing { position: relative; z-index: 1; }
