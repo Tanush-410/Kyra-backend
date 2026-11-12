@@ -15,31 +15,35 @@ export const GOALS = [
   { key: "reduce", label: "Reduce Volume" },
 ];
 
-// icon: a file in public/assets/icons. Icons without a ring get one in the colour of their place
-// (the design uses orange, green, white, top to bottom).
+// kind decides the icon and its ring colour (the design: shoes orange, tops green, bottoms white).
 const LEVERS = {
   longer: [
-    { label: "Pointed-toe shoes", icon: "lever-heels.png" },
-    { label: "Cropped hems", icon: "lever-tee.png" },
-    { label: "Wide-leg trousers", icon: "lever-trousers.png" },
+    { label: "Pointed-toe shoes", kind: "shoes" },
+    { label: "Cropped tops", kind: "top" }, // cropped trousers would shorten the leg
+    { label: "Wide-leg trousers", kind: "bottom" },
   ],
+  // Broad shoulders are balanced with volume below.
   balance: [
-    { label: "V-necklines", icon: "lever-tee.png" },
-    { label: "Straight-leg trousers", icon: "lever-trousers.png" },
-    { label: "Structured bags", icon: "bag-women.png" },
+    { label: "V-necklines", kind: "top" },
+    { label: "Wide-leg or A-line bottoms", kind: "bottom" },
+    { label: "Darker tops with lighter bottoms", kind: "top" },
   ],
   add: [
-    { label: "Layered tops", icon: "lever-tee.png" },
-    { label: "Textured fabrics", icon: "dress-women.png" },
-    { label: "Wide-leg trousers", icon: "lever-trousers.png" },
+    { label: "Layered tops", kind: "top" },
+    { label: "Textured fabrics", kind: "top" },
+    { label: "Wide-leg trousers", kind: "bottom" },
   ],
   reduce: [
-    { label: "Tonal outfits", icon: "dress-women.png" },
-    { label: "Vertical lines", icon: "lever-trousers.png" },
-    { label: "Sleek shoes", icon: "lever-heels.png" },
+    { label: "Tonal outfits", kind: "top" },
+    { label: "Vertical lines", kind: "bottom" },
+    { label: "Defined waist", kind: "bottom" },
   ],
 };
-const RINGS = ["#dfa678", "#aaf867", "#ffffff"];
+const RINGS = { shoes: "#dfa678", top: "#aaf867", bottom: "#ffffff" };
+// The design's own icons (a heel, a women's tee; exported with their rings) are for female visitors.
+// Everyone else, including visitors whose gender isn't known, gets neutral ones (public/assets/icons).
+const DESIGN_ICONS = { shoes: "lever-heels.png", top: "lever-tee.png", bottom: "lever-trousers.png" };
+const NEUTRAL_ICONS = { shoes: "shoes.png", top: "tops.png", bottom: "bottoms.png" };
 
 /** The goal shown first: petite -> look longer; broad -> balance width; slim -> add volume. */
 export function defaultGoal(profile) {
@@ -49,12 +53,16 @@ export function defaultGoal(profile) {
   return "longer";
 }
 
-// The design's three icons are exported with their rings (design/export-1, "Fit analysis").
-const RINGED = new Set(["lever-heels.png", "lever-tee.png", "lever-trousers.png"]);
-
-/** [{ label, icon, ring }]: ring is the colour to draw around the icon, or null when the image has one. */
-export function leversFor(goal) {
-  return (LEVERS[goal] || LEVERS.longer).map((lever, i) => ({ ...lever, ring: RINGED.has(lever.icon) ? null : RINGS[i] }));
+/**
+ * [{ label, kind, icon, ring }]: ring is the colour to draw around the icon, or null when the image
+ * has its own (the design's icons, for female visitors).
+ */
+export function leversFor(goal, { female = false } = {}) {
+  return (LEVERS[goal] || LEVERS.longer).map((lever) => ({
+    ...lever,
+    icon: (female ? DESIGN_ICONS : NEUTRAL_ICONS)[lever.kind],
+    ring: female ? null : RINGS[lever.kind],
+  }));
 }
 
 const BUILD_WORDS = { slim: "a slim frame", medium: "a balanced frame", broad: "a broad frame" };

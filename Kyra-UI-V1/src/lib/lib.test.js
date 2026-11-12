@@ -90,13 +90,18 @@ test("fit analysis: the first goal follows the profile; three levers per goal", 
   assert.equal(defaultGoal({ build: "broad" }), "balance");
   assert.equal(defaultGoal({ build: "slim" }), "add");
   assert.equal(defaultGoal(null), "longer");
-  for (const goal of GOALS) {
-    const levers = leversFor(goal.key);
-    assert.equal(levers.length, 3, goal.key);
-    levers.forEach((lever, i) => assert.ok(lever.ring === null || lever.ring === ["#dfa678", "#aaf867", "#ffffff"][i], `${goal.key} ${lever.label}`));
-  }
-  assert.deepEqual(leversFor("balance").map((l) => l.ring), [null, null, "#ffffff"], "the design's icons bring their own rings");
-  assert.deepEqual(leversFor("longer").map((l) => l.label), ["Pointed-toe shoes", "Cropped hems", "Wide-leg trousers"], "the design's own example");
+  for (const goal of GOALS) assert.equal(leversFor(goal.key).length, 3, goal.key);
+  assert.deepEqual(leversFor("longer").map((l) => l.label), ["Pointed-toe shoes", "Cropped tops", "Wide-leg trousers"]);
+  assert.deepEqual(leversFor("balance").map((l) => l.label), ["V-necklines", "Wide-leg or A-line bottoms", "Darker tops with lighter bottoms"]);
+  assert.ok(leversFor("reduce").some((l) => l.label === "Defined waist"));
+});
+
+test("fit analysis: the design's icons for female visitors, neutral ones for everyone else", () => {
+  const icons = (options) => GOALS.flatMap((g) => leversFor(g.key, options).map((l) => l.icon));
+  for (const icon of icons({})) assert.ok(["shoes.png", "tops.png", "bottoms.png"].includes(icon), icon);
+  assert.ok(!icons({ female: true }).some((icon) => /dress|bag/.test(icon)));
+  assert.deepEqual(leversFor("longer", { female: true }).map((l) => [l.icon, l.ring]), [["lever-heels.png", null], ["lever-tee.png", null], ["lever-trousers.png", null]], "the design's example, rings included");
+  assert.deepEqual(leversFor("longer").map((l) => l.ring), ["#dfa678", "#aaf867", "#ffffff"], "the same ring colours, drawn");
 });
 
 test("fit analysis: the outlines only explain what the camera measured", () => {
