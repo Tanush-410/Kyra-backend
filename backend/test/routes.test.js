@@ -260,8 +260,13 @@ test('privacy: /privacy is public and says how long a kept look stays', async ()
   assert.match(page.headers['content-type'], /text\/html/);
   assert.match(page.body, /deleted after 24 hours/);
   assert.match(page.body, /OpenAI/);
+  assert.match(page.body, /about 30 seconds after you step away/, 'ABSENT_AFTER_MS default');
+  assert.match(page.body, /Until you agree on its screen, nothing it sees is saved or sent anywhere/);
+  assert.doesNotMatch(page.body, /takes no photo/, 'the camera runs before consent (it guides, keeps a face crop in memory)');
   await app.close();
-  const none = await testApp({ env: { KEEP_HOURS: '0' } });
-  assert.match((await none.app.inject('/privacy')).body, /cannot be taken home/);
+  const none = await testApp({ env: { KEEP_HOURS: '0', ABSENT_AFTER_MS: '120000' } });
+  const other = (await none.app.inject('/privacy')).body;
+  assert.match(other, /cannot be taken home/);
+  assert.match(other, /about 2 minutes after you step away/);
   await none.app.close();
 });

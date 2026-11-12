@@ -28,6 +28,8 @@ export function privacyTarget(config) {
 
 export function privacyPage(config) {
   const hours = Number(config.keepHours) || 0;
+  const seconds = Math.round((Number(config.absentAfterMs) || 30_000) / 1000);
+  const away = seconds >= 120 && seconds % 60 === 0 ? `${seconds / 60} minutes` : `${seconds} seconds`;
   const keep =
     hours > 0
       ? `If you choose <b>Take it home</b>, that one picture of your look is saved behind a private link (the QR code you scan) and deleted after ${escapeHtml(hours)} hour${hours === 1 ? '' : 's'}.`
@@ -37,13 +39,13 @@ export function privacyPage(config) {
 <style>body{margin:0 auto;max-width:640px;padding:24px 20px 48px;background:#2a2a2a;color:#f2f2f2;font:17px/1.55 system-ui,sans-serif}
 h1{font-size:26px;line-height:1.25;margin:0 0 20px}h2{font-size:18px;margin:28px 0 6px}p,li{margin:0 0 10px}ul{padding-left:20px}</style></head>
 <body><h1>How the KYRA mirror uses your photo</h1>
-<h2>Only with your consent</h2>
-<p>The mirror takes a photo only after you agree on its screen. Without that, it takes no photo.</p>
+<h2>Before you agree</h2>
+<p>The camera is on while the mirror runs, so it can guide you and notice when you arrive. Until you agree on its screen, nothing it sees is saved or sent anywhere, and it is dropped when you leave.</p>
 <h2>What the photo is for</h2>
 <p>The mirror reads your skin tone and build from the camera, then sends your photo to OpenAI, our AI partner, to create your looks: pictures of you wearing the outfits it suggests.</p>
 <h2>How long it is kept</h2>
 <ul><li>During your visit your photo and results are held in the mirror's memory only.</li>
-<li>When you finish, or soon after you step away from the mirror, they are forgotten.</li>
+<li>When you finish, or about ${escapeHtml(away)} after you step away from the mirror, they are forgotten.</li>
 <li>${keep}</li></ul>
 <h2>What the mirror learns</h2>
 <p>When you like or dislike a look, or correct your skin tone, the mirror notes the colours and the undertone, to suggest better colours to future visitors. These notes contain no photo, name or anything that identifies you.</p>

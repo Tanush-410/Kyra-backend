@@ -181,6 +181,8 @@ export function loadConfig(env = process.env) {
     shutdownGraceMs: numberFrom(env.SHUTDOWN_GRACE_MS, 30_000),
 
     keepHours: numberFrom(env.KEEP_HOURS, 24),
+    // The sidecar's setting (passed on to it): how long out of view before a visit ends. Read here for /privacy.
+    absentAfterMs: numberFrom(env.ABSENT_AFTER_MS, 30_000),
     publicBaseUrl: env.PUBLIC_BASE_URL || '',
     // Where the consent screen's QR code leads: the venue's own privacy notice. Empty: this backend's
     // /privacy page, when PUBLIC_BASE_URL says how phones reach it; otherwise the screen shows no QR.
