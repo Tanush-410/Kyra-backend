@@ -19,6 +19,12 @@ import SplashScreen from "./screens/onboarding/SplashScreen.jsx";
 import SurpriseMeScreen from "./screens/onboarding/SurpriseMeScreen.jsx";
 import TellUsWhatYouHaveInMindScreen from "./screens/onboarding/TellUsWhatYouHaveInMindScreen.jsx";
 import WelcomeScreen from "./screens/onboarding/WelcomeScreen.jsx";
+import AccountScreen from "./screens/shop/AccountScreen.jsx";
+import CartScreen from "./screens/shop/CartScreen.jsx";
+import CheckoutScreen from "./screens/shop/CheckoutScreen.jsx";
+import EditScreen from "./screens/shop/EditScreen.jsx";
+import FilterScreen from "./screens/shop/FilterScreen.jsx";
+import ProductsScreen from "./screens/shop/ProductsScreen.jsx";
 
 // Development only: the shared components on their own, for screenshot checks (src/dev/). Not built for production.
 const ComponentPreview = import.meta.env.DEV ? lazy(() => import("./dev/ComponentPreview.jsx")) : null;
@@ -56,6 +62,12 @@ export default function App() {
                 <Route path="/welcome/looking-for-today/specificscreen/voicesearch/listening" element={<ListeningScreen />} />
                 <Route path="/welcome/looking-for-today/surpriseme/analysis/holdstill" element={<HoldStillScreen />} />
                 <Route path="/welcome/looking-for-today/surpriseme/analysis/holdstill/analysisres" element={<LookResultScreen />} />
+                <Route path="/shop" element={<ProductsScreen />} />
+                <Route path="/shop/cart" element={<CartScreen />} />
+                <Route path="/shop/checkout" element={<CheckoutScreen />} />
+                <Route path="/shop/filter" element={<FilterScreen />} />
+                <Route path="/account" element={<AccountScreen />} />
+                <Route path="/edit" element={<EditScreen />} />
                 {ComponentPreview && (
                   <Route
                     path="/dev/:name"

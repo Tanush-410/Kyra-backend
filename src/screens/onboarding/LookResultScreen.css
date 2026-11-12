@@ -70,6 +70,8 @@
 }
 .look__row { display: flex; align-items: center; gap: 32px; }
 .look__heading { margin: 0; font-size: 66px; font-weight: 700; line-height: var(--type-line-height); }
+.look__heading-row { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.look__heading-row .look__heading { flex: 1; }
 .look__count { margin: 0; font-size: 40px; letter-spacing: 0.04em; text-transform: uppercase; opacity: 0.7; }
 .look__text { margin: 0; font-size: 48px; line-height: var(--type-line-height); }
 .look__text--quiet { opacity: 0.75; }
@@ -114,6 +116,13 @@
   width: 960px;
 }
 .look__actions .option-card { width: 100%; padding-inline: 24px; }
+.look__shop-row {
+  display: flex;
+  gap: 32px;
+  width: 960px;
+}
+.look__shop-row .option-card { flex: 1; padding-inline: 24px; }
+.look__shop-row .option-card:disabled { opacity: 0.4; }
 
 .look__qr {
   position: absolute;

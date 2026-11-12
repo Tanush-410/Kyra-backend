@@ -12,7 +12,12 @@ const RECONNECT_MS = 3000;
  * starts it is reopened for that session, so it also carries the visitor's images (the backend keeps
  * them off streams that aren't scoped to the session).
  *
- * value: { state, start, next, showAnother, like, keep, confirmProfile, correctUndertone, end, clear }
+ * value: { state, start, next, showAnother, like, keep, confirmProfile, correctUndertone, end, clear,
+ *          addToCart, removeFromCart, setCartQty, setCartSize, saveOutfit, setFilters, clearFilters,
+ *          editPiece, clearShop }
+ *
+ * The shop actions are frontend-only (no API calls): they live in the visit's state and are dropped
+ * by sessionReducer when the visit starts, ends, or is cleared.
  */
 export function KyraSessionProvider({ children }) {
   const [state, dispatch] = useReducer(sessionReducer, initialState);
@@ -132,6 +137,15 @@ export function KyraSessionProvider({ children }) {
         if (session && !session.ended) await kyraApi.endSession(session.id).catch(() => {});
       },
       clear: () => dispatch({ type: "session/cleared" }),
+      addToCart: (product, { size, qty } = {}) => dispatch({ type: "shop/cartAdded", product, size, qty }),
+      removeFromCart: (id) => dispatch({ type: "shop/cartRemoved", id }),
+      setCartQty: (id, qty) => dispatch({ type: "shop/cartQty", id, qty }),
+      setCartSize: (id, size) => dispatch({ type: "shop/cartSize", id, size }),
+      saveOutfit: (outfit) => dispatch({ type: "shop/outfitSaved", ...outfit }),
+      setFilters: ({ from, to }) => dispatch({ type: "shop/filtersSet", from, to }),
+      clearFilters: () => dispatch({ type: "shop/filtersCleared" }),
+      editPiece: ({ key, category, product }) => dispatch({ type: "shop/pieceEdited", key, category, product }),
+      clearShop: () => dispatch({ type: "shop/cleared" }),
     }),
     [act]
   );

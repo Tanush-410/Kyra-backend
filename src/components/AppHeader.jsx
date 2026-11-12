@@ -11,6 +11,7 @@ const icon = (name) => `${import.meta.env.BASE_URL}assets/icons/${name}`;
  *
  * cartPulse: the cart shakes once to show something was just added to it (Figma note: "the cart icon
  * starts vibrating to catch attention"). Change the value (a counter) to shake it again.
+ * cartCount: a badge with the number of items in the cart (hidden at 0).
  */
 export default function AppHeader({
   onKyraClick,
@@ -19,6 +20,7 @@ export default function AppHeader({
   onCart,
   onFilter,
   cartPulse = 0,
+  cartCount = 0,
   paddingX = 18,
 }) {
   const tools = Boolean(onBin || onCart || onFilter);
@@ -45,9 +47,10 @@ export default function AppHeader({
               key={cartPulse}
               className={`app-header__tool app-header__tool--end${cartPulse ? " app-header__tool--pulse" : ""}`}
               onClick={onCart}
-              aria-label="My looks"
+              aria-label={cartCount ? `Cart, ${cartCount} items` : "Cart"}
             >
               <img src={icon("header-cart.svg")} alt="" width="156.6" height="156.6" />
+              {cartCount > 0 && <span className="app-header__badge">{cartCount}</span>}
             </button>
           )}
         </div>

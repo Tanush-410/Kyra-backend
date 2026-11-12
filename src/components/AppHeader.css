@@ -46,3 +46,22 @@
 @media (prefers-reduced-motion: reduce) {
   .app-header__tool--pulse { animation: none; outline: 6px solid #d1ffab; outline-offset: 4px; }
 }
+
+/* How many items are in the cart (on the cart button). */
+.app-header__tool { position: relative; }
+.app-header__badge {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  min-width: 52px;
+  height: 52px;
+  padding: 0 12px;
+  border-radius: 26px;
+  background: #d1ffab;
+  color: #1a1a1a;
+  font-family: var(--font-family);
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 52px;
+  text-align: center;
+}

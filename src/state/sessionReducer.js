@@ -7,12 +7,20 @@
  *   -> session.option x3 -> session.render.started -> session.render.done (the look) -> ...
  */
 
+export const DEFAULT_PRICE_RANGE = { from: 0, to: 10000 };
+
+/** The shop slice is frontend-only and is dropped with the visit (privacy: nothing outlives "I'm done"). */
+export function emptyShop() {
+  return { cart: [], saved: [], filters: { ...DEFAULT_PRICE_RANGE }, edits: {} };
+}
+
 export const initialState = {
   connection: "connecting", // connecting | open | reconnecting | unauthorized
   camera: "unknown", // the backend camera: running | starting | disabled | error | unavailable | unknown
   perception: null, // { state, message, ready, heldMs, holdMs, armed, receivedAt }
   present: null,
   session: null,
+  shop: emptyShop(),
 };
 
 export const keyOf = (round, option) => `${round}.${option}`;
@@ -163,14 +171,87 @@ function mergeSnapshot(session, snapshot) {
   };
 }
 
+function clampQty(value, stock) {
+  const limit = Math.max(1, Number(stock) || 1);
+  return Math.max(1, Math.min(limit, Math.round(Number(value) || 1)));
+}
+
+function addToCart(shop, action) {
+  const { product } = action;
+  if (!product?.id || !product.stock || product.stock < 1) return shop;
+  const explicitSize = action.size || null;
+  const size = explicitSize || product.sizes?.[0] || "";
+  const qty = clampQty(action.qty ?? 1, product.stock);
+  const existing = shop.cart.find((line) => line.id === product.id);
+  if (existing) {
+    return {
+      ...shop,
+      cart: shop.cart.map((line) =>
+        line.id === product.id
+          ? { ...line, size: explicitSize || line.size, qty: clampQty(line.qty + qty, product.stock) }
+          : line,
+      ),
+    };
+  }
+  return { ...shop, cart: [...shop.cart, { ...product, size, qty }] };
+}
+
+function setCartQty(shop, { id, qty }) {
+  return {
+    ...shop,
+    cart: shop.cart.map((line) => (line.id === id ? { ...line, qty: clampQty(qty, line.stock) } : line)),
+  };
+}
+
+function setCartSize(shop, { id, size }) {
+  return {
+    ...shop,
+    cart: shop.cart.map((line) =>
+      line.id === id ? { ...line, size: size || line.size, qty: clampQty(line.qty, line.stock) } : line,
+    ),
+  };
+}
+
+function saveOutfit(shop, action) {
+  const key = action.key;
+  if (!key) return shop;
+  const outfit = {
+    key,
+    round: action.round,
+    option: action.option,
+    title: action.title || "",
+    summary: action.summary || "",
+    items: action.items || [],
+    imageDataUrl: action.imageDataUrl || null,
+  };
+  const rest = shop.saved.filter((entry) => entry.key !== key);
+  return { ...shop, saved: [...rest, outfit] };
+}
+
+function setFilters(shop, { from, to }) {
+  let nextFrom = Math.max(0, Math.round(Number(from) || 0));
+  let nextTo = Math.max(0, Math.round(Number(to) || 0));
+  if (nextFrom > nextTo) [nextFrom, nextTo] = [nextTo, nextFrom];
+  return { ...shop, filters: { from: nextFrom, to: nextTo } };
+}
+
+function editPiece(shop, { key, category, product }) {
+  if (!key || !category) return shop;
+  const editKey = `${key}|${category}`;
+  const edits = { ...shop.edits };
+  if (product) edits[editKey] = product;
+  else delete edits[editKey];
+  return { ...shop, edits };
+}
+
 export function sessionReducer(state, action) {
   switch (action.type) {
     case "connection":
       return { ...state, connection: action.status };
     case "session/started":
-      return { ...state, session: newSession(action.sessionId, action.status) };
+      return { ...state, session: newSession(action.sessionId, action.status), shop: emptyShop() };
     case "session/cleared":
-      return { ...state, session: null };
+      return { ...state, session: null, shop: emptyShop() };
     case "session/snapshot":
       return state.session && state.session.id === action.snapshot.sessionId
         ? { ...state, session: mergeSnapshot(state.session, action.snapshot) }
@@ -179,6 +260,26 @@ export function sessionReducer(state, action) {
       return state.session ? { ...state, session: { ...state.session, actionError: action.message } } : state;
     case "session/actionCleared":
       return state.session ? { ...state, session: { ...state.session, actionError: "" } } : state;
+    case "shop/cleared":
+      return { ...state, shop: emptyShop() };
+    case "shop/cartAdded":
+      return { ...state, shop: addToCart(state.shop, action) };
+    case "shop/cartRemoved":
+      return { ...state, shop: { ...state.shop, cart: state.shop.cart.filter((line) => line.id !== action.id) } };
+    case "shop/cartQty":
+      return { ...state, shop: setCartQty(state.shop, action) };
+    case "shop/cartSize":
+      return { ...state, shop: setCartSize(state.shop, action) };
+    case "shop/outfitSaved":
+      return { ...state, shop: saveOutfit(state.shop, action) };
+    case "shop/outfitRemoved":
+      return { ...state, shop: { ...state.shop, saved: state.shop.saved.filter((entry) => entry.key !== action.key) } };
+    case "shop/filtersSet":
+      return { ...state, shop: setFilters(state.shop, action) };
+    case "shop/filtersCleared":
+      return { ...state, shop: { ...state.shop, filters: { ...DEFAULT_PRICE_RANGE } } };
+    case "shop/pieceEdited":
+      return { ...state, shop: editPiece(state.shop, action) };
     case "event":
       return applyEvent(state, action.event, action.now ?? 0);
     default:
@@ -211,7 +312,11 @@ function applyEvent(state, event, now) {
       if (!event.type?.startsWith("session.")) return state;
       // Another visitor's session (a stale tab, an operator's console): not ours.
       if (!state.session || event.sessionId !== state.session.id) return state;
-      return { ...state, session: sessionEvent(state.session, event) };
+      return {
+        ...state,
+        session: sessionEvent(state.session, event),
+        ...(event.type === "session.ended" ? { shop: emptyShop() } : null),
+      };
   }
 }
 
@@ -260,6 +365,24 @@ export function countdown(perception, now) {
   const held = perception.heldMs + Math.max(0, now - perception.receivedAt);
   const left = perception.holdMs - held;
   return Math.max(1, Math.ceil(left / 1000));
+}
+
+export function cartCount(shop) {
+  return (shop?.cart || []).reduce((total, line) => total + (Number(line.qty) || 0), 0);
+}
+
+export function cartSubtotal(shop) {
+  return (shop?.cart || []).reduce((total, line) => total + (Number(line.price) || 0) * (Number(line.qty) || 0), 0);
+}
+
+/** The replacement pieces chosen for one look, keyed by category. */
+export function editsForLook(shop, key) {
+  const edits = {};
+  for (const [editKey, product] of Object.entries(shop?.edits || {})) {
+    const [lookKey, category] = editKey.split("|");
+    if (lookKey === key) edits[category] = product;
+  }
+  return edits;
 }
 
 /** The screen to show for this session: "capture" | "working" | "results" | "error" | "ended". */

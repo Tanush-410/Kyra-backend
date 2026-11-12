@@ -1,0 +1,106 @@
+.product-card {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  width: 100%;
+  padding: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-card);
+  background: rgba(255, 255, 255, 0.08);
+}
+.product-card__image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  border-radius: 30px;
+  background: rgba(255, 255, 255, 0.07);
+  overflow: hidden;
+}
+.product-card__image img {
+  width: 68%;
+  height: 68%;
+  object-fit: contain;
+}
+.product-card--wide .product-card__image { height: 620px; }
+.product-card--wide .product-card__image img { width: 78%; height: 78%; }
+.product-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.product-card__brand {
+  font-size: 30px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--colour-gray-light-text);
+}
+.product-card__name {
+  margin: 0;
+  font-size: 50px;
+  font-weight: 700;
+  line-height: 1.15;
+}
+.product-card--wide .product-card__name { font-size: 62px; }
+.product-card__price {
+  font-size: 54px;
+  font-weight: 700;
+  color: #f3d1a2;
+}
+.product-card__description {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.86);
+}
+.product-card__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.product-card__tags li {
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.9);
+}
+.product-card__note {
+  margin: 0;
+  font-size: 26px;
+  color: rgba(255, 255, 255, 0.5);
+}
+.product-card__actions {
+  display: flex;
+  gap: 18px;
+}
+.product-card__action {
+  flex: 1;
+  padding: 24px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  background: var(--colour-white-100);
+  color: #1a1a1a;
+  font-family: var(--font-family);
+  font-size: 38px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.product-card__action--muted {
+  background: #4b4b4b;
+  color: rgba(255, 255, 255, 0.75);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+.product-card__action--ghost {
+  flex: 0 0 auto;
+  padding-inline: 40px;
+  background: transparent;
+  color: var(--colour-white-100);
+}
+.product-card__action:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
