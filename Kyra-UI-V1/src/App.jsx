@@ -6,7 +6,7 @@ import { CameraProvider } from "./context/CameraContext.jsx";
 import { HandTrackingProvider } from "./context/HandTrackingContext.jsx";
 import { SHOP_DEMO } from "./config.js";
 import { KyraSessionProvider } from "./context/KyraSessionContext.jsx";
-import { EDIT_LOOK_PATH, FIT_PATH, LOOK_PATH, RESULTS_PATH, SKIN_TONE_PATH, SUGGESTIONS_PATH } from "./lib/shopRoutes.js";
+import { BYE_PATH, EDIT_LOOK_PATH, FIT_PATH, LOOK_PATH, RESULTS_PATH, SKIN_TONE_PATH, SUGGESTIONS_PATH } from "./lib/shopRoutes.js";
 import AnalysisScreen from "./screens/onboarding/AnalysisScreen.jsx";
 import ConsentScreen from "./screens/onboarding/ConsentScreen.jsx";
 import FemaleSomethingSpecificScreen from "./screens/onboarding/FemaleSomethingSpecificScreen.jsx";
@@ -18,6 +18,8 @@ import SkinToneScreen from "./screens/results/SkinToneScreen.jsx";
 import SuggestionsScreen from "./screens/results/SuggestionsScreen.jsx";
 import TryOnScreen from "./screens/results/TryOnScreen.jsx";
 import EditLookScreen from "./screens/results/EditLookScreen.jsx";
+import ByeScreen from "./screens/results/ByeScreen.jsx";
+import StillHereGuard from "./components/StillHereGuard.jsx";
 import MaleSomethingSpecificScreen from "./screens/onboarding/MaleSomethingSpecificScreen.jsx";
 import ShoppingForScreen from "./screens/onboarding/ShoppingForScreen.jsx";
 import SpecificScreen from "./screens/onboarding/SpecificScreen.jsx";
@@ -62,6 +64,7 @@ export default function App() {
         <CameraProvider>
           <HandTrackingProvider>
             <ScreenFrame>
+              <StillHereGuard>
               <Routes>
                 <Route path="/" element={<SplashScreen />} />
                 <Route path="/welcome" element={<WelcomeScreen />} />
@@ -82,6 +85,7 @@ export default function App() {
                 <Route path={SUGGESTIONS_PATH} element={<SuggestionsScreen />} />
                 <Route path={LOOK_PATH} element={<TryOnScreen />} />
                 <Route path={EDIT_LOOK_PATH} element={<EditLookScreen />} />
+                <Route path={BYE_PATH} element={<ByeScreen />} />
                 <Route path="/account" element={<AccountScreen />} />
                 {SHOP_DEMO ? (
                   <>
@@ -108,6 +112,7 @@ export default function App() {
                   />
                 )}
               </Routes>
+              </StillHereGuard>
             </ScreenFrame>
             <StaffNotice />
           </HandTrackingProvider>

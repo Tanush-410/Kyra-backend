@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppHeader from "../../components/AppHeader.jsx";
 import CameraFeed from "../../components/CameraFeed.jsx";
 import Dialog from "../../components/Dialog.jsx";
+import EndScreen from "../../components/EndScreen.jsx";
 import KyraLoader from "../../components/KyraLoader.jsx";
 import OptionCard from "../../components/OptionCard.jsx";
 import ShopHeader from "../../components/ShopHeader.jsx";
@@ -10,19 +11,18 @@ import Toast from "../../components/Toast.jsx";
 import { SHOP_DEMO } from "../../config.js";
 import { useKyraSession } from "../../context/KyraSessionContext.jsx";
 import { useToast } from "../../hooks/useToast.js";
-import { EDIT_PATH, SHOP_PATH, SUGGESTIONS_PATH } from "../../lib/shopRoutes.js";
+import { BYE_PATH, EDIT_PATH, SHOP_PATH, SUGGESTIONS_PATH } from "../../lib/shopRoutes.js";
 import { nextOptionOf, tryOnState } from "../../lib/tryOnView.js";
 import { keyOf, phaseOf } from "../../state/sessionReducer.js";
 import { OutfitItems } from "./SuggestionsScreen.jsx";
 import "./TryOnScreen.css";
 
 const HOME = "/";
-const ENDED_MS = 5000; // how long "Thanks for visiting" stays before the mirror resets
-const ENDED_COPY = {
-  visitor_left: "Looks like you’ve stepped away. Come back any time!",
-  timeout: "This visit has timed out. Wave to start again!",
-  replaced: "Someone new stepped in. Wave to start your own visit!",
-};
+const PRAISE_MS = 3000;
+const PRAISE = [
+  { title: "Great", text: "You look beautiful today" },
+  { title: "Perfect", text: "You look gorgeous!" },
+];
 
 /**
  * Figma: "Virtual try on" (2043:13475): the visitor wearing the look, full height under the header.
@@ -89,39 +89,53 @@ export function TryOnView({ view, actions, header, background = null, preview = 
 
 export default function TryOnScreen() {
   const navigate = useNavigate();
-  const { state, like, showAnother, keep, tryOn, end, clear, saveOutfit } = useKyraSession();
+  const { state, like, showAnother, keep, tryOn, end, saveOutfit } = useKyraSession();
   const { toast, showToast } = useToast();
   const session = state.session;
   const phase = phaseOf(session);
   const [menu, setMenu] = useState(false);
   const [exitOpen, setExitOpen] = useState(false);
   const [closedQr, setClosedQr] = useState(null);
+  const [praise, setPraise] = useState(null); // index into PRAISE while it shows
 
+  // The visit ended (stepped away, timed out, someone else): "Bye", then the start.
   useEffect(() => {
-    if (phase !== "ended") return undefined;
-    const timer = setTimeout(() => {
-      clear();
-      navigate(HOME, { replace: true });
-    }, ENDED_MS);
-    return () => clearTimeout(timer);
-  }, [phase, clear, navigate]);
-  useEffect(() => {
-    if (phase === "none") navigate(HOME, { replace: true });
+    if (phase === "ended") navigate(BYE_PATH, { replace: true });
+    else if (phase === "none") navigate(HOME, { replace: true });
   }, [phase, navigate]);
 
+  // Figma "Confirmation" (2043:13358, 13374): after a like, from the menu or a thumbs-up, for 3 s.
+  const activeKeyNow = session?.active ? keyOf(session.active.round, session.active.option) : null;
+  const likedNow = Boolean(activeKeyNow && session?.ratings[activeKeyNow] === "up");
+  const likedBefore = useRef({ key: activeKeyNow, liked: likedNow });
+  useEffect(() => {
+    const before = likedBefore.current;
+    likedBefore.current = { key: activeKeyNow, liked: likedNow };
+    if (likedNow && !(before.key === activeKeyNow && before.liked)) {
+      setPraise((n) => (n == null ? 0 : (n + 1) % PRAISE.length));
+    }
+  }, [activeKeyNow, likedNow]);
+  useEffect(() => {
+    if (praise == null) return undefined;
+    const timer = setTimeout(() => setPraise(null), PRAISE_MS);
+    return () => clearTimeout(timer);
+  }, [praise]);
+
   if (!session) return null;
-  const finish = async () => {
-    await end();
-    navigate(HOME, { replace: true });
+  // "Bye" first, then the visit ends: the screen never flashes back to the start on the way.
+  const finish = () => {
+    navigate(BYE_PATH, { replace: true });
+    end();
   };
 
-  if (phase === "ended" || phase === "error") {
+  if (phase === "ended") return null;
+  if (phase === "error") {
     return (
       <div className="screen">
         <AppHeader />
         <div className="screen__content tryon__ended">
-          <h1 className="title">{phase === "ended" ? "Thanks for visiting!" : "Something went wrong"}</h1>
-          <p className="screen__text">{phase === "ended" ? ENDED_COPY[session.ended] || "See you next time!" : session.error}</p>
+          <h1 className="title">Something went wrong</h1>
+          <p className="screen__text">{session.error}</p>
           <OptionCard label="Start again" width="w500" onClick={finish} />
         </div>
       </div>
@@ -135,14 +149,14 @@ export default function TryOnScreen() {
   const kept = session.kept && activeKey && keyOf(session.kept.round, session.kept.option) === activeKey ? session.kept : null;
   const qrOpen = Boolean(kept?.qrDataUrl && closedQr !== kept.url);
   const next = nextOptionOf(session);
-  const modal = menu || exitOpen || qrOpen;
+  const modal = menu || exitOpen || qrOpen || praise != null;
 
   const close = (fn) => async () => {
     setMenu(false);
     await fn();
   };
   const menuActions = [
-    { label: liked ? "Loved it ♥" : "Love it", disabled: liked, onClick: close(async () => (await like()) && showToast("Loved it")) },
+    { label: liked ? "Loved it ♥" : "Love it", disabled: liked, onClick: close(like) },
     { label: "Take it home", onClick: close(keep) },
     ...(next ? [{ label: "Show another", onClick: close(showAnother) }] : []),
     { label: "Back to suggestions", onClick: close(() => navigate(SUGGESTIONS_PATH)) },
@@ -179,6 +193,11 @@ export default function TryOnScreen() {
           }}
         />
       </div>
+      {praise != null && (
+        <div className="tryon__praise">
+          <EndScreen live title={PRAISE[praise].title} text={PRAISE[praise].text} onTap={() => setPraise(null)} />
+        </div>
+      )}
       {session.actionError && <Toast kind="error">{session.actionError}</Toast>}
       <Toast toast={toast} />
 

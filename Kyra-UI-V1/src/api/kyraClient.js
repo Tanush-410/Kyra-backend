@@ -57,6 +57,8 @@ export const kyraApi = {
   /** corrections: any of { skinUndertone, skinDepth, heightCm, build } */
   correctProfile: (id, corrections) => request(`${session(id)}/profile`, { method: "POST", body: corrections }),
   endSession: (id, { keepalive = false } = {}) => request(session(id), { method: "DELETE", keepalive }),
+  /** "Still here?": the visitor pressed Still here during the countdown (session.leaving). */
+  stillHere: (id) => request(`${session(id)}/still-here`, { method: "POST", body: {} }),
   /** The consent screen's QR code: { url, qrDataUrl }, or { url: null } when phones can't reach a page. */
   privacy: () => request("/api/v2/privacy"),
   /** 401 means the kiosk token is missing or wrong (an EventSource can't tell us that itself). */
@@ -107,6 +109,8 @@ export const EVENT_TYPES = [
   "session.error",
   "session.ended",
   "session.subject",
+  "session.leaving",
+  "session.stayed",
 ];
 
 /**

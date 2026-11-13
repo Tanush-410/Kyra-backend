@@ -11,6 +11,7 @@ import { SkinToneView } from "../screens/results/SkinToneScreen.jsx";
 import { SuggestionsView } from "../screens/results/SuggestionsScreen.jsx";
 import { TryOnView } from "../screens/results/TryOnScreen.jsx";
 import { EditView } from "../screens/results/EditLookScreen.jsx";
+import EndScreen from "../components/EndScreen.jsx";
 import LookShortcut from "../components/LookShortcut.jsx";
 import { fitNotes } from "../lib/fitLevers.js";
 
@@ -22,7 +23,8 @@ const noop = () => {};
  * whole screens: consent, consent-noqr, consent-error, too-far, out-of-frame, too-close, camera-loading,
  * hold, count, flash, allset, skin-tone, skin-analysing, fit, fit-guide, fit-outline, suggestions,
  * suggestions-2, suggestions-hint, suggestions-busy, tryon, tryon-loading, tryon-failed, tryon-text,
- * edit-piece, edit-piece-male, edit-intent, edit-voice, edit-working, edit-busy.
+ * edit-piece, edit-piece-male, edit-intent, edit-voice, edit-working, edit-busy, great, perfect, bye,
+ * still-here.
  */
 const PREVIEWS = {
   header: () => <AppHeader onBin={noop} onCart={noop} onFilter={noop} />,
@@ -125,6 +127,10 @@ const SCREENS = {
   "edit-voice": () => <EditView step="voice" {...EDIT_ACTIONS} />,
   "edit-working": () => <EditView step="working" {...EDIT_ACTIONS} />,
   "edit-busy": () => <EditView step="intent" busy {...EDIT_ACTIONS} />,
+  great: () => <EndScreen title="Great" text="You look beautiful today" onTap={noop} />,
+  perfect: () => <EndScreen title="Perfect" text="You look gorgeous!" onTap={noop} />,
+  bye: () => <EndScreen title="Bye" text="Have a nice day." />,
+  "still-here": () => <EndScreen title="Still here?" text="We’ll delete your session in 30 seconds." actions={[{ label: "Still Here", onClick: noop }, { label: "Delete Session", onClick: noop }]} />,
   "fit-outline": () => <FitAnalysisView goal="balance" onGoal={noop} notes={SAMPLE_FIT} female={false} shortcut={shortcut(true)} />,
 };
 

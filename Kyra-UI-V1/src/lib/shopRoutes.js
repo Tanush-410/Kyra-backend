@@ -10,6 +10,8 @@ export const LOOK_PATH = `${SKIN_TONE_PATH}/look`;
 export const EDIT_LOOK_PATH = `${SKIN_TONE_PATH}/edit`;
 // Where the shop (and "Exit" in it) returns to: the look.
 export const RESULTS_PATH = LOOK_PATH;
+// After any visit ends (done, exit, delete, stepped away): "Bye", then the start.
+export const BYE_PATH = "/bye";
 export const SHOP_PATH = "/shop";
 export const CART_PATH = "/shop/cart";
 export const CHECKOUT_PATH = "/shop/checkout";

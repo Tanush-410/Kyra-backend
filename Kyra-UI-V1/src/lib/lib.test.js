@@ -6,6 +6,7 @@ import { defaultGoal, fitNotes, GOALS, leversFor } from "./fitLevers.js";
 import { nextOptionOf, tryOnState } from "./tryOnView.js";
 import { editFeedback, editPieces, INTENTS, MAX_FEEDBACK, moreLikeFeedback } from "./editFeedback.js";
 import { allOutfits, outfitCount, setStart } from "./outfits.js";
+import { IDLE_GRACE_MS, IDLE_MS, stillHereState, stillHereText } from "./stillHere.js";
 import { COPY, guidanceView } from "./guidanceCopy.js";
 import { createJpegSplitter } from "./mjpegStream.js";
 import { DEFAULT_STYLE, intentQuery, visitIntent } from "./visitIntent.js";
@@ -203,4 +204,19 @@ test("suggestions keep every set: oldest first, the newest set's start, and wher
   assert.equal(outfitCount(outfits, 4), "Set 2 of 2 · 2 of 3");
   assert.equal(outfitCount(allOutfits({ rounds: { 1: session.rounds[1] } }), 1), "2 of 3", "one set: just the position");
   assert.deepEqual(allOutfits({ rounds: { 1: [] } }), []);
+});
+
+test("Still here?: when the camera lost the visitor, or after 90 s without a tap, pinch or gesture", () => {
+  const session = { leavingEndsAt: null };
+  const at = (now, extra = {}) => stillHereState({ session, phase: "results", lastInteraction: 0, now, ...extra });
+  assert.equal(at(IDLE_MS - 1), null, "still active");
+  assert.deepEqual(at(IDLE_MS), { reason: "idle", endsAt: IDLE_MS + IDLE_GRACE_MS, secondsLeft: 30 });
+  assert.equal(at(IDLE_MS + IDLE_GRACE_MS - 1500).secondsLeft, 2);
+  assert.equal(at(IDLE_MS + IDLE_GRACE_MS + 5000).secondsLeft, 0);
+  const away = stillHereState({ session: { leavingEndsAt: 40_000 }, phase: "results", lastInteraction: 9_000, now: 15_000 });
+  assert.deepEqual(away, { reason: "away", endsAt: 40_000, secondsLeft: 25 }, "the backend's countdown, whatever the taps");
+  assert.equal(stillHereState({ session, phase: "capture", lastInteraction: 0, now: 10 * IDLE_MS }), null, "not while posing for the photo");
+  assert.equal(stillHereState({ session: null, phase: "none", lastInteraction: 0, now: 10 * IDLE_MS }), null);
+  assert.equal(stillHereText(30), "We’ll delete your session in 30 seconds.");
+  assert.equal(stillHereText(1), "We’ll delete your session in 1 second.");
 });
