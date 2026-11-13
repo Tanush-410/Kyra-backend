@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { SHOP_DEMO } from "../../config.js";
+import { useHandSwipe, usePinchDrop } from "../../hooks/useHandSwipe.js";
 import { useLocation, useNavigate } from "react-router-dom";
 import CameraFeed from "../../components/CameraFeed.jsx";
 import Dialog from "../../components/Dialog.jsx";
@@ -10,7 +12,7 @@ import { useResultsSession } from "../../hooks/useResultsSession.js";
 import { useToast } from "../../hooks/useToast.js";
 import { allOutfits, outfitCount, setStart } from "../../lib/outfits.js";
 import { BYE_PATH, EDIT_LOOK_PATH, LOOK_PATH } from "../../lib/shopRoutes.js";
-import { isDesigning } from "../../state/sessionReducer.js";
+import { editsForLook, isDesigning } from "../../state/sessionReducer.js";
 import "./SuggestionsScreen.css";
 
 const icon = (name) => `${import.meta.env.BASE_URL}assets/icons/${name}`;
@@ -88,7 +90,7 @@ export function OutfitItems({ items }) {
  * Figma: "Suggestion to buy" / Suggestion (2043:8093, 8133, 8151) and its menu (2043:8110).
  * options: this round's outfits; index: the one shown. busy: a message while new looks are designed.
  */
-export function SuggestionsView({ options, index, onIndex, onOpenMenu, busy, hint, count, lede = "Swipe for more options", background = null, header }) {
+export function SuggestionsView({ options, index, onIndex, onOpenMenu, busy, hint, count, lede = "Swipe for more options", background = null, header, outfitRef, draggable = false }) {
   const option = options[index];
   const drag = useRef(null);
   const go = (step) => {
@@ -128,7 +130,10 @@ export function SuggestionsView({ options, index, onIndex, onOpenMenu, busy, hin
           {index < options.length - 1 && <span className="suggest__shade suggest__shade--right" aria-hidden="true" />}
           <button
             type="button"
+            ref={outfitRef}
             className="suggest__outfit"
+            // Shop demo: pinch and drag the outfit to the cart (add) or the bin (discard).
+            data-pinch-drag={draggable ? "" : undefined}
             aria-label={`${option.title}: options`}
             onPointerDown={onPointerDown}
             onPointerUp={onPointerUp}
@@ -162,7 +167,8 @@ export default function SuggestionsScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const session = useResultsSession();
-  const { state, redesigning, tryOn, moreLike, end } = useKyraSession();
+  const { state, redesigning, tryOn, moreLike, addToCart } = useKyraSession();
+  const outfitRef = useRef(null);
   const { toast, showToast } = useToast();
   const [index, setIndex] = useState(0);
   const [menu, setMenu] = useState(false);
@@ -186,9 +192,34 @@ export default function SuggestionsScreen() {
     return () => clearTimeout(timer);
   }, [hint, session, outfits.length]);
 
-  if (!session) return null;
   const at = Math.min(index, Math.max(0, outfits.length - 1));
   const option = outfits[at];
+  const browsing = !menu && !exitOpen && asked == null;
+  const step = (by) => {
+    const next = at + by;
+    if (next < 0 || next >= outfits.length) return;
+    setIndex(next);
+    setHint(false);
+  };
+  // Hand swipes (lib/handGestures.js): right for the next outfit, as the design's hint says.
+  useHandSwipe((direction) => browsing && step(direction === "right" ? 1 : -1));
+  // Shop demo: an outfit dragged to the cart adds its pieces (placeholder products); to the bin, it's skipped.
+  usePinchDrop(outfitRef, async (target) => {
+    if (!SHOP_DEMO || !option) return;
+    if (target === "cart") {
+      const { firstAvailableSize, productsForLook } = await import("../../data/shopPlaceholders.js");
+      const key = `${option.round}.${option.option}`;
+      for (const product of productsForLook(option, key, editsForLook(state.shop, key))) {
+        if (product.stock) addToCart(product, { size: firstAvailableSize(product), qty: 1 });
+      }
+      showToast("Outfit added to cart");
+    } else if (target === "bin") {
+      showToast("Item discarded");
+      step(1);
+    }
+  });
+
+  if (!session) return null;
   const designing = isDesigning(state.session, redesigning);
   const busy = asked != null ? "Finding more like this…" : "";
 
@@ -225,7 +256,17 @@ export default function SuggestionsScreen() {
           busy={busy}
           hint={hint}
           background={<CameraFeed />}
-          header={<ShopHeader onExit={() => setExitOpen(true)} />}
+          header={
+            <ShopHeader
+              onExit={() => setExitOpen(true)}
+              // Pinch and hold on the bin: the hold is the confirmation.
+              onExitHold={() => {
+                navigate(BYE_PATH, { replace: true }); // Bye ends the visit
+              }}
+            />
+          }
+          outfitRef={outfitRef}
+          draggable={SHOP_DEMO}
         />
       </div>
       <Toast toast={toast} />
@@ -237,8 +278,7 @@ export default function SuggestionsScreen() {
             {
               label: "Exit",
               onClick: () => {
-                navigate(BYE_PATH, { replace: true });
-                end();
+                navigate(BYE_PATH, { replace: true }); // Bye ends the visit
               },
             },
           ]}

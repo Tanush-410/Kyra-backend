@@ -111,6 +111,13 @@ Open it once with the token, `http://localhost:5173/Kyra-UI-V1/#token=<apiToken>
   unaffected.
 - **Models are local:** `public/mediapipe/` holds the hand and pose models and the WASM files (from
   `npm run assets`). The splash screen no longer downloads a second copy from a CDN.
+- **Hand gestures** (`src/lib/handGestures.js`, tested with landmark sequences): only the main hand counts (the
+  largest in view, palm at least 6% of the picture's height, not at its edge), so someone behind the visitor
+  can't drive the screen. A pinch clicks only when the hand is still. Swipe (Suggestions only): 25% of the
+  picture sideways in under 0.6 s, mostly straight, then 1 s of nothing; right for the next outfit, as the
+  design's hint says. Pinch and hold on the bin for 1.5 s (a ring fills; opening the pinch or moving off
+  cancels) ends the visit with no dialog. With the shop demo, pinch and drag an outfit to the cart or bin.
+  `npm run dev` adds `window.__kyraHand.swipe("left" | "right")` for checks without a camera.
 - **Spoken words** stay in memory: they travel between screens in router state, never in the address (a
   browser keeps addresses in its history), and aren't logged. The browser's speech service (Google, in
   Chrome) turns them into text; the backend sends the text to OpenAI to design the looks.
