@@ -224,6 +224,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
 import { useCamera } from "./CameraContext.jsx";
+import { createSwipeDetector, holdStep, mainHand, palmPoint, steadyForPinch } from "../lib/handGestures.js";
 
 // Files served from /public (see setup steps).
 //const WASM_URL = "/mediapipe/wasm";
@@ -238,12 +239,20 @@ const HandTrackingContext = createContext(null);
 
 const CLICK_TOLERANCE = 40; // px around a button that still counts as a hit
 const CLICKABLE = 'button, a[href], [role="button"], [data-pinch]';
+const DRAG_PX = 60; // a pinch that moves further than this before opening is a drag, not a click
 
-/** Real .click() on the clickable element nearest the pinch point (within tolerance). */
-function clickAt(x, y) {
+/** Is (x, y) on el, within the click tolerance? */
+function near(el, x, y) {
+  const r = el.getBoundingClientRect();
+  if (r.width === 0 || r.height === 0) return false;
+  return Math.hypot(Math.max(r.left - x, 0, x - r.right), Math.max(r.top - y, 0, y - r.bottom)) <= CLICK_TOLERANCE;
+}
+
+/** The pinchable element nearest (x, y), within tolerance, that isn't greyed out or behind a dialog. */
+function targetAt(x, y, selector = CLICKABLE) {
   let best = null;
   let bestDist = Infinity;
-  document.querySelectorAll(CLICKABLE).forEach((el) => {
+  document.querySelectorAll(selector).forEach((el) => {
     // Greyed-out buttons, and anything behind an open dialog (marked inert), can't be pinched.
     if (el.disabled || el.closest("[inert]")) return;
     const r = el.getBoundingClientRect();
@@ -256,6 +265,12 @@ function clickAt(x, y) {
       bestDist = dist;
     }
   });
+  return best;
+}
+
+/** Real .click() on the clickable element nearest the pinch point (within tolerance). */
+function clickAt(x, y) {
+  const best = targetAt(x, y);
   if (best) {
     console.log("[hand] pinch at", Math.round(x), Math.round(y), "-> clicking", best.textContent?.trim() || best.tagName);
     best.click();
@@ -290,7 +305,7 @@ async function createLandmarker(say) {
     HandLandmarker.createFromOptions(vision, {
       baseOptions: { modelAssetPath: MODEL_URL, delegate },
       runningMode: "VIDEO",
-      numHands: 1,
+      numHands: 2, // then only the main hand counts (lib/handGestures.js mainHand)
     });
   try {
     return await make("GPU");
@@ -313,6 +328,7 @@ export function HandTrackingProvider({ children, mirror }) {
   const cursorRef = useRef(null);
   const handlers = useRef(new Set());       // pinch listeners
   const frameHandlers = useRef(new Set());  // per-frame listeners (e.g. wave detection)
+  const swipeHandlers = useRef(new Set());  // swipe listeners (only Suggestions): no listener, no swipes
   const [status, setStatus] = useState("Loading hand tracking…");
 
   const register = useCallback((fn) => {
@@ -325,6 +341,18 @@ export function HandTrackingProvider({ children, mirror }) {
     return () => frameHandlers.current.delete(fn);
   }, []);
 
+  const registerSwipe = useCallback((fn) => {
+    swipeHandlers.current.add(fn);
+    return () => swipeHandlers.current.delete(fn);
+  }, []);
+
+  // Development only (npm run dev): window.__kyraHand.swipe("left" | "right") for checks without a camera.
+  useEffect(() => {
+    if (!import.meta.env.DEV) return undefined;
+    window.__kyraHand = { swipe: (direction) => swipeHandlers.current.forEach((fn) => fn(direction)) };
+    return () => delete window.__kyraHand;
+  }, []);
+
   useEffect(() => {
     let landmarker = null;
     let raf = 0;
@@ -335,6 +363,32 @@ export function HandTrackingProvider({ children, mirror }) {
     let sy = null;
     let lastStatus = "";
     let warnedMissing = false;
+    const swipe = createSwipeDetector();
+    let lastSwipeAt = -Infinity;
+    let history = []; // recent { t, x, y } of the pointer, for "is the hand steady?"
+    let hold = null; // { el, start }: pinch and hold on [data-pinch-hold] (the bin)
+    let drag = null; // { el, x, y }: pinch and drag from [data-pinch-drag] (shop demo)
+    const endHold = (fired) => {
+      if (!hold) return;
+      hold.el.removeAttribute("data-holding");
+      hold.el.style.removeProperty("--hold-progress");
+      if (fired) hold.el.dispatchEvent(new CustomEvent("pinchhold", { bubbles: true }));
+      hold = null;
+    };
+    const endDrag = (x, y) => {
+      if (!drag) return;
+      const { el } = drag;
+      el.removeAttribute("data-dragging");
+      document.querySelectorAll("[data-drop-hover]").forEach((d) => d.removeAttribute("data-drop-hover"));
+      if (x != null) {
+        if (Math.hypot(x - drag.x, y - drag.y) < DRAG_PX) el.click(); // it didn't move: a plain pinch
+        else {
+          const drop = targetAt(x, y, "[data-drop]");
+          if (drop) el.dispatchEvent(new CustomEvent("pinchdrop", { bubbles: true, detail: { target: drop.dataset.drop } }));
+        }
+      }
+      drag = null;
+    };
 
     const say = (s) => {
       if (s !== lastStatus) {
@@ -366,7 +420,12 @@ export function HandTrackingProvider({ children, mirror }) {
         say("Waiting for camera video to start playing…");
       } else if (video.currentTime !== lastVideoTime) {
         lastVideoTime = video.currentTime;
-        const lm = landmarker.detectForVideo(video, performance.now()).landmarks?.[0];
+        const now = performance.now();
+        // Only the main hand counts: the largest in view, big enough, not at the picture's edge.
+        const lm = mainHand(landmarker.detectForVideo(video, now).landmarks || [], {
+          vw: video.videoWidth || 1,
+          vh: video.videoHeight || 1,
+        });
 
         if (lm) {
           const thumb = lm[4];
@@ -425,13 +484,52 @@ export function HandTrackingProvider({ children, mirror }) {
           say(pinching ? "Pinching" : "Hand detected: pinch to click");
           frameHandlers.current.forEach((fn) => fn({ landmarks: lm }));
 
+          // Swipes, only while a screen listens (Suggestions).
+          if (swipeHandlers.current.size) {
+            const direction = swipe.feed({ t: now, ...palmPoint(lm, { mirror: flip }) });
+            if (direction) {
+              lastSwipeAt = now;
+              swipeHandlers.current.forEach((fn) => fn(direction));
+            }
+          } else {
+            swipe.feed(null);
+          }
+          history = [...history.filter((h) => now - h.t <= 300), { t: now, x: px, y: py }];
+
           if (pinching && !wasPinching) {
-            handlers.current.forEach((fn) => fn({ x: sx, y: sy }));
-            clickAt(sx, sy); // a pinch is a click: fires the element's normal onClick
+            // A pinch while the hand sweeps (a swipe) presses nothing.
+            const ignored = !steadyForPinch(history, now, { lastSwipeAt });
+            const target = ignored ? null : targetAt(sx, sy);
+            if (ignored) {
+              console.log("[hand] pinch ignored: the hand is moving");
+            } else if (target?.hasAttribute("data-pinch-hold")) {
+              hold = { el: target, start: now }; // the bin: hold to confirm
+              target.setAttribute("data-holding", "");
+            } else if (target?.hasAttribute("data-pinch-drag")) {
+              drag = { el: target, x: sx, y: sy }; // shop demo: maybe a drag to the cart or bin
+              target.setAttribute("data-dragging", "");
+            } else {
+              handlers.current.forEach((fn) => fn({ x: sx, y: sy }));
+              clickAt(sx, sy); // a pinch is a click: fires the element's normal onClick
+            }
+          }
+          if (hold) {
+            const step = holdStep(hold, { pinching, inside: near(hold.el, sx, sy), now });
+            if (step.done) endHold(true);
+            else if (step.cancelled) endHold(false);
+            else hold.el.style.setProperty("--hold-progress", step.progress.toFixed(3));
+          }
+          if (drag) {
+            document.querySelectorAll("[data-drop]").forEach((d) => d.toggleAttribute("data-drop-hover", near(d, sx, sy)));
+            if (!pinching) endDrag(sx, sy);
           }
         } else {
           pinching = false;
           sx = sy = null;
+          endHold(false);
+          endDrag(null, null);
+          swipe.feed(null);
+          history = [];
           hideCursor();
           say("No hand detected. Hold your hand up.");
           frameHandlers.current.forEach((fn) => fn({ landmarks: null }));
@@ -464,7 +562,7 @@ export function HandTrackingProvider({ children, mirror }) {
   }, [videoRef, flip]);
 
   return (
-    <HandTrackingContext.Provider value={{ register, registerFrame, status }}>
+    <HandTrackingContext.Provider value={{ register, registerFrame, registerSwipe, status }}>
       {children}
       <div
         ref={cursorRef}

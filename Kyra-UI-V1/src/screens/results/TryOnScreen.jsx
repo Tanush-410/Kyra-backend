@@ -89,7 +89,7 @@ export function TryOnView({ view, actions, header, background = null, preview = 
 
 export default function TryOnScreen() {
   const navigate = useNavigate();
-  const { state, like, showAnother, keep, tryOn, end, saveOutfit } = useKyraSession();
+  const { state, like, showAnother, keep, tryOn, saveOutfit } = useKyraSession();
   const { toast, showToast } = useToast();
   const session = state.session;
   const phase = phaseOf(session);
@@ -122,10 +122,9 @@ export default function TryOnScreen() {
   }, [praise]);
 
   if (!session) return null;
-  // "Bye" first, then the visit ends: the screen never flashes back to the start on the way.
+  // Bye ends the visit when it opens: ending it here first would send this screen home instead.
   const finish = () => {
-    navigate(BYE_PATH, { replace: true });
-    end();
+    navigate(BYE_PATH, { replace: true }); // Bye ends the visit
   };
 
   if (phase === "ended") return null;
@@ -184,7 +183,7 @@ export default function TryOnScreen() {
           view={view}
           preview={view.render?.preview || null}
           background={<CameraFeed />}
-          header={<ShopHeader onExit={() => setExitOpen(true)} />}
+          header={<ShopHeader onExit={() => setExitOpen(true)} onExitHold={finish} />}
           actions={{
             onMenu: () => setMenu(true),
             onRetry: () => tryOn(active.round, active.option),

@@ -18,7 +18,7 @@ const AWAY_SLACK_MS = 5000;
  */
 export default function StillHereGuard({ children }) {
   const navigate = useNavigate();
-  const { state, end, dispatchStayed } = useKyraSession();
+  const { state, dispatchStayed } = useKyraSession();
   const session = state.session;
   const phase = phaseOf(session);
   const [lastInteraction, setLastInteraction] = useState(() => Date.now());
@@ -57,12 +57,12 @@ export default function StillHereGuard({ children }) {
 
   const view = stillHereState({ session, phase, lastInteraction, now });
 
-  const deleteSession = useCallback(async () => {
+  // Bye ends the visit when it opens (ending it here first would let the screen underneath go home).
+  const deleteSession = useCallback(() => {
     if (ending.current) return;
     ending.current = true;
-    await end();
     navigate(BYE_PATH, { replace: true });
-  }, [end, navigate]);
+  }, [navigate]);
 
   useEffect(() => {
     if (!view) return;

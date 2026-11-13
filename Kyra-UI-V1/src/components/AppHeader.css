@@ -1,5 +1,8 @@
 /* Figma: "Frame 1410126071" (2043:13424): 18px padding, rows 1044px wide, each overlapping the next by 4px. */
 .app-header {
+  /* Above the camera and its dark overlay (positioned), which would otherwise dim the icons */
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -65,3 +68,17 @@
   line-height: 52px;
   text-align: center;
 }
+
+/* Pinch and hold on the bin: a ring fills over 1.5 s (--hold-progress, from HandTrackingContext) */
+.app-header__tool[data-holding]::after {
+  content: "";
+  position: absolute;
+  inset: -16px;
+  border-radius: 50%;
+  background: conic-gradient(#ff5757 calc(var(--hold-progress, 0) * 360deg), rgba(255, 255, 255, 0.25) 0);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 12px), #000 calc(100% - 11px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 12px), #000 calc(100% - 11px));
+  pointer-events: none;
+}
+/* Shop demo: a pinch dragging an outfit over the cart or the bin */
+.app-header__tool[data-drop-hover] { outline: 8px solid #d1ffab; outline-offset: 6px; }
