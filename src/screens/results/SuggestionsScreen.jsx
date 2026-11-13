@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { SHOP_DEMO } from "../../config.js";
 import { useHandSwipe, usePinchDrop } from "../../hooks/useHandSwipe.js";
+import { useProductPhotos } from "../../hooks/useProductPhotos.js";
+import { flatLay } from "../../lib/flatLay.js";
+import { withLook } from "../../components/FigmaProductCard.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import CameraFeed from "../../components/CameraFeed.jsx";
 import Dialog from "../../components/Dialog.jsx";
@@ -75,6 +78,38 @@ export function ItemCard({ item }) {
   );
 }
 
+// The outfit area's top left on the screen (.suggest__outfit): flat lay boxes are given in screen px.
+const OUTFIT_LEFT = 124;
+const OUTFIT_TOP = 718;
+
+/**
+ * The outfit as a flat lay of product photos, placed as in Figma's Suggestion frame (lib/flatLay.js).
+ * photoFor(index): the piece's product photo, or null until it's made (or when photos are off): then the
+ * piece shows as its colour with its category icon and name, in the same place.
+ */
+export function FlatLay({ items, photoFor = () => null }) {
+  return (
+    <span className="flatlay">
+      {flatLay(items).map(({ item, index, slot, box }) => {
+        const url = photoFor(index);
+        const style = { left: box.left - OUTFIT_LEFT, top: box.top - OUTFIT_TOP, width: box.width, height: box.height };
+        return (
+          <span key={`${index}-${item.name}`} className={`flatlay__piece flatlay__piece--${slot}`} style={style}>
+            {url ? (
+              <img className="flatlay__photo" src={url} alt={`${item.colorName ? `${item.colorName} ` : ""}${item.name}`} />
+            ) : (
+              <span className={`flatlay__tile${isLight(item.hex) ? " flatlay__tile--light" : ""}`} style={{ background: item.hex || "#777" }}>
+                <img src={icon(categoryOf(item).icon)} alt="" />
+                <span className="flatlay__name">{item.name}</span>
+              </span>
+            )}
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
 /** The outfit's pieces as cards (also the try-on screen's text-only and failed views). */
 export function OutfitItems({ items }) {
   return (
@@ -90,7 +125,7 @@ export function OutfitItems({ items }) {
  * Figma: "Suggestion to buy" / Suggestion (2043:8093, 8133, 8151) and its menu (2043:8110).
  * options: this round's outfits; index: the one shown. busy: a message while new looks are designed.
  */
-export function SuggestionsView({ options, index, onIndex, onOpenMenu, busy, hint, count, lede = "Swipe for more options", background = null, header, outfitRef, draggable = false }) {
+export function SuggestionsView({ options, index, onIndex, onOpenMenu, busy, hint, count, lede = "Swipe for more options", background = null, header, outfitRef, draggable = false, photoFor }) {
   const option = options[index];
   const drag = useRef(null);
   const go = (step) => {
@@ -140,7 +175,7 @@ export function SuggestionsView({ options, index, onIndex, onOpenMenu, busy, hin
             onPointerCancel={() => (drag.current = null)}
             onClick={(e) => e.detail === 0 && onOpenMenu()}
           >
-            <OutfitItems items={option.items} />
+            <FlatLay items={option.items} photoFor={photoFor} />
           </button>
           <p className="suggest__count" aria-live="polite">
             {count || `${index + 1} of ${options.length}`}
@@ -194,6 +229,7 @@ export default function SuggestionsScreen() {
 
   const at = Math.min(index, Math.max(0, outfits.length - 1));
   const option = outfits[at];
+  const photoFor = useProductPhotos(option);
   const browsing = !menu && !exitOpen && asked == null;
   const step = (by) => {
     const next = at + by;
@@ -210,7 +246,8 @@ export default function SuggestionsScreen() {
       const { firstAvailableSize, productsForLook } = await import("../../data/shopPlaceholders.js");
       const key = `${option.round}.${option.option}`;
       for (const product of productsForLook(option, key, editsForLook(state.shop, key))) {
-        if (product.stock) addToCart(product, { size: firstAvailableSize(product), qty: 1 });
+        const at = product.replacesProductId ? -1 : Number(String(product.id).split(":").pop());
+        if (product.stock) addToCart(withLook(product, option, at >= 0 ? photoFor(at) : null), { size: firstAvailableSize(product), qty: 1 });
       }
       showToast("Outfit added to cart");
     } else if (target === "bin") {
@@ -267,6 +304,7 @@ export default function SuggestionsScreen() {
           }
           outfitRef={outfitRef}
           draggable={SHOP_DEMO}
+          photoFor={photoFor}
         />
       </div>
       <Toast toast={toast} />

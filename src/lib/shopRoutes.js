@@ -8,6 +8,8 @@ export const SUGGESTIONS_PATH = `${SKIN_TONE_PATH}/suggestions`;
 export const LOOK_PATH = `${SKIN_TONE_PATH}/look`;
 // The edit flow (Figma "Edit"): a new set of outfits built around one change.
 export const EDIT_LOOK_PATH = `${SKIN_TONE_PATH}/edit`;
+// Rate and changes (Figma "Rate and changes"): the score, three changes, the look with them.
+export const RATE_PATH = `${SKIN_TONE_PATH}/rate`;
 // Where the shop (and "Exit" in it) returns to: the look.
 export const RESULTS_PATH = LOOK_PATH;
 // After any visit ends (done, exit, delete, stepped away): "Bye", then the start.

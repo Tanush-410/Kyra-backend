@@ -7,7 +7,9 @@ import KyraLoader from "../../components/KyraLoader.jsx";
 import LookShortcut from "../../components/LookShortcut.jsx";
 import OptionCard from "../../components/OptionCard.jsx";
 import { useKyraSession } from "../../context/KyraSessionContext.jsx";
+import { useProductPhotos } from "../../hooks/useProductPhotos.js";
 import { useResultsSession } from "../../hooks/useResultsSession.js";
+import { allOutfits } from "../../lib/outfits.js";
 import { colourChips, paletteRoles } from "../../lib/colourRoles.js";
 import { FIT_PATH, LOOK_PATH } from "../../lib/shopRoutes.js";
 import { undertoneView } from "../../state/sessionReducer.js";
@@ -125,6 +127,9 @@ export default function SkinToneScreen() {
   const { confirmProfile, correctUndertone } = useKyraSession();
   const [dialog, setDialog] = useState(null); // "more" | "correct" | null
   const [answered, setAnswered] = useState(false);
+  // Start the first outfit's product photos now (about 10 s each, two at a time), so they're ready by
+  // Suggestions. Only the first outfit: nothing is made for outfits the visitor may never open.
+  useProductPhotos(allOutfits(session)[0] || null);
   if (!session) return null;
 
   const view = undertoneView(session);

@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Dialog from "../../components/Dialog.jsx";
-import ProductCard from "../../components/ProductCard.jsx";
+import FigmaProductCard from "../../components/FigmaProductCard.jsx";
+import { usePinchDrop } from "../../hooks/useHandSwipe.js";
 import ShopHeader from "../../components/ShopHeader.jsx";
 import Toast from "../../components/Toast.jsx";
 import { useKyraSession } from "../../context/KyraSessionContext.jsx";
@@ -27,7 +28,11 @@ export default function CartScreen() {
   const [sizeOutOfStock, setSizeOutOfStock] = useState(null);
   const [discardOpen, setDiscardOpen] = useState(false);
   const [exitOpen, setExitOpen] = useState(false);
+  const [itemMenu, setItemMenu] = useState(false);
   const dragStart = useRef(null);
+  const photoRef = useRef(null);
+  // Figma: pinch and drag the item onto the bin to discard it (the Discard Item question follows).
+  usePinchDrop(photoRef, (target) => target === "bin" && setDiscardOpen(true));
 
   useEffect(() => {
     setIndex((current) => Math.min(current, Math.max(0, items.length - 1)));
@@ -35,7 +40,7 @@ export default function CartScreen() {
 
   const current = items[Math.min(index, Math.max(0, items.length - 1))];
   const itemOutOfStock = Boolean(current && (!current.stock || current.stock < 1));
-  const modalOpen = Boolean(qtyOpen || sizeOpen || sizeOutOfStock || discardOpen || exitOpen || itemOutOfStock);
+  const modalOpen = Boolean(qtyOpen || sizeOpen || sizeOutOfStock || discardOpen || exitOpen || itemOutOfStock || itemMenu);
 
   const move = (direction) => {
     setIndex((currentIndex) => Math.min(items.length - 1, Math.max(0, currentIndex + direction)));
@@ -76,51 +81,36 @@ export default function CartScreen() {
           </div>
         ) : (
           <>
-            <div className="cart-count">
-              Item {Math.min(index + 1, items.length)} of {items.length}
+            {/* Figma "Cart" (design/export-2/frames/cart-card.png): the product card at y 470, side shades and
+                arrows, Continue Shopping / Checkout at y 2022 and 2165. */}
+            {index > 0 && <span className="fpc-shade fpc-shade--left" style={{ top: 791 }} aria-hidden="true" />}
+            {index < items.length - 1 && <span className="fpc-shade fpc-shade--right" style={{ top: 791 }} aria-hidden="true" />}
+            <div
+              style={{ position: "absolute", top: 470, left: 0, width: 1080 }}
+              onPointerDown={onPointerDown}
+              onPointerUp={onPointerUp}
+              onPointerCancel={() => (dragStart.current = null)}
+            >
+              <FigmaProductCard
+                product={current}
+                qty={current.qty}
+                size={current.size}
+                photoRef={photoRef}
+                onPhoto={() => setItemMenu(true)}
+                onQty={() => setQtyOpen(true)}
+                onSize={() => setSizeOpen(true)}
+              />
             </div>
-            <div className="cart-stage">
-              <button
-                type="button"
-                className="cart-arrow"
-                onClick={() => move(-1)}
-                disabled={index <= 0}
-                aria-label="Previous item"
-              >
-                <img src={`${import.meta.env.BASE_URL}assets/icons/arrow-left.svg`} alt="" width="74" height="74" />
-              </button>
-              <div className="cart-swipe" onPointerDown={onPointerDown} onPointerUp={onPointerUp} onPointerCancel={() => (dragStart.current = null)}>
-                <ProductCard product={current} wide />
-              </div>
-              <button
-                type="button"
-                className="cart-arrow"
-                onClick={() => move(1)}
-                disabled={index >= items.length - 1}
-                aria-label="Next item"
-              >
-                <img src={`${import.meta.env.BASE_URL}assets/icons/arrow-right.svg`} alt="" width="74" height="74" />
-              </button>
-            </div>
-
-            <div className="cart-controls">
-              <button type="button" className="shop-select" onClick={() => setQtyOpen(true)}>
-                Quantity: {current.qty} ▾
-              </button>
-              <button type="button" className="shop-select" onClick={() => setSizeOpen(true)}>
-                Size: {current.size || "Select"} ▾
-              </button>
-              <button type="button" className="shop-select" onClick={() => setDiscardOpen(true)}>
-                Remove item
-              </button>
-            </div>
-
-            <div className="cart-controls">
-              <span className="cart-total">Total {formatPrice(cartSubtotal(state.shop))}</span>
-            </div>
-
-            {/* Figma: Continue Shopping / Checkout, 840 x 112, 31px apart */}
-            <div className="button-stack cart-figma__buttons">
+            <button type="button" className="fpc-arrow fpc-arrow--left" style={{ top: 738 }} onClick={() => move(-1)} disabled={index <= 0} aria-label="Previous item">
+              <img src={`${import.meta.env.BASE_URL}assets/icons/arrow-left.svg`} alt="" width="74" height="74" />
+            </button>
+            <button type="button" className="fpc-arrow fpc-arrow--right" style={{ top: 738 }} onClick={() => move(1)} disabled={index >= items.length - 1} aria-label="Next item">
+              <img src={`${import.meta.env.BASE_URL}assets/icons/arrow-right.svg`} alt="" width="74" height="74" />
+            </button>
+            <p className="fpc-note" style={{ top: 1830 }}>
+              {Math.min(index + 1, items.length)} of {items.length} · Total {formatPrice(cartSubtotal(state.shop))} · placeholder prices
+            </p>
+            <div className="fpc-buttons" style={{ top: 2022 }}>
               <OptionCard label="Continue Shopping" width="w840" onClick={() => navigate(SHOP_PATH)} />
               <OptionCard label="Checkout" width="w840" onClick={() => navigate(CHECKOUT_PATH)} />
             </div>
@@ -128,6 +118,17 @@ export default function CartScreen() {
         )}
       </main>
       <Toast toast={toast} />
+
+      {itemMenu && current && (
+        <Dialog
+          label={`${current.name}: options`}
+          top={860}
+          actions={[
+            { label: "Remove from Cart", onClick: () => { setItemMenu(false); setDiscardOpen(true); } },
+            { label: "Back", onClick: () => setItemMenu(false) },
+          ]}
+        />
+      )}
 
       {qtyOpen && current && (
         <Dialog

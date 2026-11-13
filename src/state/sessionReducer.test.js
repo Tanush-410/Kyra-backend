@@ -278,3 +278,15 @@ test("the camera lost the visitor: a countdown until the visit ends, gone when t
   assert.equal(snap({}), 35000, "an older backend without the field changes nothing");
   assert.equal(sessionReducer(initialState, { type: "event", event: { type: "gesture", gesture: "thumbs_up" }, now: 777 }).lastGestureAt, 777);
 });
+
+test("a rate visit keeps its mode and its rating, also after a reconnect", () => {
+  let state = sessionReducer(initialState, { type: "session/started", sessionId: "r1", status: "waiting_for_capture", mode: "rate" });
+  assert.equal(state.session.mode, "rate");
+  const rateLook = { score: 7, finalScore: 9.4, summary: "", changes: [{ id: 1, category: "shoes", name: "Heels", hex: "#FFFFFF", why: [], tags: [], points: 1 }] };
+  state = sessionReducer(state, { type: "event", event: { type: "session.ratelook", sessionId: "r1", rateLook } });
+  assert.equal(state.session.rateLook.finalScore, 9.4);
+  const fresh = sessionReducer(initialState, { type: "session/started", sessionId: "r1", status: "rating" });
+  const merged = sessionReducer(fresh, { type: "session/snapshot", snapshot: { sessionId: "r1", status: "ready", rounds: [], renders: [], mode: "rate", rateLook } });
+  assert.equal(merged.session.mode, "rate");
+  assert.equal(merged.session.rateLook.changes[0].name, "Heels");
+});

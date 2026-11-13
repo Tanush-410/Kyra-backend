@@ -26,6 +26,8 @@ function clean(value) {
 
 export function visitIntent({ category, q } = {}) {
   const id = clean(category).toLowerCase();
+  // "Rate my outfit" (How can I help you today?): rate what they wear, no outfits designed.
+  if (id === "rate") return { style: "Rate my outfit", gender: null, piece: null, mode: "rate" };
   const said = clean(q).replace(/\s+/g, " ");
   const gender = id.endsWith("-female") ? "female" : id.endsWith("-male") ? "male" : null;
   const piece = PIECES[id.replace(/-(male|female)$/, "")] || null;

@@ -22,13 +22,16 @@ export const initialState = {
   lastGestureAt: 0, // when the camera last saw a hand gesture (thumbs up, ...): counts as the visitor being active
   session: null,
   shop: emptyShop(),
+  photos: {}, // product photo key -> "ready" | "failed" (from 'product.photo' events)
 };
 
 export const keyOf = (round, option) => `${round}.${option}`;
 
-function newSession(sessionId, status, gender = null) {
+function newSession(sessionId, status, gender = null, mode = "style") {
   return {
     id: sessionId,
+    mode, // "style" (design outfits) | "rate" (rate what they wear: Rate and changes)
+    rateLook: null, // { score, finalScore, summary, changes: [{ id, category, name, hex, colorName, why, tags, points }] }
     gender, // "male" | "female" | null: from the visitor's picks (the Fit Analysis silhouette is female)
     status: status || "waiting_for_capture",
     message: "",
@@ -123,6 +126,8 @@ function sessionEvent(session, event) {
       return { ...session, ratings: { ...session.ratings, [keyOf(round, option)]: event.rating } };
     case "session.kept":
       return { ...session, kept: { url: event.url, qrDataUrl: event.qrDataUrl, expiresAt: event.expiresAt, round, option } };
+    case "session.ratelook":
+      return event.rateLook ? { ...session, rateLook: event.rateLook } : session;
     case "session.degraded":
       return { ...session, degraded: { message: event.message || "" } };
     case "session.recovered":
@@ -175,6 +180,8 @@ function mergeSnapshot(session, snapshot) {
     renders,
     active,
     degraded: snapshot.degraded ?? session.degraded,
+    rateLook: snapshot.rateLook || session.rateLook,
+    mode: snapshot.mode || session.mode,
     leavingEndsAt: snapshot.leavingEndsAt !== undefined ? snapshot.leavingEndsAt : session.leavingEndsAt,
   };
 }
@@ -257,7 +264,7 @@ export function sessionReducer(state, action) {
     case "connection":
       return { ...state, connection: action.status };
     case "session/started":
-      return { ...state, session: newSession(action.sessionId, action.status, action.gender || null), shop: emptyShop() };
+      return { ...state, session: newSession(action.sessionId, action.status, action.gender || null, action.mode === "rate" ? "rate" : "style"), shop: emptyShop() };
     case "session/cleared":
       return { ...state, session: null, shop: emptyShop() };
     case "session/snapshot":
@@ -324,6 +331,8 @@ function applyEvent(state, event, now) {
       return { ...state, lastGestureAt: now };
     case "presence":
       return { ...state, present: Boolean(event.present) };
+    case "product.photo":
+      return /^[a-f0-9]{24}$/.test(event.key || "") ? { ...state, photos: { ...state.photos, [event.key]: event.failed ? "failed" : "ready" } } : state;
     default:
       if (!event.type?.startsWith("session.")) return state;
       // Another visitor's session (a stale tab, an operator's console): not ours.

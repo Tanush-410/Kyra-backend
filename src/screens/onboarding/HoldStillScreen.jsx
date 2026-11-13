@@ -14,10 +14,12 @@ import { intentFromLocation, intentQuery, visitIntent } from "../../lib/visitInt
 import { countdown, phaseOf } from "../../state/sessionReducer.js";
 import { CONSENT } from "./ConsentScreen.jsx";
 
-import { SKIN_TONE_PATH } from "../../lib/shopRoutes.js";
+import { RATE_PATH, SKIN_TONE_PATH } from "../../lib/shopRoutes.js";
 
 // After the photo: the Skin Tone Analysis (then Fit Analysis, then the look).
 export const RESULT = SKIN_TONE_PATH;
+/** After the photo: the analysis, or for "Rate my outfit" the rating. */
+const nextAfterPhoto = (session) => (session?.mode === "rate" ? RATE_PATH : RESULT);
 
 const asset = (name) => `${import.meta.env.BASE_URL}assets/brand/${name}`;
 
@@ -113,15 +115,15 @@ function BackendHoldStill() {
   useEffect(() => {
     if (phase !== "results" || capturedAt != null) return;
     // Reopened after the photo was taken (no capture on this screen): go straight on.
-    if (!sawCapture.current) navigate(RESULT, { replace: true });
+    if (!sawCapture.current) navigate(nextAfterPhoto(state.session), { replace: true });
     else setCapturedAt(Date.now());
   }, [phase, capturedAt, navigate]);
 
   const now = useNow(ready || capturedAt != null);
   const stage = captureStage(capturedAt, now);
   useEffect(() => {
-    if (stage === "done") navigate(RESULT, { replace: true });
-  }, [stage, navigate]);
+    if (stage === "done") navigate(nextAfterPhoto(state.session), { replace: true });
+  }, [stage, navigate]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Opened directly, or the visit ended (the visitor walked away): ask again, with the same choices.
   if (phase === "none" || phase === "ended") {
@@ -179,7 +181,7 @@ function BrowserHoldStill() {
   const now = useNow(capturedAt != null);
   const stage = captureStage(capturedAt, now);
   useEffect(() => {
-    if (stage === "done" && uploaded) navigate(RESULT, { replace: true });
+    if (stage === "done" && uploaded) navigate(intentRef.current?.category === "rate" ? RATE_PATH : RESULT, { replace: true });
   }, [stage, uploaded, navigate]);
 
   if (!consented) return <Navigate to={`${CONSENT}${intentQuery(raw)}`} state={{ id: raw.category, text: raw.q }} replace />;

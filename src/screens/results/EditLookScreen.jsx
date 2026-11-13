@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import AppHeader from "../../components/AppHeader.jsx";
 import KyraLoader from "../../components/KyraLoader.jsx";
@@ -138,9 +138,18 @@ export default function EditLookScreen() {
   const session = useResultsSession();
   const { state, redesigning, redesign } = useKyraSession();
   const { toast, showToast } = useToast();
-  const [step, setStep] = useState("piece");
-  const [piece, setPiece] = useState(null);
+  // A product card can open this for one piece (state.piece), and "Find something different" goes
+  // straight to the redesign (state.intent "different").
+  const startPiece = location.state?.piece || null;
+  const [step, setStep] = useState(startPiece ? "intent" : "piece");
+  const [piece, setPiece] = useState(startPiece);
   const [intent, setIntent] = useState(null);
+  const auto = useRef(false);
+  useEffect(() => {
+    if (auto.current || !session || !startPiece || location.state?.intent !== "different") return;
+    auto.current = true;
+    submit("different"); // eslint-disable-line no-use-before-define
+  }); // eslint-disable-line react-hooks/exhaustive-deps
   if (!session) return null;
 
   // The outfit being edited: the one Suggestions opened this for, else the look on screen.
