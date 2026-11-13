@@ -30,10 +30,13 @@ export function usePinchDrop(ref, onDrop) {
   const cb = useRef(onDrop);
   cb.current = onDrop;
   useEffect(() => {
-    const el = ref.current;
-    if (!el) return undefined;
-    const listener = (e) => cb.current?.(e.detail?.target);
-    el.addEventListener("pinchdrop", listener);
-    return () => el.removeEventListener("pinchdrop", listener);
+    // Listened for at the document (the event bubbles), so the element may appear after this screen opens:
+    // the try-on picture arrives when its render is done.
+    const listener = (e) => {
+      const el = ref.current;
+      if (el && e.target instanceof Node && el.contains(e.target)) cb.current?.(e.detail?.target);
+    };
+    document.addEventListener("pinchdrop", listener);
+    return () => document.removeEventListener("pinchdrop", listener);
   }, [ref]);
 }

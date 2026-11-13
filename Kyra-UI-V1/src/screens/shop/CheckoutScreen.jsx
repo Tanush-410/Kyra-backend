@@ -2,7 +2,8 @@ import { useNavigate } from "react-router-dom";
 import ShopHeader from "../../components/ShopHeader.jsx";
 import { useSessionGuard } from "../../hooks/useSessionGuard.js";
 import OptionCard from "../../components/OptionCard.jsx";
-import { BYE_PATH, SHOP_PATH } from "../../lib/shopRoutes.js";
+import { SHOP_PATH } from "../../lib/shopRoutes.js";
+import { KYRA_TAG_PATH } from "../../lib/nfcRoutes.js";
 import "./shop.css";
 import "./figma-shop.css";
 
@@ -10,8 +11,8 @@ import "./figma-shop.css";
 export default function CheckoutScreen() {
   const navigate = useNavigate();
   const session = useSessionGuard();
-  // Bye ends the visit (lib/shopRoutes.js BYE_PATH).
-  const finish = () => navigate(BYE_PATH, { replace: true });
+  // "Would you like a Kyra Tag?", then Bye, which ends the visit (lib/nfcRoutes.js).
+  const finish = () => navigate(KYRA_TAG_PATH, { replace: true });
 
   if (!session) return <div className="screen" />;
 

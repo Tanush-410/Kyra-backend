@@ -224,7 +224,8 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
 import { useCamera } from "./CameraContext.jsx";
-import { createSwipeDetector, holdStep, mainHand, palmPoint, steadyForPinch } from "../lib/handGestures.js";
+import { createSwipeDetector, dragStep, dropTargetAt, dropZonesFor, holdStep, mainHand, palmPoint, RELEASE_FRAMES, steadyForPinch } from "../lib/handGestures.js";
+import { PINCH_EMPTY_EVENT } from "../lib/pinchBack.js";
 
 // Files served from /public (see setup steps).
 //const WASM_URL = "/mediapipe/wasm";
@@ -268,17 +269,34 @@ function targetAt(x, y, selector = CLICKABLE) {
   return best;
 }
 
-/** Real .click() on the clickable element nearest the pinch point (within tolerance). */
+/**
+ * Real .click() on the clickable element nearest the pinch point (within tolerance). Away from every button:
+ *  - inside an element marked data-pinch-tap, it taps whatever is under it, like a finger (the open change
+ *    card in Rate and changes: a pinch off the card closes it);
+ *  - anywhere else it means "back": PinchBack (components/PinchBack.jsx) goes back one screen where that's
+ *    safe. A stray pinch never taps a screen that moves on when tapped anywhere (the start screen).
+ */
 function clickAt(x, y) {
   const best = targetAt(x, y);
   if (best) {
     console.log("[hand] pinch at", Math.round(x), Math.round(y), "-> clicking", best.textContent?.trim() || best.tagName);
     best.click();
-  } else {
-    console.log("[hand] pinch at", Math.round(x), Math.round(y), "-> no button within", CLICK_TOLERANCE, "px");
+    return true;
   }
-  return !!best;
+  const under = document.elementFromPoint(x, y);
+  if (under && under.closest("[data-pinch-tap]") && !under.closest("[inert]")) {
+    console.log("[hand] pinch at", Math.round(x), Math.round(y), "-> no button within", CLICK_TOLERANCE, "px; tapping", under.className || under.tagName);
+    // A real click event (an SVG icon has no .click()); it bubbles like a finger's tap.
+    under.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, view: window }));
+    return true;
+  }
+  console.log("[hand] pinch at", Math.round(x), Math.round(y), "-> no button within", CLICK_TOLERANCE, "px: back");
+  window.dispatchEvent(new CustomEvent(PINCH_EMPTY_EVENT, { detail: { x, y } }));
+  return false;
 }
+
+// Development only: fire a pinch at a point without a camera (browser checks of pinch behaviour).
+if (import.meta.env.DEV && typeof window !== "undefined") window.__kyraPinchAt = clickAt;
 
 async function assertServed(url) {
   let res;
@@ -367,28 +385,166 @@ export function HandTrackingProvider({ children, mirror }) {
     let lastSwipeAt = -Infinity;
     let history = []; // recent { t, x, y } of the pointer, for "is the hand steady?"
     let hold = null; // { el, start }: pinch and hold on [data-pinch-hold] (the bin)
-    let drag = null; // { el, x, y }: pinch and drag from [data-pinch-drag] (shop demo)
-    const endHold = (fired) => {
-      if (!hold) return;
-      hold.el.removeAttribute("data-holding");
-      hold.el.style.removeProperty("--hold-progress");
-      if (fired) hold.el.dispatchEvent(new CustomEvent("pinchhold", { bubbles: true }));
-      hold = null;
+    let drag = null; // pinch and drag from [data-pinch-drag] (an outfit to the cart or bin): see beginDrag
+
+    // ---- Pick and drop ----
+    // Pinch on a [data-pinch-drag] element and move: a small copy follows the hand (the original fades,
+    // data-dragging), and big zones appear down the sides, the bin on the left, the cart on the right (lib/
+    // handGestures.js dropZonesFor). Letting go over one sends "pinchdrop" to the element and the copy flies
+    // into that icon; anywhere else, it floats back. Letting go needs the pinch open for a few frames, and the
+    // hand can leave the camera's view for a moment (dragStep). A pinch that doesn't move is a plain click.
+    const GHOST_MAX = { w: 220, h: 320 }; // screen pixels
+    const ZONE_TEXT = { bin: ["Discard", "Let go to discard"], cart: ["Add to cart", "Let go to add"] };
+    const iconFor = (type) => document.querySelector(`[data-drop="${type}"]:not(.drop-zone)`);
+
+    const makeGhost = (el) => {
+      const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return null;
+      const k = Math.min(1, GHOST_MAX.w / r.width, GHOST_MAX.h / r.height);
+      const imgs = el.querySelectorAll("img");
+      let node;
+      if (imgs.length === 1) {
+        node = document.createElement("img");
+        node.src = imgs[0].currentSrc || imgs[0].src;
+        node.alt = "";
+        Object.assign(node.style, { width: `${r.width * k}px`, height: `${r.height * k}px`, objectFit: "cover" });
+      } else {
+        node = el.cloneNode(true);
+        node.removeAttribute("data-pinch-drag");
+        node.removeAttribute("data-dragging");
+        node.removeAttribute("id");
+        Object.assign(node.style, { width: `${r.width}px`, height: `${r.height}px`, margin: "0", transformOrigin: "top left" });
+      }
+      node.className = `${node.className || ""} drag-ghost`.trim();
+      node.setAttribute("aria-hidden", "true");
+      node.inert = true;
+      document.body.appendChild(node);
+      return { node, w: r.width * k, h: r.height * k, scale: imgs.length === 1 ? 1 : k };
     };
-    const endDrag = (x, y) => {
+    const placeGhost = (ghost, x, y, extraScale = 1) => {
+      ghost.node.style.transform = `translate(${x - ghost.w / 2}px, ${y - ghost.h / 2}px) scale(${ghost.scale * extraScale})`;
+    };
+    // The end of a drag: the copy flies to (x, y) shrinking and fading, then goes.
+    const flyGhost = (ghost, x, y, extraScale) => {
+      if (!ghost) return;
+      ghost.node.classList.add("drag-ghost--flying");
+      requestAnimationFrame(() => {
+        placeGhost(ghost, x, y, extraScale);
+        ghost.node.style.opacity = "0";
+      });
+      setTimeout(() => ghost.node.remove(), 450);
+    };
+
+    const makeZones = () => {
+      const area = document.querySelector(".screen")?.getBoundingClientRect();
+      if (!area) return [];
+      const types = [...new Set([...document.querySelectorAll("[data-drop]")].map((d) => d.dataset.drop))];
+      const scale = area.width / 1080; // the kiosk frame's scale (ScreenFrame): text sized like the screens'
+      return dropZonesFor(types, area).map((zone) => {
+        const node = document.createElement("div");
+        node.className = `drop-zone drop-zone--${zone.type}`;
+        node.dataset.drop = zone.type;
+        node.setAttribute("aria-hidden", "true");
+        node.style.setProperty("--zone-scale", String(scale));
+        Object.assign(node.style, {
+          left: `${zone.rect.left}px`,
+          top: `${zone.rect.top}px`,
+          width: `${zone.rect.right - zone.rect.left}px`,
+          height: `${zone.rect.bottom - zone.rect.top}px`,
+        });
+        const icon = iconFor(zone.type)?.querySelector("img");
+        if (icon) {
+          const img = document.createElement("img");
+          img.src = icon.currentSrc || icon.src;
+          img.alt = "";
+          node.appendChild(img);
+        }
+        const label = document.createElement("span");
+        label.textContent = ZONE_TEXT[zone.type]?.[0] || zone.type;
+        node.appendChild(label);
+        document.body.appendChild(node);
+        requestAnimationFrame(() => node.classList.add("drop-zone--shown"));
+        return { ...zone, node, label };
+      });
+    };
+
+    const beginDrag = (el, x, y) => {
+      drag = { el, x, y, ghost: null, zones: [], over: null, openFrames: 0, lostAt: null };
+      el.setAttribute("data-dragging", "");
+    };
+    // The hand moved, still pinched.
+    const updateDrag = (x, y) => {
+      if (!drag.ghost && Math.hypot(x - drag.x, y - drag.y) >= DRAG_PX) {
+        drag.ghost = makeGhost(drag.el);
+        drag.zones = makeZones();
+      }
+      if (!drag.ghost) return;
+      const icons = [...document.querySelectorAll("[data-drop]:not(.drop-zone)")].map((d) => ({ type: d.dataset.drop, rect: d.getBoundingClientRect() }));
+      const over = dropTargetAt(x, y, drag.zones, icons, CLICK_TOLERANCE);
+      drag.over = over; // what a let-go drops on: decided while still pinched (opening the fingers drifts)
+      for (const zone of drag.zones) {
+        const on = zone.type === over;
+        zone.node.toggleAttribute("data-over", on);
+        zone.label.textContent = ZONE_TEXT[zone.type]?.[on ? 1 : 0] || zone.type;
+      }
+      document.querySelectorAll("[data-drop]:not(.drop-zone)").forEach((d) => d.toggleAttribute("data-drop-hover", d.dataset.drop === over));
+      placeGhost(drag.ghost, x, y, over ? 0.6 : 1); // shrinks over a target: "let go here"
+    };
+    // how: "drop" (let go) or "cancel" (the hand left).
+    const finishDrag = (how) => {
       if (!drag) return;
-      const { el } = drag;
+      const { el, ghost, zones, over } = drag;
+      drag = null;
       el.removeAttribute("data-dragging");
       document.querySelectorAll("[data-drop-hover]").forEach((d) => d.removeAttribute("data-drop-hover"));
-      if (x != null) {
-        if (Math.hypot(x - drag.x, y - drag.y) < DRAG_PX) el.click(); // it didn't move: a plain pinch
-        else {
-          const drop = targetAt(x, y, "[data-drop]");
-          if (drop) el.dispatchEvent(new CustomEvent("pinchdrop", { bubbles: true, detail: { target: drop.dataset.drop } }));
-        }
+      for (const zone of zones) {
+        zone.node.classList.remove("drop-zone--shown");
+        setTimeout(() => zone.node.remove(), 250);
       }
-      drag = null;
+      if (!ghost) {
+        if (how === "drop") el.click(); // it never moved: a plain pinch
+        return;
+      }
+      if (how === "drop" && over) {
+        const icon = iconFor(over)?.getBoundingClientRect();
+        if (icon) flyGhost(ghost, icon.left + icon.width / 2, icon.top + icon.height / 2, 0.12);
+        else flyGhost(ghost, ...ghostCentre(ghost), 0.2);
+        console.log("[hand] dropped on", over);
+        el.dispatchEvent(new CustomEvent("pinchdrop", { bubbles: true, detail: { target: over } }));
+      } else {
+        const home = el.getBoundingClientRect();
+        flyGhost(ghost, home.left + home.width / 2, home.top + home.height / 2, 1.4); // back where it came from
+        console.log("[hand] drag", how === "drop" ? "let go away from the cart and bin" : "cancelled: hand lost");
+      }
     };
+    const ghostCentre = (ghost) => {
+      const r = ghost.node.getBoundingClientRect();
+      return [r.left + r.width / 2, r.top + r.height / 2];
+    };
+
+    // Development only: a pinch-drag from one point to another without a camera (browser checks of pick and
+    // drop). The same steps as a hand: pick up, move pinched, let go (open for a few frames).
+    if (import.meta.env.DEV) {
+      window.__kyraDrag = async (x0, y0, x1, y1, { steps = 12, holdOpenFrames = RELEASE_FRAMES } = {}) => {
+        const target = targetAt(x0, y0);
+        if (!target?.hasAttribute("data-pinch-drag")) return "nothing draggable there";
+        beginDrag(target, x0, y0);
+        let ghostSeen = false;
+        let zonesSeen = 0;
+        for (let i = 1; i <= steps; i += 1) {
+          updateDrag(x0 + ((x1 - x0) * i) / steps, y0 + ((y1 - y0) * i) / steps);
+          ghostSeen ||= Boolean(drag.ghost?.node.isConnected);
+          zonesSeen = Math.max(zonesSeen, drag.zones.length);
+          await new Promise((r) => setTimeout(r, 25));
+        }
+        const over = drag.over;
+        for (let i = 0; i < holdOpenFrames; i += 1) {
+          if (dragStep(drag, { hand: true, pinching: false, now: performance.now() }) === "drop") finishDrag("drop");
+          if (!drag) break;
+        }
+        return `${ghostSeen ? "copy followed" : "no copy"}, ${zonesSeen} zones, over ${over || "nothing"}, ${drag ? "still dragging" : "let go"}`;
+      };
+    }
 
     const say = (s) => {
       if (s !== lastStatus) {
@@ -485,7 +641,8 @@ export function HandTrackingProvider({ children, mirror }) {
           frameHandlers.current.forEach((fn) => fn({ landmarks: lm }));
 
           // Swipes, only while a screen listens (Suggestions).
-          if (swipeHandlers.current.size) {
+          // Not while dragging or holding: a sideways drag to the cart isn't "next outfit".
+          if (swipeHandlers.current.size && !drag && !hold) {
             const direction = swipe.feed({ t: now, ...palmPoint(lm, { mirror: flip }) });
             if (direction) {
               lastSwipeAt = now;
@@ -496,7 +653,7 @@ export function HandTrackingProvider({ children, mirror }) {
           }
           history = [...history.filter((h) => now - h.t <= 300), { t: now, x: px, y: py }];
 
-          if (pinching && !wasPinching) {
+          if (pinching && !wasPinching && !drag) {
             // A pinch while the hand sweeps (a swipe) presses nothing.
             const ignored = !steadyForPinch(history, now, { lastSwipeAt });
             const target = ignored ? null : targetAt(sx, sy);
@@ -506,8 +663,7 @@ export function HandTrackingProvider({ children, mirror }) {
               hold = { el: target, start: now }; // the bin: hold to confirm
               target.setAttribute("data-holding", "");
             } else if (target?.hasAttribute("data-pinch-drag")) {
-              drag = { el: target, x: sx, y: sy }; // shop demo: maybe a drag to the cart or bin
-              target.setAttribute("data-dragging", "");
+              beginDrag(target, sx, sy); // maybe a drag to the cart or bin
             } else {
               handlers.current.forEach((fn) => fn({ x: sx, y: sy }));
               clickAt(sx, sy); // a pinch is a click: fires the element's normal onClick
@@ -520,14 +676,15 @@ export function HandTrackingProvider({ children, mirror }) {
             else hold.el.style.setProperty("--hold-progress", step.progress.toFixed(3));
           }
           if (drag) {
-            document.querySelectorAll("[data-drop]").forEach((d) => d.toggleAttribute("data-drop-hover", near(d, sx, sy)));
-            if (!pinching) endDrag(sx, sy);
+            if (pinching) updateDrag(sx, sy);
+            if (dragStep(drag, { hand: true, pinching, now }) === "drop") finishDrag("drop");
           }
         } else {
           pinching = false;
           sx = sy = null;
           endHold(false);
-          endDrag(null, null);
+          // A drag survives the hand leaving the camera's view for a moment.
+          if (drag && dragStep(drag, { hand: false, pinching: false, now: performance.now() }) === "cancel") finishDrag("cancel");
           swipe.feed(null);
           history = [];
           hideCursor();

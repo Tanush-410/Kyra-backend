@@ -28,6 +28,7 @@ import mirrorRoutes from './routes/mirror.js';
 import privacyRoutes from './routes/privacy.js';
 import productPhotoRoutes from './routes/product-photos.js';
 import contextRoutes from './routes/context.js';
+import nfcRoutes from './routes/nfc.js';
 import { createProductPhotos } from './lib/productPhotos.js';
 import reviewRoutes from './routes/review.js';
 import styleMeRoutes from './routes/style-me.js';
@@ -153,6 +154,10 @@ export async function buildApp(config, { logger = true, fetchImpl, sidecarFetch,
     if (!request.url.startsWith('/api/') || request.method === 'OPTIONS') {
       return;
     }
+    // The Kyra Tag writer (Raspberry Pi) has its own device token, checked by routes/nfc.js.
+    if (request.url.startsWith('/api/v2/nfc/device/')) {
+      return;
+    }
     const token = providedToken(request);
     const isOperator = Boolean(config.operatorToken) && sameToken(token, config.operatorToken);
     request.isOperator = isOperator;
@@ -249,6 +254,10 @@ export async function buildApp(config, { logger = true, fetchImpl, sidecarFetch,
   await app.register(mirrorRoutes, deps);
   await app.register(privacyRoutes, deps);
   await app.register(productPhotoRoutes, deps);
+  await app.register(nfcRoutes, deps);
+  if (config.nfc.enabled && !config.nfc.deviceToken) {
+    app.log.warn('NFC_TAGS is on but NFC_DEVICE_TOKEN is empty: the tag writer can\'t connect');
+  }
   await app.register(contextRoutes, { ...deps, ...(weatherFetch ? { fetchWeather: weatherFetch } : {}) });
 
   const sweepDisk = () => {

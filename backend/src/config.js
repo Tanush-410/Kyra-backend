@@ -206,6 +206,15 @@ export function loadConfig(env = process.env) {
 
     // Product photos: a studio photo of each designed piece (no person in it), for the kiosk's Suggestions
     // and cart. Made the first time a piece is shown, then kept and reused for the same piece.
+    // Kyra Tags (nfc/README.md): a short link per finished visit, written to an NFC tag by a Raspberry Pi.
+    nfc: {
+      enabled: booleanFrom(env.NFC_TAGS, false),
+      deviceToken: env.NFC_DEVICE_TOKEN || '', // the tag writer's credential (not the kiosk's)
+      publicBaseUrl: env.NFC_PUBLIC_BASE_URL || env.PUBLIC_BASE_URL || '', // e.g. https://kyra.style
+      tokenLength: Math.min(32, Math.max(8, numberFrom(env.NFC_TOKEN_LENGTH, 10))),
+      keepHours: numberFrom(env.NFC_KEEP_HOURS, 720), // a tagged visit's Canvas is kept 30 days
+      jobTimeoutMs: Math.max(30, numberFrom(env.NFC_JOB_TIMEOUT_S, 180)) * 1000
+    },
     productPhotos: booleanFrom(env.PRODUCT_PHOTOS, true),
     // The venue's location for the weather shown on Rate and changes (Open-Meteo, no key, no visitor data).
     // Empty: no weather.

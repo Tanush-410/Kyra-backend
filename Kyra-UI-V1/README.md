@@ -128,9 +128,9 @@ Open it once with the token, `http://localhost:5173/Kyra-UI-V1/#token=<apiToken>
 - **Your results** (the profile icon, `screens/shop/AccountScreen`, Figma "Account"): a QR to a temporary page
   of the visit's undertone, colours, fit notes and any look taken home (backend `POST …/results`). Before the
   photo, it says the results come after it.
-- **Shop demo** (`VITE_SHOP_DEMO=true`, off by default): the friend's products, cart, filter, checkout and
-  piece edits, and the cart and filter buttons in the header. Their prices, sizes, brands and stock are
-  placeholders (`src/data/shopPlaceholders.js`), so real visitors never see them unless it is turned on.
+- **Shop** (on by default; `VITE_SHOP_DEMO=false` turns it off): the friend's products, cart, filter, checkout
+  and piece edits. The cart is in the header on every screen from the photo onwards (`hooks/useCartTool.js`).
+  Prices, sizes, brands and stock are placeholders (`src/data/shopPlaceholders.js`) until a real feed exists.
   The cart, checkout and filter follow the Figma Cart and Filter frames (`screens/shop/figma-shop.css`); values
   marked EXPORT-2 there are guesses until the team's export-2 arrives.
 - **Design checks:** `npm run dev`, then `/Kyra-UI-V1/dev/<name>` shows a piece or screen on its own (header,

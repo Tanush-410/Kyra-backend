@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { kyraApi } from "../api/kyraClient.js";
 import { useKyraSession } from "../context/KyraSessionContext.jsx";
+import { KYRA_TAG_PATH } from "../lib/nfcRoutes.js";
 import { BYE_PATH } from "../lib/shopRoutes.js";
 import { stillHereState, stillHereText } from "../lib/stillHere.js";
 import { phaseOf } from "../state/sessionReducer.js";
@@ -55,7 +56,11 @@ export default function StillHereGuard({ children }) {
     return () => clearInterval(timer);
   }, [open]);
 
-  const view = stillHereState({ session, phase, lastInteraction, now });
+  // On "Would you like a Kyra Tag?" the visitor is holding a tag to the reader, not tapping: no idle
+  // countdown there (stepping away still counts).
+  const onTagScreen = useLocation().pathname === KYRA_TAG_PATH;
+  const shown = stillHereState({ session, phase, lastInteraction, now });
+  const view = onTagScreen && shown?.reason === "idle" ? null : shown;
 
   // Bye ends the visit when it opens (ending it here first would let the screen underneath go home).
   const deleteSession = useCallback(() => {

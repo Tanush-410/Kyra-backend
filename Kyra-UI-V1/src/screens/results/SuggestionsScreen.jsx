@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { SHOP_DEMO } from "../../config.js";
 import { useHandSwipe, usePinchDrop } from "../../hooks/useHandSwipe.js";
 import { useProductPhotos } from "../../hooks/useProductPhotos.js";
+import { addLookToCart } from "../../lib/lookCart.js";
 import { flatLay } from "../../lib/flatLay.js";
-import { withLook } from "../../components/FigmaProductCard.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import CameraFeed from "../../components/CameraFeed.jsx";
 import Dialog from "../../components/Dialog.jsx";
@@ -15,7 +15,7 @@ import { useResultsSession } from "../../hooks/useResultsSession.js";
 import { useToast } from "../../hooks/useToast.js";
 import { allOutfits, outfitCount, setStart } from "../../lib/outfits.js";
 import { BYE_PATH, EDIT_LOOK_PATH, LOOK_PATH } from "../../lib/shopRoutes.js";
-import { editsForLook, isDesigning } from "../../state/sessionReducer.js";
+import { isDesigning } from "../../state/sessionReducer.js";
 import "./SuggestionsScreen.css";
 
 const icon = (name) => `${import.meta.env.BASE_URL}assets/icons/${name}`;
@@ -243,13 +243,8 @@ export default function SuggestionsScreen() {
   usePinchDrop(outfitRef, async (target) => {
     if (!SHOP_DEMO || !option) return;
     if (target === "cart") {
-      const { firstAvailableSize, productsForLook } = await import("../../data/shopPlaceholders.js");
-      const key = `${option.round}.${option.option}`;
-      for (const product of productsForLook(option, key, editsForLook(state.shop, key))) {
-        const at = product.replacesProductId ? -1 : Number(String(product.id).split(":").pop());
-        if (product.stock) addToCart(withLook(product, option, at >= 0 ? photoFor(at) : null), { size: firstAvailableSize(product), qty: 1 });
-      }
-      showToast("Outfit added to cart");
+      const added = await addLookToCart({ option, shop: state.shop, addToCart, photoFor });
+      showToast(added ? "Outfit added to cart" : "These pieces are out of stock");
     } else if (target === "bin") {
       showToast("Item discarded");
       step(1);

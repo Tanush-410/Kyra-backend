@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { kyraApi } from "../../api/kyraClient.js";
 import KyraLoader from "../../components/KyraLoader.jsx";
 import AppHeader from "../../components/AppHeader.jsx";
+import { useCartTool } from "../../hooks/useCartTool.js";
 import { useKyraSession } from "../../context/KyraSessionContext.jsx";
 import { phaseOf } from "../../state/sessionReducer.js";
 import "./AccountScreen.css";
@@ -61,6 +62,8 @@ export default function AccountScreen() {
     // a new page when a look is taken home (session.kept changes)
   }, [ready, session?.id, session?.kept?.url]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const cart = useCartTool();
+  const afterPhoto = phase === "results"; // the cart, from the photo onwards
   let view;
   if (!session || phase === "none" || phase === "ended") view = { kind: "message", text: "Your skin tone and fit results appear here once Kyra has taken your photo." };
   else if (!ready) view = { kind: "message", text: "Kyra is still working out your results. Try again in a moment." };
@@ -68,5 +71,5 @@ export default function AccountScreen() {
   else if (qr) view = { kind: "ready", qr };
   else view = { kind: "loading" };
 
-  return <AccountView view={view} onBack={() => navigate(-1)} header={<AppHeader onProfileClick={() => {}} />} />;
+  return <AccountView view={view} onBack={() => navigate(-1)} header={<AppHeader onProfileClick={() => {}} {...(afterPhoto ? cart : {})} />} />;
 }

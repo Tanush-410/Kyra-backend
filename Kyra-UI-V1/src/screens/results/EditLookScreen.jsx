@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import AppHeader from "../../components/AppHeader.jsx";
+import { useCartTool } from "../../hooks/useCartTool.js";
 import KyraLoader from "../../components/KyraLoader.jsx";
 import OptionCard from "../../components/OptionCard.jsx";
 import Toast from "../../components/Toast.jsx";
@@ -80,9 +81,10 @@ function Presets({ onPick, disabled = false }) {
  */
 export function EditView({ step, gender, outfit, busy, onPiece, onIntent, onListen, onWords, onBack }) {
   const pieces = editPieces(gender);
+  const cart = useCartTool();
   return (
     <div className="screen edit">
-      <AppHeader />
+      <AppHeader {...cart} />
       {step === "working" && (
         <>
           <div className="screen__content">

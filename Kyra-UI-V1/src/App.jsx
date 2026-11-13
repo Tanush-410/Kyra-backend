@@ -20,7 +20,10 @@ import TryOnScreen from "./screens/results/TryOnScreen.jsx";
 import EditLookScreen from "./screens/results/EditLookScreen.jsx";
 import RateLookScreen from "./screens/results/RateLookScreen.jsx";
 import ByeScreen from "./screens/results/ByeScreen.jsx";
+import KyraTagScreen from "./screens/nfc/KyraTagScreen.jsx";
+import { KYRA_TAG_PATH } from "./lib/nfcRoutes.js";
 import StillHereGuard from "./components/StillHereGuard.jsx";
+import PinchBack from "./components/PinchBack.jsx";
 import MaleSomethingSpecificScreen from "./screens/onboarding/MaleSomethingSpecificScreen.jsx";
 import ShoppingForScreen from "./screens/onboarding/ShoppingForScreen.jsx";
 import SpecificScreen from "./screens/onboarding/SpecificScreen.jsx";
@@ -69,6 +72,7 @@ export default function App() {
         <CameraProvider>
           <HandTrackingProvider>
             <ScreenFrame>
+              <PinchBack />
               <StillHereGuard>
               <Routes>
                 <Route path="/" element={<SplashScreen />} />
@@ -96,6 +100,7 @@ export default function App() {
                 <Route path={EDIT_LOOK_PATH} element={<EditLookScreen />} />
                 <Route path={RATE_PATH} element={<RateLookScreen />} />
                 <Route path={BYE_PATH} element={<ByeScreen />} />
+                <Route path={KYRA_TAG_PATH} element={<KyraTagScreen />} />
                 <Route path="/account" element={<AccountScreen />} />
                 {SHOP_DEMO ? (
                   <>

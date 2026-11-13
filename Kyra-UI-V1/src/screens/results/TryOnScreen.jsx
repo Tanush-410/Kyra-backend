@@ -10,8 +10,12 @@ import ShopHeader from "../../components/ShopHeader.jsx";
 import Toast from "../../components/Toast.jsx";
 import { SHOP_DEMO } from "../../config.js";
 import { useKyraSession } from "../../context/KyraSessionContext.jsx";
+import { usePinchDrop } from "../../hooks/useHandSwipe.js";
+import { useProductPhotos } from "../../hooks/useProductPhotos.js";
 import { useToast } from "../../hooks/useToast.js";
+import { addLookToCart } from "../../lib/lookCart.js";
 import { BYE_PATH, EDIT_PATH, SHOP_PATH, SUGGESTIONS_PATH } from "../../lib/shopRoutes.js";
+import { KYRA_TAG_PATH } from "../../lib/nfcRoutes.js";
 import { nextOptionOf, tryOnState } from "../../lib/tryOnView.js";
 import { keyOf, phaseOf } from "../../state/sessionReducer.js";
 import { OutfitItems } from "./SuggestionsScreen.jsx";
@@ -31,14 +35,23 @@ const PRAISE = [
  * "Please try again"), always with a way on: try again, another look, or back to the suggestions.
  *
  * view: tryOnState(session). actions: { onMenu, onRetry, onAnother, onSuggestions }.
+ * lookRef, draggable: the picture can be pinched and dragged onto the cart (its pieces, with prices) or the
+ * bin (not for me: the next look). A plain pinch on it still opens the options.
  */
-export function TryOnView({ view, actions, header, background = null, preview = null }) {
+export function TryOnView({ view, actions, header, background = null, preview = null, lookRef = null, draggable = false }) {
   const { onMenu, onRetry, onAnother, onSuggestions } = actions;
   if (view.kind === "ready") {
     return (
       <div className="screen tryon">
         {header}
-        <button type="button" className="tryon__look" onClick={onMenu} aria-label={`You in ${view.option.title}: options`}>
+        <button
+          type="button"
+          ref={lookRef}
+          className="tryon__look"
+          onClick={onMenu}
+          aria-label={`You in ${view.option.title}: options`}
+          data-pinch-drag={draggable ? "" : undefined}
+        >
           <img src={view.render.imageDataUrl} alt="" />
         </button>
         <button type="button" className="outline-button tryon__options" onClick={onMenu}>
@@ -89,7 +102,7 @@ export function TryOnView({ view, actions, header, background = null, preview = 
 
 export default function TryOnScreen() {
   const navigate = useNavigate();
-  const { state, like, showAnother, keep, tryOn, saveOutfit } = useKyraSession();
+  const { state, like, showAnother, keep, tryOn, saveOutfit, addToCart } = useKyraSession();
   const { toast, showToast } = useToast();
   const session = state.session;
   const phase = phaseOf(session);
@@ -97,6 +110,23 @@ export default function TryOnScreen() {
   const [exitOpen, setExitOpen] = useState(false);
   const [closedQr, setClosedQr] = useState(null);
   const [praise, setPraise] = useState(null); // index into PRAISE while it shows
+  const lookRef = useRef(null);
+  const lookOption = session && phase === "results" ? tryOnState(session).option : null;
+  const photoFor = useProductPhotos(lookOption);
+
+  // Pick and drop (pinch and drag the picture): onto the cart, the look's pieces go in with their prices;
+  // onto the bin, it's "not for me" (a thumbs-down that teaches the mirror) and the next look comes up.
+  usePinchDrop(lookRef, async (target) => {
+    if (!SHOP_DEMO || !lookOption) return;
+    if (target === "cart") {
+      const added = await addLookToCart({ option: lookOption, shop: state.shop, addToCart, photoFor });
+      showToast(added ? "Outfit added to cart" : "These pieces are out of stock");
+    } else if (target === "bin") {
+      showToast("Look discarded");
+      if (nextOptionOf(session)) await showAnother();
+      else navigate(SUGGESTIONS_PATH);
+    }
+  });
 
   // The visit ended (stepped away, timed out, someone else): "Bye", then the start.
   useEffect(() => {
@@ -123,8 +153,9 @@ export default function TryOnScreen() {
 
   if (!session) return null;
   // Bye ends the visit when it opens: ending it here first would send this screen home instead.
+  // "I'm done": "Would you like a Kyra Tag?" first (it goes on to Bye, which ends the visit).
   const finish = () => {
-    navigate(BYE_PATH, { replace: true }); // Bye ends the visit
+    navigate(KYRA_TAG_PATH, { replace: true });
   };
 
   if (phase === "ended") return null;
@@ -135,7 +166,8 @@ export default function TryOnScreen() {
         <div className="screen__content tryon__ended">
           <h1 className="title">Something went wrong</h1>
           <p className="screen__text">{session.error}</p>
-          <OptionCard label="Start again" width="w500" onClick={finish} />
+          {/* A failed visit: no Kyra Tag offer, straight to Bye. */}
+          <OptionCard label="Start again" width="w500" onClick={() => navigate(BYE_PATH, { replace: true })} />
         </div>
       </div>
     );
@@ -184,6 +216,8 @@ export default function TryOnScreen() {
           preview={view.render?.preview || null}
           background={<CameraFeed />}
           header={<ShopHeader onExit={() => setExitOpen(true)} onExitHold={finish} />}
+          lookRef={lookRef}
+          draggable={SHOP_DEMO}
           actions={{
             onMenu: () => setMenu(true),
             onRetry: () => tryOn(active.round, active.option),

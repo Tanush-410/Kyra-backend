@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 import AppHeader from "../components/AppHeader.jsx";
 import Dialog from "../components/Dialog.jsx";
@@ -15,6 +16,14 @@ import EndScreen from "../components/EndScreen.jsx";
 import { AccountView } from "../screens/shop/AccountScreen.jsx";
 import LookShortcut from "../components/LookShortcut.jsx";
 import { fitNotes } from "../lib/fitLevers.js";
+import { KyraTagView } from "../screens/nfc/KyraTagScreen.jsx";
+import { RateView } from "../screens/results/RateLookScreen.jsx";
+import { useRef } from "react";
+import ShopHeader from "../components/ShopHeader.jsx";
+import { useKyraSession } from "../context/KyraSessionContext.jsx";
+import { usePinchDrop } from "../hooks/useHandSwipe.js";
+import { addLookToCart } from "../lib/lookCart.js";
+import { cartSubtotal } from "../state/sessionReducer.js";
 
 const noop = () => {};
 
@@ -25,9 +34,54 @@ const noop = () => {};
  * hold, count, flash, allset, skin-tone, skin-analysing, fit, fit-guide, fit-outline, suggestions,
  * suggestions-2, suggestions-hint, suggestions-busy, tryon, tryon-loading, tryon-failed, tryon-text,
  * edit-piece, edit-piece-male, edit-intent, edit-voice, edit-working, edit-busy, great, perfect, bye,
- * still-here.
+ * still-here, rate, rate-open (a change open: tap or pinch outside it to close); Kyra Tags: tag-ask, tag-waiting, tag-writing, tag-done, tag-failed, tag-link.
  */
+const QR_SAMPLE = "data:image/svg+xml;utf8," + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><rect width="10" height="10" fill="#fff"/><path d="M1 1h3v3H1zM6 1h3v3H6zM1 6h3v3H1zM6 6h1v1H6zM8 8h1v1H8z"/></svg>');
+
+const SAMPLE_RATING = {
+  score: 6.5,
+  verdict: "A clean base: three small changes lift it.",
+  changes: [
+    { id: 1, category: "shoes", name: "White leather sneakers", points: 1, tags: ["Clean", "Casual"], why: ["Lightens the whole look."], hex: "#f2f0ea" },
+    { id: 2, category: "accessory", name: "A thin gold chain", points: 1, tags: ["Warm"], why: ["Picks up your warm undertone."], hex: "#c9a25a" },
+    { id: 3, category: "hair", name: "Hair tucked behind the ears", points: 0.5, tags: [], why: [], hex: "#3a2a20" },
+  ],
+};
+
+function RateOpenPreview() {
+  const [open, setOpen] = useState(1);
+  return <RateView now={new Date(2026, 10, 13, 15, 20)} weather={null} rating={SAMPLE_RATING} seen={new Set([1])} open={open} onOpen={setOpen} onClose={() => setOpen(null)} photoFor={() => null} final={false} onFinal={noop} onDone={noop} onKeep={noop} />;
+}
+
+/** Pick and drop on the try-on picture with the real drop handling (the cart is the real cart state). */
+function TryOnDragPreview() {
+  const lookRef = useRef(null);
+  const { state, addToCart } = useKyraSession();
+  const [last, setLast] = useState("");
+  usePinchDrop(lookRef, async (target) => {
+    if (target === "cart") {
+      const added = await addLookToCart({ option: { ...SAMPLE_OPTIONS[0], round: 1, option: 1 }, shop: state.shop, addToCart });
+      setLast(`cart: ${added} pieces`);
+    } else setLast(`bin`);
+  });
+  return (
+    <>
+      <TryOnView view={{ kind: "ready", option: SAMPLE_OPTIONS[0], render: { imageDataUrl: `${import.meta.env.BASE_URL}assets/brand/fit-silhouette.png` } }} actions={TRYON_ACTIONS} header={<ShopHeader onExit={noop} />} lookRef={lookRef} draggable />
+      <output id="drag-result" data-last={last} data-cart={state.shop.cart.length} data-total={cartSubtotal(state.shop)} data-prices={state.shop.cart.map((i) => i.price).join(",")} />
+    </>
+  );
+}
+
 const PREVIEWS = {
+  "tryon-drag": () => <TryOnDragPreview />,
+  "rate-open": () => <RateOpenPreview />,
+  rate: () => <RateView now={new Date(2026, 10, 13, 15, 20)} weather={{ temperatureC: 14, kind: "cloudy" }} rating={SAMPLE_RATING} seen={new Set()} open={null} onOpen={noop} onClose={noop} photoFor={() => null} final={false} onFinal={noop} onDone={noop} onKeep={noop} />,
+  "tag-ask": () => <KyraTagView stage="ask" />,
+  "tag-waiting": () => <KyraTagView stage="job" status="waiting_for_tag" />,
+  "tag-writing": () => <KyraTagView stage="job" status="writing" />,
+  "tag-done": () => <KyraTagView stage="job" status="succeeded" />,
+  "tag-failed": () => <KyraTagView stage="job" status="failed" error="tag_not_blank" />,
+  "tag-link": () => <KyraTagView stage="link" link={{ url: "https://kyra.style/s/Ab3dE5gH7k", qrDataUrl: QR_SAMPLE }} />,
   header: () => <AppHeader onBin={noop} onCart={noop} onFilter={noop} />,
   toast: () => (
     <>

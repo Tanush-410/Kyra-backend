@@ -68,6 +68,22 @@ export function createLookStore({ dir, keepHours, publicBaseUrl }) {
       return { ...meta, image: readFileSync(fileFor(token)) };
     },
 
+    /** A kept look's picture is still there (it may expire before a results page that lists it). */
+    hasLook(token) {
+      return TOKEN_PATTERN.test(String(token || '')) && existsSync(fileFor(token)) && existsSync(metaFor(token));
+    },
+
+    /** Keeps a results page until untilMs at least (Kyra Tags: a physical tag outlives a 24 h link). */
+    extendResults(token, untilMs) {
+      const results = this.getResults(token);
+      if (!results) return null;
+      if (Date.parse(results.expiresAt) < untilMs) {
+        results.expiresAt = new Date(untilMs).toISOString();
+        writeFileSync(resultsFor(token), JSON.stringify(results));
+      }
+      return results;
+    },
+
     delete(token) {
       rmSync(fileFor(token), { force: true });
       rmSync(metaFor(token), { force: true });

@@ -147,6 +147,7 @@ The React UI already implements the whole flow below. Its README has the details
 | **Choices** | The picks and voice text become the session's `style` and `gender` (`src/lib/visitIntent.js`): "tops-female" becomes gender female, "…built around a top". |
 | **State** | `src/context/KyraSessionContext.jsx` (one event stream, scoped to the session) and the pure reducer `src/state/sessionReducer.js` (unit-tested). |
 | **Develop** | `npm run dev` in `Kyra-UI-V1/` forwards `/api` to this backend. `VITE_CAMERA_SOURCE=browser` uses the browser's webcam and uploads the photo instead (a UI on another machine). |
+| **Kyra Tags** | Optional (`NFC_TAGS=true` and a Raspberry Pi tag writer online): "I'm done" first asks "Would you like a Kyra Tag?" and writes the visit's short link `…/s/{token}` to an NFC tag. All of it is in its own files; see [nfc/README.md](nfc/README.md). |
 | **Rebuild** | After changing the UI: `cd Kyra-UI-V1 && npm run build`, then reload. No backend restart needed. |
 
 The hold-still countdown matches the camera: `READY_HOLD_MS` (sidecar) now defaults to 3000, and `perception`

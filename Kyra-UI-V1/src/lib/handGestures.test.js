@@ -2,6 +2,9 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   createSwipeDetector,
+  dragStep,
+  dropTargetAt,
+  dropZonesFor,
   holdStep,
   HOLD_MS,
   mainHand,
@@ -138,4 +141,35 @@ test("pinch and hold: fills over 1.5 s, cancelled by opening the pinch or moving
   const done = holdStep(started, { pinching: true, inside: true, now: 1000 + HOLD_MS });
   assert.deepEqual([done.done, done.progress, done.state], [true, 1, null]);
   assert.equal(holdStep(null, { pinching: true, inside: true, now: 5000 }).done, false, "no hold running");
+});
+
+test("pick and drop: the bin and cart zones run down the sides, wide enough to reach sideways", () => {
+  const frame = { left: 100, top: 0, right: 640, bottom: 1920 };
+  const zones = dropZonesFor(["bin", "cart"], frame);
+  assert.deepEqual(zones.map((z) => z.type), ["bin", "cart"]);
+  assert.equal(dropTargetAt(150, 900, zones), "bin");
+  assert.equal(dropTargetAt(600, 900, zones), "cart");
+  assert.equal(dropTargetAt(370, 900, zones), null, "the middle: let go here to cancel");
+  assert.equal(dropTargetAt(600, 1800, zones), null, "below the zones");
+  assert.deepEqual(dropZonesFor(["cart"], frame).map((z) => z.type), ["cart"], "only the targets the screen has");
+  const icons = [{ type: "cart", rect: { left: 560, top: 40, right: 620, bottom: 100 } }];
+  assert.equal(dropTargetAt(590, 120, [], icons), "cart", "the header icon still works, with some slack");
+  assert.equal(dropTargetAt(590, 200, [], icons), null);
+});
+
+test("pick and drop: letting go needs a few open frames; a hand out of view for a moment doesn't cancel", () => {
+  const s = {};
+  assert.equal(dragStep(s, { hand: true, pinching: true, now: 0 }), "continue");
+  assert.equal(dragStep(s, { hand: true, pinching: false, now: 33 }), "continue", "one open frame: noise");
+  assert.equal(dragStep(s, { hand: true, pinching: true, now: 66 }), "continue");
+  assert.equal(dragStep(s, { hand: true, pinching: false, now: 99 }), "continue");
+  assert.equal(dragStep(s, { hand: true, pinching: false, now: 132 }), "continue");
+  assert.equal(dragStep(s, { hand: true, pinching: false, now: 165 }), "drop", "three open frames: let go");
+
+  const t = {};
+  assert.equal(dragStep(t, { hand: false, pinching: false, now: 1000 }), "continue");
+  assert.equal(dragStep(t, { hand: false, pinching: false, now: 1400 }), "continue", "lost for 0.4 s");
+  assert.equal(dragStep(t, { hand: true, pinching: true, now: 1430 }), "continue", "back: the drag goes on");
+  assert.equal(dragStep(t, { hand: false, pinching: false, now: 2000 }), "continue");
+  assert.equal(dragStep(t, { hand: false, pinching: false, now: 2600 }), "cancel", "gone over 0.5 s: cancelled");
 });

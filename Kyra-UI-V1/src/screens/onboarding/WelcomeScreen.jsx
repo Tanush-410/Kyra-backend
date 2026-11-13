@@ -49,7 +49,7 @@ export default function WelcomeScreen() {
     <div ref={screenRef} className="screen welcome">
       <AppHeader paddingX={32} />
       <div className="welcome__content">
-        <div ref={logoRef} style={{ display: "inline-block", cursor: "pointer" }} onClick={goNext}>
+        <div ref={logoRef} style={{ display: "inline-block", cursor: "pointer" }} onClick={goNext} role="button" tabIndex={0} aria-label="Start">
           <KyraLogo />
         </div>
 

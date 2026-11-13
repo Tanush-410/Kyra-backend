@@ -14,6 +14,10 @@
 .rate__weather { display: flex; align-items: center; gap: 12px; }
 .rate__weather svg { width: 60px; height: 42px; }
 .rate__star { position: absolute; top: 178px; left: 16px; width: 64px; height: 64px; opacity: 0.8; }
+/* The cart, under the date and weather (z-index: above the camera's shade) */
+.rate__cart { position: absolute; z-index: 3; top: 300px; right: 60px; width: 156.6px; height: 156.6px; padding: 0; border: 0; border-radius: 50%; background: none; cursor: pointer; }
+.rate__cart img { display: block; }
+.rate__cart[data-hand-hovered="true"], .rate__cart:hover { outline: 6px solid #e74787; outline-offset: 4px; }
 
 .rate__score { position: absolute; top: 330px; left: 0; width: 100%; margin: 0; text-align: center; font-weight: 700; font-size: 100px; line-height: 1.2; text-shadow: 0 4px 18px rgba(0, 0, 0, 0.45); }
 .rate__lede { position: absolute; top: 460px; left: 212px; width: 656px; margin: 0; text-align: center; font-size: 44px; line-height: 1.3; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); white-space: pre-line; }

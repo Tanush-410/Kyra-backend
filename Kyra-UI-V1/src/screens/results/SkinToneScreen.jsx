@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppHeader from "../../components/AppHeader.jsx";
+import { useCartTool } from "../../hooks/useCartTool.js";
 import CameraFeed from "../../components/CameraFeed.jsx";
 import Dialog from "../../components/Dialog.jsx";
 import KyraLoader from "../../components/KyraLoader.jsx";
@@ -31,12 +32,13 @@ const UNDERTONE_LINES = {
  * (the "Analysing" frame 2043:13245 is shown then).
  */
 export function SkinToneView({ view, depth, shortcut, onKnowMore, onKnowFit, background = null }) {
+  const cart = useCartTool();
   if (!view) {
     return (
       <div className="screen">
         {background}
         {background && <div className="results-backdrop" />}
-        <AppHeader />
+        <AppHeader {...cart} />
         <div className="screen__content screen__content--analysing skin__analysing">
           <h1 className="title">Building your profile.</h1>
           <p className="screen__text">We’re analysing your skin tone and fit to personalise your recommendations.</p>
@@ -52,7 +54,7 @@ export function SkinToneView({ view, depth, shortcut, onKnowMore, onKnowFit, bac
     <div className="screen">
       {background}
       {background && <div className="results-backdrop" />}
-      <AppHeader />
+      <AppHeader {...cart} />
       <div className="skin">
         <h1 className="title title--h4 skin__title">Skin Tone Analysis</h1>
         <section className="skin__card" aria-label="Your colours">

@@ -153,3 +153,52 @@ body { font-family: var(--font-family); }
 
 /* "Still here?" (StillHereGuard): over whatever screen the visit is on */
 .still-here { position: absolute; top: 0; left: 0; z-index: 50; }
+
+/* Pick and drop (HandTrackingContext): what's being dragged fades; a copy follows the hand; the bin and cart
+   become big zones down the sides of the screen. Sizes scale with the kiosk frame (--zone-scale). */
+[data-dragging] { opacity: 0.35; transition: opacity 0.15s ease; }
+.drag-ghost {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9998;
+  pointer-events: none;
+  opacity: 0.95;
+  border-radius: 18px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55);
+  outline: 3px solid rgba(255, 255, 255, 0.85);
+  transition: transform 0.08s linear;
+}
+.drag-ghost--flying { transition: transform 0.4s cubic-bezier(0.3, 0.7, 0.4, 1), opacity 0.4s ease; }
+.drop-zone {
+  position: fixed;
+  z-index: 9997;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* icon and words at the top: the dragged copy is usually lower down */
+  padding-top: calc(70px * var(--zone-scale, 1));
+  gap: calc(22px * var(--zone-scale, 1));
+  border: calc(6px * var(--zone-scale, 1)) dashed rgba(255, 255, 255, 0.55);
+  border-radius: calc(48px * var(--zone-scale, 1));
+  color: #fff;
+  font-weight: 600;
+  font-size: calc(46px * var(--zone-scale, 1));
+  line-height: 1.15;
+  text-align: center;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transform: scale(0.94);
+  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+.drop-zone--shown { opacity: 1; transform: scale(1); }
+.drop-zone img { width: calc(170px * var(--zone-scale, 1)); height: auto; }
+.drop-zone span { padding: 0 calc(24px * var(--zone-scale, 1)); }
+.drop-zone--bin { background: rgba(231, 76, 76, 0.22); }
+.drop-zone--cart { background: rgba(140, 200, 110, 0.22); }
+.drop-zone--bin[data-over] { background: rgba(231, 76, 76, 0.55); border-color: #ff8a8a; border-style: solid; transform: scale(1.03); }
+.drop-zone--cart[data-over] { background: rgba(140, 200, 110, 0.55); border-color: #d1ffab; border-style: solid; transform: scale(1.03); }
+@media (prefers-reduced-motion: reduce) {
+  .drag-ghost, .drag-ghost--flying, .drop-zone { transition: none; }
+}

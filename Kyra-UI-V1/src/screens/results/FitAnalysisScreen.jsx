@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AppHeader from "../../components/AppHeader.jsx";
+import { useCartTool } from "../../hooks/useCartTool.js";
 import CameraFeed from "../../components/CameraFeed.jsx";
 import LookShortcut from "../../components/LookShortcut.jsx";
 import { useResultsSession } from "../../hooks/useResultsSession.js";
@@ -70,6 +71,7 @@ function Hotspot({ note, style, onShow, label }) {
  * female: show the design's silhouette (otherwise only its outlines); guide: the first-time overlay.
  */
 export function FitAnalysisView({ goal, onGoal, notes, female, guide, onGuideDone, shortcut, background = null }) {
+  const cart = useCartTool();
   const [active, setActive] = useState(null);
   const note = (active && notes[active]) || DEFAULT_NOTE;
   const levers = leversFor(goal, { female });
@@ -77,7 +79,7 @@ export function FitAnalysisView({ goal, onGoal, notes, female, guide, onGuideDon
     <div className="screen">
       {background}
       {background && <div className="results-backdrop" />}
-      <AppHeader />
+      <AppHeader {...cart} />
       <div className="fit" inert={guide ? "" : undefined}>
         <section className="fit__card">
           <img className="fit__star" src={asset("icons/kyra-star.png")} alt="" width="72" height="72" />

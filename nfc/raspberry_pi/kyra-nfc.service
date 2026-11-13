@@ -1,0 +1,26 @@
+# systemd unit for the Kyra Tag writer. Install (see nfc/README.md, "Run it as a service"):
+#   sudo cp kyra-nfc.service /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now kyra-nfc
+# Settings and the device token live in /etc/kyra-nfc.env (root-owned, mode 600), never in this file.
+[Unit]
+Description=KYRA AI NFC Tag writer (PN532)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=kyra
+Group=kyra
+SupplementaryGroups=i2c spi gpio dialout
+WorkingDirectory=/opt/kyra/nfc/raspberry_pi
+EnvironmentFile=/etc/kyra-nfc.env
+ExecStart=/opt/kyra/nfc/raspberry_pi/.venv/bin/python main.py
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+ProtectSystem=full
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

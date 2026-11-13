@@ -1,0 +1,4 @@
+# Only on the Raspberry Pi with a real PN532 (mock mode and the tests need nothing beyond Python 3.10+).
+adafruit-circuitpython-pn532==2.4.3
+Adafruit-Blinka==8.47.0
+pyserial==3.5

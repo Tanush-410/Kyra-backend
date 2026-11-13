@@ -6,10 +6,11 @@ import KyraLoader from "../../components/KyraLoader.jsx";
 import OptionCard from "../../components/OptionCard.jsx";
 import Toast from "../../components/Toast.jsx";
 import { useKyraSession } from "../../context/KyraSessionContext.jsx";
+import { useCartTool } from "../../hooks/useCartTool.js";
 import { useProductPhotos } from "../../hooks/useProductPhotos.js";
 import { useResultsSession } from "../../hooks/useResultsSession.js";
 import { useToast } from "../../hooks/useToast.js";
-import { BYE_PATH } from "../../lib/shopRoutes.js";
+import { KYRA_TAG_PATH } from "../../lib/nfcRoutes.js";
 import { keyOf } from "../../state/sessionReducer.js";
 import "./RateLookScreen.css";
 
@@ -59,8 +60,11 @@ const scoreText = (n) => `${Number.isInteger(n) ? n : n.toFixed(1)}/10`;
 export function RateView({ now, weather, rating, seen, open, onOpen, onClose, photoFor, final, render, onFinal, onDone, onKeep, error }) {
   const score = rating ? Math.min(10, Math.round((rating.score + rating.changes.filter((c) => seen.has(c.id)).reduce((s, c) => s + c.points, 0)) * 10) / 10) : null;
   const change = open != null ? rating?.changes.find((c) => c.id === open) : null;
+  const cart = useCartTool();
   return (
-    <div className="screen rate">
+    // With a change open, a tap or a pinch anywhere but its card or a button closes it (a pinch away from
+    // buttons taps what is under it, only while data-pinch-tap is set: HandTrackingContext clickAt).
+    <div className="screen rate" onClick={change ? (e) => !e.target.closest(".rate__card, button") && onClose() : undefined} data-pinch-tap={change ? "" : undefined} role="presentation">
       {final && render?.imageDataUrl ? <img className="rate__look" src={render.imageDataUrl} alt="You with the changes" /> : <CameraFeed />}
       <div className={`rate__shade${change || (final && !render?.imageDataUrl) ? " rate__shade--blur" : ""}`} />
 
@@ -81,6 +85,20 @@ export function RateView({ now, weather, rating, seen, open, onOpen, onClose, ph
         </div>
         <img className="rate__star" src={icon("kyra-star.png")} alt="" />
       </header>
+      {/* The cart, as on every screen from the photo onwards (this screen has its own header). */}
+      {cart.onCart && (
+        <button
+          type="button"
+          key={cart.cartPulse}
+          className={`rate__cart${cart.cartPulse ? " app-header__tool--pulse" : ""}`}
+          onClick={cart.onCart}
+          aria-label={cart.cartCount ? `Cart, ${cart.cartCount} items` : "Cart"}
+          data-drop="cart"
+        >
+          <img src={icon("header-cart.svg")} alt="" width="156.6" height="156.6" />
+          {cart.cartCount > 0 && <span className="app-header__badge">{cart.cartCount}</span>}
+        </button>
+      )}
 
       {error ? (
         <div className="rate__middle">
@@ -224,7 +242,7 @@ export default function RateLookScreen() {
         final={final}
         render={render}
         onFinal={next}
-        onDone={() => navigate(BYE_PATH, { replace: true })}
+        onDone={() => navigate(KYRA_TAG_PATH, { replace: true })} // a Kyra Tag first, then Bye
         onKeep={takeHome}
         error={session.status === "error" && !rating ? session.error : ""}
       />

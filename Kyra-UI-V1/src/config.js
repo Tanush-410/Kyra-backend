@@ -8,15 +8,16 @@
  * VITE_CAMERA_SOURCE  "backend" (default): the backend's camera does the capture, and this UI shows its
  *                     preview. "browser": this browser's webcam is used and the photo is uploaded
  *                     (for a UI running on a different machine than the camera).
- * VITE_SHOP_DEMO      "true": the shop demo (products with prices, cart, filter, checkout, piece edits).
- *                     Its prices, sizes, brands and stock are PLACEHOLDERS (src/data/shopPlaceholders.js),
- *                     so it is off by default and real visitors never see made-up prices.
+ * VITE_SHOP_DEMO      On unless "false": the shop (products with prices, the cart on every screen from the
+ *                     photo onwards, filter, checkout, piece edits). Its prices, sizes, brands and stock are
+ *                     PLACEHOLDERS (src/data/shopPlaceholders.js) until a real product feed exists: set
+ *                     "false" to hide them from visitors.
  */
 const env = import.meta.env;
 
 export const API_BASE = String(env.VITE_KYRA_API_URL || "").replace(/\/+$/, "");
 export const CAMERA_SOURCE = env.VITE_CAMERA_SOURCE === "browser" ? "browser" : "backend";
-export const SHOP_DEMO = env.VITE_SHOP_DEMO === "true";
+export const SHOP_DEMO = env.VITE_SHOP_DEMO !== "false";
 
 // Same key as the backend's test console, so one link sets up both on this machine.
 const TOKEN_KEY = "kyraToken:kiosk";

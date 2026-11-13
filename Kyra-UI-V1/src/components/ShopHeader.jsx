@@ -8,7 +8,7 @@ import AppHeader from "./AppHeader.jsx";
 /**
  * The shop's top bar: the Figma header (AppHeader) wired to the kiosk routes. Bin = exit (onExit),
  * cart and filter go to their screens, profile to the account screen. The cart shows how many items
- * it holds and shakes when that changes. Cart and filter appear only in the shop demo (VITE_SHOP_DEMO).
+ * it holds and shakes when that changes. Cart and filter appear while the shop is on (VITE_SHOP_DEMO, on unless "false").
  * onExitHold: a pinch held on the bin (no dialog: the hold is the confirmation).
  */
 export default function ShopHeader({ onExit, onExitHold, onCart, onFilter, showCart = SHOP_DEMO, showFilter = SHOP_DEMO }) {

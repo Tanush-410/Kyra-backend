@@ -132,3 +132,60 @@ export function holdStep(state, { pinching, inside, now, holdMs = HOLD_MS }) {
   if (progress >= 1) return { state: null, progress: 1, done: true, cancelled: false };
   return { state, progress, done: false, cancelled: false };
 }
+
+// ---- Pick and drop (pinch, drag, let go on the cart or the bin) ----
+
+export const RELEASE_FRAMES = 3; // the pinch must look open this many frames running to count as letting go
+export const LOST_GRACE_MS = 500; // the hand may drop out of the camera's view this long without cancelling
+
+/**
+ * The big drop zones shown while something is being dragged, inside the screen's rect (screen pixels):
+ * the bin down the left side, the cart down the right, where the header shows them, but tall and wide enough
+ * to reach with a sideways move (the header icons sit at the camera picture's top edge, where hands are lost).
+ * types: the drop targets the screen has ("bin", "cart"). -> [{ type, rect: { left, top, right, bottom } }]
+ */
+export function dropZonesFor(types, frame, { widthShare = 0.32, top = 0.13, bottom = 0.75 } = {}) {
+  const w = frame.right - frame.left;
+  const h = frame.bottom - frame.top;
+  const band = { top: frame.top + h * top, bottom: frame.top + h * bottom };
+  const zones = [];
+  if (types.includes("bin")) zones.push({ type: "bin", rect: { left: frame.left, right: frame.left + w * widthShare, ...band } });
+  if (types.includes("cart")) zones.push({ type: "cart", rect: { left: frame.right - w * widthShare, right: frame.right, ...band } });
+  return zones;
+}
+
+/** Which drop target (x, y) is over: inside a zone, or within tolerance of a header icon. -> type or null */
+export function dropTargetAt(x, y, zones = [], icons = [], tolerance = 40) {
+  for (const { type, rect } of zones) {
+    if (x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom) return type;
+  }
+  let best = null;
+  let bestDist = Infinity;
+  for (const { type, rect } of icons) {
+    const d = Math.hypot(Math.max(rect.left - x, 0, x - rect.right), Math.max(rect.top - y, 0, y - rect.bottom));
+    if (d <= tolerance && d < bestDist) {
+      best = type;
+      bestDist = d;
+    }
+  }
+  return best;
+}
+
+/**
+ * One camera frame of a drag. state: { openFrames, lostAt }; hand: is a hand in view; pinching: is it pinched.
+ * -> "continue" | "drop" (let go: drop on what it was over while still pinched) | "cancel" (the hand left).
+ * Mutates state (the frame counters).
+ */
+export function dragStep(state, { hand, pinching, now, releaseFrames = RELEASE_FRAMES, lostGraceMs = LOST_GRACE_MS }) {
+  if (!hand) {
+    state.lostAt ??= now;
+    return now - state.lostAt > lostGraceMs ? "cancel" : "continue";
+  }
+  state.lostAt = null;
+  if (pinching) {
+    state.openFrames = 0;
+    return "continue";
+  }
+  state.openFrames = (state.openFrames || 0) + 1;
+  return state.openFrames >= releaseFrames ? "drop" : "continue";
+}
