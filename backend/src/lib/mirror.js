@@ -938,10 +938,16 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
     return true;
   }
 
+  // "Still here" pressed. If the camera still sees nobody, a fresh countdown starts at once: no new
+  // presence event will come while they stay out of view, and /privacy promises ~40 s after they leave.
   function stillHere(sessionId) {
     const session = get(sessionId);
     session.lastActivity = Date.now();
-    return { stayed: stay(session, 'visitor') };
+    const stayed = stay(session, 'visitor');
+    if (!visitorPresent && config.autoEndOnLeave && session.source === 'camera' && session.status !== 'waiting_for_capture') {
+      leave(session);
+    }
+    return { stayed, leavingEndsAt: session.leaving?.endsAt || null };
   }
 
   function end(session, reason) {

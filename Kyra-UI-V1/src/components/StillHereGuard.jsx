@@ -87,6 +87,8 @@ export default function StillHereGuard({ children }) {
             live
             title="Still here?"
             text={stillHereText(view.secondsLeft)}
+            // The camera can't see them: pressing Still here alone just starts the countdown again.
+            note={view.reason === "away" ? "I can’t see you. Step in front of the mirror to stay." : null}
             actions={[
               { label: "Still Here", onClick: stay },
               { label: "Delete Session", onClick: deleteSession },
