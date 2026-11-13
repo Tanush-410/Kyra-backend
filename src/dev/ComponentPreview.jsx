@@ -130,6 +130,7 @@ const SCREENS = {
   great: () => <EndScreen title="Great" text="You look beautiful today" onTap={noop} />,
   perfect: () => <EndScreen title="Perfect" text="You look gorgeous!" onTap={noop} />,
   bye: () => <EndScreen title="Bye" text="Have a nice day." />,
+  "still-here-away": () => <EndScreen title="Still here?" text="We’ll delete your session in 30 seconds." note="I can’t see you. Step in front of the mirror to stay." actions={[{ label: "Still Here", onClick: noop }, { label: "Delete Session", onClick: noop }]} />,
   "still-here": () => <EndScreen title="Still here?" text="We’ll delete your session in 30 seconds." actions={[{ label: "Still Here", onClick: noop }, { label: "Delete Session", onClick: noop }]} />,
   "fit-outline": () => <FitAnalysisView goal="balance" onGoal={noop} notes={SAMPLE_FIT} female={false} shortcut={shortcut(true)} />,
 };
