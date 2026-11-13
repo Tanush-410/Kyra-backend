@@ -6,6 +6,10 @@
   /* Screen background. Sampled from the Figma preview, not a named token. Confirm with design. */
   --colour-screen-bg: #2a2a2a;
   --colour-screen-border: rgba(255, 255, 255, 0.84);
+  /* Figma: colour/gray/cards (dialogs, info cards) */
+  --colour-gray-cards: #4d4d4d;
+  /* Figma: colour/green/confirm */
+  --colour-green-confirm: rgba(209, 255, 171, 0.8);
 
   /* Figma: MR/Primary/Bold/H3 */
   --type-h3-size: 110px;
@@ -13,6 +17,8 @@
   --type-h4-size: 90px;
   /* Figma: MR/Secondary/Regular/P2 */
   --type-p2-size: 52px;
+  /* Figma: MR/Secondary/Light/P3 */
+  --type-p3-size: 44px;
   --type-line-height: 1.3;
 
   --radius-card: 40px;

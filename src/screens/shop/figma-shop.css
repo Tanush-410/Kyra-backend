@@ -1,0 +1,70 @@
+/* The shop demo (VITE_SHOP_DEMO) placed per the Figma "Cart" and "Filter" frames, from the saved layout
+   data (design/export-2 isn't in yet). Every value marked EXPORT-2 is a guess to check against the
+   exports: the frames' outer boxes are known, but their insides (the product card "Component 71", the
+   filter's "Frame 44") were not in the saved data. Positions are in px from the screen's top left. */
+.shop-figma { position: absolute; inset: 0; color: var(--colour-white-100); }
+
+/* ---- Cart (2043:13494) ---- */
+/* Top to bottom from the product card's top (y 455): the card (905 wide), then what the design keeps
+   inside it. The buttons stay where the design has them. */
+.cart-figma {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding-top: 455px;
+}
+.cart-figma .cart-stage { position: relative; width: 905px; display: block; }
+.cart-figma .cart-swipe { width: 905px; }
+/* Arrows: the 15 x 31 chevrons at y 925 (Figma "Swipe Arroes" at (79, 925)), either side of the card */
+.cart-figma .cart-arrow {
+  position: absolute;
+  top: 470px; /* 925 - 455 */
+  width: 74px;
+  height: 74px;
+  padding: 0;
+  border: 0;
+  background: none;
+  z-index: 1;
+}
+.cart-figma .cart-arrow:first-child { left: -86px; }
+.cart-figma .cart-arrow:last-child { left: 917px; }
+.cart-figma .cart-arrow img { display: block; }
+.cart-figma .cart-arrow:disabled { opacity: 0; }
+/* EXPORT-2: in the design, quantity, size and remove sit inside the product card; here they follow it,
+   and the item count (above) and the total (not in the design) are additions. */
+.cart-figma .cart-count { position: absolute; top: 400px; left: 0; width: 100%; text-align: center; }
+.cart-figma .cart-controls { width: 905px; justify-content: center; margin: 0; }
+/* Continue Shopping / Checkout: 840 x 112 at (120, 2022) and (120, 2165) */
+.cart-figma__buttons { position: absolute; top: 2022px; left: 120px; gap: 31px; }
+.cart-figma .shop__empty { margin-top: 400px; width: 905px; }
+
+/* ---- Thank you (2043:13555) ---- */
+/* Title: 905 x 429 (three 110px lines) at (87.5, 376); text: 905 x 312 (60px) at y 850 */
+.checkout-figma .checkout-figma__title { position: absolute; top: 376px; left: 87.5px; width: 905px; }
+.checkout-figma .checkout-figma__text { position: absolute; top: 850px; left: 87.5px; width: 905px; margin: 0; }
+/* Not in the frame: the ways on */
+.checkout-figma__buttons { position: absolute; top: 1350px; left: 120px; }
+
+/* ---- Filters (2043:18391) ---- */
+/* The card: 904 x 926 at (88, 596), like the dialogs; Apply / Clear Filters 784 x 112 at y 1254 */
+.filter-figma {
+  position: absolute;
+  top: 596px;
+  left: 88px;
+  width: 904px;
+  min-height: 926px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 22px 28px;
+  border-radius: var(--radius-card);
+  background: var(--colour-gray-cards);
+}
+.filter-figma .dialog__title { margin: 0; }
+/* EXPORT-2: "Price range" / "Drag to adjust" sizes and the slider rows' layout are guesses */
+.filter-figma__label { align-self: flex-start; margin: 0; font-size: var(--type-p2-size); }
+.filter-figma__hint { align-self: flex-start; margin: -16px 0 0; font-weight: 300; font-size: 28px; color: #ccc; }
+.filter-figma .filter__row { width: 100%; }
+.filter-figma .dialog__actions { margin-top: auto; }

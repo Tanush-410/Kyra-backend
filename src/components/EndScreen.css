@@ -1,0 +1,17 @@
+/* Figma "End" (2043:13348): "Prompt" 960 wide at (60, 376): the title (714 x 143, 110px) and a 60px line
+   from y 559; "Still here?" adds two 600 x 112 buttons from y 835. */
+.end-screen { text-align: left; }
+.end-screen--tap { cursor: pointer; }
+.end-screen__prompt { position: absolute; top: 376px; left: 60px; width: 960px; }
+.end-screen .end-screen__title { width: 714px; margin: 0 auto; }
+.end-screen .end-screen__text { margin-top: 40px; } /* after global.css's .screen__text margin: 0 */
+.end-screen__actions { position: absolute; top: 835px; left: 240px; }
+.end-screen__note {
+  margin: 24px 0 0;
+  text-align: center;
+  font-weight: 300;
+  font-size: var(--type-p3-size);
+  line-height: var(--type-line-height);
+  color: #ccc;
+}
+.end-screen--note .end-screen__actions { top: 995px; }

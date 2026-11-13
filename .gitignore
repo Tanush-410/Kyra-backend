@@ -1,0 +1,15 @@
+# Installed and built files: recreated by `npm ci` and `npm run build`, never committed.
+node_modules/
+dist/
+.vite/
+
+# Local settings (API address and kiosk token)
+.env
+.env.local
+.env.*.local
+
+.DS_Store
+*.log
+
+# Figma exports (reference for building screens, ~MBs; copy the icons the app uses into public/assets/)
+design/

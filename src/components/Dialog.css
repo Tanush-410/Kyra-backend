@@ -1,0 +1,62 @@
+/* Figma: "Bracelet Info card" (2043:13577): 904px wide at top 757px, grey card, 784 x 112px buttons. */
+.dialog {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 757px;
+  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: blur(25px);
+  background: rgba(42, 42, 42, 0.35);
+}
+.dialog__card {
+  width: 904px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 47px;
+  padding: 22px 28px;
+  border-radius: var(--radius-card);
+  background: var(--colour-gray-cards);
+  -webkit-backdrop-filter: blur(var(--blur-card));
+  backdrop-filter: blur(var(--blur-card));
+  overflow: hidden;
+}
+.dialog__card--bare { width: auto; padding: 0; background: none; }
+.dialog__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  text-align: center;
+  color: var(--colour-white-100);
+  line-height: var(--type-line-height);
+}
+.dialog__title { margin: 0; font-weight: 700; font-size: var(--type-h4-size); line-height: var(--type-line-height); }
+.dialog__text { width: 832px; font-size: var(--type-p2-size); }
+.dialog__text p { margin: 0; }
+
+.dialog__actions { display: flex; flex-direction: column; gap: 22px; }
+.dialog__button {
+  width: 784px;
+  height: 112px;
+  padding: 22px 60px;
+  border: 0;
+  border-radius: var(--radius-card);
+  background: var(--colour-gray-light-text);
+  -webkit-backdrop-filter: blur(var(--blur-card));
+  backdrop-filter: blur(var(--blur-card));
+  color: var(--colour-white-100);
+  font-family: var(--font-family);
+  font-size: var(--type-p2-size);
+  line-height: var(--type-line-height);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.dialog__card--bare .dialog__button { width: 840px; }
+.dialog__button:hover,
+.dialog__button[data-hand-hovered="true"] { background: #000; outline: 4px solid #e74787; }
+.dialog__button:disabled { opacity: 0.4; cursor: default; outline: none; background: var(--colour-gray-light-text); }

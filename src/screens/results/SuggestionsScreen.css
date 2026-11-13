@@ -1,0 +1,215 @@
+/* Figma: "Suggestion to buy" / Suggestion (2043:8093, 8133) and its menu (2043:8110). Positions are the
+   frame's, in px from the top left of the screen. */
+.suggest-wrap { position: relative; width: 1080px; height: 3840px; overflow: hidden; }
+.suggest-screen { color: var(--colour-white-100); }
+
+/* "Swipe for more options": 562 x 57 at y 545 */
+.suggest__hint {
+  position: absolute;
+  top: 545px;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  font-weight: 300;
+  font-size: var(--type-p3-size);
+  line-height: var(--type-line-height);
+  color: #aaa;
+}
+/* Not in the frame: which outfit this is */
+.suggest__title {
+  position: absolute;
+  top: 612px;
+  left: 124px;
+  width: 831px;
+  margin: 0;
+  text-align: center;
+  font-weight: 700;
+  font-size: var(--type-p2-size);
+  line-height: var(--type-line-height);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* The outfit: 831 x 1917 at (124, 718), where the design has the product photos */
+.suggest__outfit {
+  position: absolute;
+  top: 718px;
+  left: 124px;
+  width: 831px;
+  height: 1917px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-card);
+  background: none;
+  color: inherit;
+  font-family: var(--font-family);
+  text-align: left;
+  cursor: pointer;
+  touch-action: none;
+}
+.suggest__outfit:hover,
+.suggest__outfit[data-hand-hovered="true"] { outline: 6px solid #e74787; outline-offset: 12px; }
+.suggest__items {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 30px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.suggest__item {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  padding: 36px;
+  border: 2px solid #56575b;
+  border-radius: var(--radius-card);
+  background: #434343;
+}
+.suggest__swatch {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 230px;
+  height: 230px;
+  flex: none;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 30px;
+  box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.35);
+}
+.suggest__swatch img { width: 120px; height: 120px; object-fit: contain; opacity: 0.85; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6)); }
+/* A light colour: the white line icon turns dark so it still shows */
+.suggest__swatch--light img { filter: invert(1); opacity: 0.7; }
+.suggest__item-text { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.suggest__category { font-size: 32px; letter-spacing: 0.06em; text-transform: uppercase; color: #aaa; }
+.suggest__name { font-weight: 600; font-size: 48px; line-height: 1.2; }
+.suggest__colour { display: flex; align-items: center; gap: 16px; font-size: 36px; }
+.suggest__colour i { width: 30px; height: 30px; flex: none; border-radius: 50%; border: 2px solid rgba(255, 255, 255, 0.5); }
+.suggest__tags { display: flex; flex-wrap: wrap; gap: 12px; }
+.suggest__tags span {
+  padding: 4px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 20px;
+  background: #3a3a3a;
+  font-size: 28px;
+  line-height: var(--type-line-height);
+}
+
+/* "Option indicators": 62 x 1443 at x -32 and 1050, y 1172: more outfits that way */
+.suggest__shade {
+  position: absolute;
+  top: 1172px;
+  width: 62px;
+  height: 1443px;
+  border-radius: 31px;
+  background: rgba(255, 255, 255, 0.16);
+}
+.suggest__shade--left { left: -32px; }
+.suggest__shade--right { left: 1050px; }
+
+/* Arrows: the 15 x 31 chevrons at (101, 1536) and (1023, 1536) */
+.suggest__arrow {
+  position: absolute;
+  top: 1514px;
+  width: 74px;
+  height: 74px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+}
+.suggest__arrow img { display: block; }
+.suggest__arrow--left { left: 73px; }
+.suggest__arrow--right { left: 992px; }
+.suggest__arrow:disabled { opacity: 0; pointer-events: none; }
+.suggest__arrow:not(:disabled):hover,
+.suggest__arrow[data-hand-hovered="true"] { outline: 4px solid #e74787; }
+
+/* Not in the frame: which of the round's outfits this is */
+.suggest__count {
+  position: absolute;
+  top: 2670px;
+  left: 0;
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  font-weight: 300;
+  font-size: var(--type-p3-size);
+  color: #aaa;
+}
+
+/* The first-time hint (Figma 2043:8133: a hand with arrows, 882 x 340 at (99, 1364), and the text at y 1759).
+   The hand isn't exported yet: arrows only. */
+.suggest__swipe-hint {
+  position: absolute;
+  top: 1364px;
+  left: 99px;
+  width: 882px;
+  height: 463px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  border-radius: var(--radius-card);
+  background: rgba(24, 24, 24, 0.85);
+  pointer-events: none;
+  font-size: var(--type-p2-size);
+  line-height: var(--type-line-height);
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9);
+}
+.suggest__chevrons { font-size: 200px; line-height: 1; letter-spacing: -0.1em; color: rgba(255, 255, 255, 0.85); animation: suggest-nudge 1.2s ease-in-out infinite; }
+@keyframes suggest-nudge { 50% { transform: translateX(60px); } }
+@media (prefers-reduced-motion: reduce) { .suggest__chevrons { animation: none; } }
+
+/* Designing (first looks, or More like this) */
+.suggest__busy { position: absolute; inset: 0; }
+.suggest__busy-text { position: absolute; top: 1520px; left: 0; padding: 0 87px; }
+
+/* The flat lay (Figma Suggestion 2043:8151): each piece's product photo in its place (lib/flatLay.js).
+   Until a photo is ready, the piece shows as its colour with its category icon and name. */
+.flatlay { position: absolute; inset: 0; display: block; }
+.flatlay__piece { position: absolute; display: flex; align-items: center; justify-content: center; }
+.flatlay__photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.45));
+  animation: flatlay-in 0.4s ease-out;
+}
+@keyframes flatlay-in { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: none; } }
+.flatlay__tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  width: 86%;
+  height: 86%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  border-radius: 36px;
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.35);
+  animation: flatlay-wait 1.6s ease-in-out infinite;
+}
+@keyframes flatlay-wait { 50% { opacity: 0.7; } }
+.flatlay__tile img { width: 42%; max-width: 150px; max-height: 45%; object-fit: contain; opacity: 0.85; filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6)); }
+.flatlay__tile--light img { filter: invert(1); opacity: 0.7; }
+.flatlay__name {
+  max-width: 90%;
+  font-size: 34px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+}
+.flatlay__tile--light .flatlay__name { color: #1a1a1a; text-shadow: none; }
+.flatlay__piece--sideSmall .flatlay__name { display: none; }
+@media (prefers-reduced-motion: reduce) { .flatlay__photo, .flatlay__tile { animation: none; } }

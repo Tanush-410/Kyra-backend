@@ -1,0 +1,63 @@
+/* Figma: "Concnt" (2043:13252). Positions are the frame's, in px from the top of the screen. */
+.consent { position: absolute; inset: 0; color: var(--colour-white-100); }
+
+/* "By continuing": 779 x 143 at y 406 */
+/* ".consent" in front: global.css (loaded later) sets .title to the full width. */
+.consent .consent__title { position: absolute; top: 406px; left: 150.5px; width: 779px; }
+
+/* Camera icon (175.5px at 128, 720) and the consent text (588px wide at 364, 649) */
+.consent__row { position: absolute; top: 619px; left: 89px; width: 902px; height: 378px; }
+.consent__camera { position: absolute; left: 39.25px; top: 101.25px; display: block; }
+.consent__text {
+  position: absolute;
+  left: 274.75px;
+  top: 30px;
+  width: 588px;
+  margin: 0;
+  font-weight: 600;
+  font-size: 40px;
+  line-height: var(--type-line-height);
+}
+
+/* The red asterisk and the underlined note, 670px wide at y 1037 */
+.consent__note {
+  position: absolute;
+  top: 1037px;
+  left: 205px;
+  width: 670px;
+  margin: 0;
+  padding-left: 30px;
+  font-weight: 600;
+  font-size: 40px;
+  line-height: var(--type-line-height);
+  text-align: center;
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+.consent__note img { position: absolute; left: 21px; top: 8px; display: block; }
+.consent__note span { display: block; width: 610px; }
+
+/* Continue: 840 x 112 at y 1316 */
+.consent__continue { position: absolute; top: 1316px; left: 120px; }
+
+.consent__error {
+  position: absolute;
+  top: 1434px;
+  left: 120px;
+  width: 840px;
+  margin: 0;
+  text-align: center;
+  font-size: var(--type-p3-size);
+  line-height: var(--type-line-height);
+  color: #ff8a8a;
+}
+
+/* QR (300px at 390, 1548) and its caption (818 x 234 at 131, 1970) */
+.consent__qr { position: absolute; top: 1548px; left: 120px; width: 840px; }
+.consent__qr img {
+  display: block;
+  margin: 0 auto;
+  background: #fff;
+  image-rendering: pixelated;
+}
+.consent__qr .screen__text { position: absolute; margin: 0; top: 422px; left: 11px; width: 818px; }

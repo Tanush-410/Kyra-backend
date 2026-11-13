@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import AppHeader from "../../components/AppHeader.jsx";
 import { useNavigate,useLocation, useSearchParams  } from "react-router-dom";
 const INTRO_MS = 3000; // 3 seconds
-const NEXT = "/welcome/looking-for-today/surpriseme/analysis/holdstill";
+// Next: ask before any photo is taken (ConsentScreen), then the camera (HoldStillScreen).
+const NEXT = "/welcome/looking-for-today/surpriseme/analysis/consent";
 
 /** Figma: Analysis / "Analysing" (2043:13245) */
 export default function AnalysisScreen() {
@@ -11,7 +12,6 @@ export default function AnalysisScreen() {
   const searchid = state?.id ?? params.get("category");
 const text = state?.text ?? params.get("q");
 console.log("inside - analysis category "+searchid);
-console.log("inside - analysis voice search "+text);
   const navigate = useNavigate();
   // useEffect(() => {
   //   const timer = setTimeout(() => navigate(NEXT), INTRO_MS);
@@ -21,7 +21,7 @@ console.log("inside - analysis voice search "+text);
   const timer = setTimeout(() => {
     const query = new URLSearchParams();
     if (searchid) query.set("category", searchid);
-    if (text) query.set("q", text);
+    // The words stay in router state only: an address ends up in the browser's history.
 
     navigate(`${NEXT}?${query.toString()}`, {
       state: { id: searchid, text },

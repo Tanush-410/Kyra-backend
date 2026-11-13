@@ -24,7 +24,7 @@ export default function TellUsWhatYouHaveInMindScreen() {
         <h1 className="title">Tell us what you have in mind</h1>
         <OptionCard
           label="Voice search"
-          icon={`${import.meta.env.BASE_URL}/assets/icons/voicesearch.png`}
+          icon={`${import.meta.env.BASE_URL}assets/icons/voicesearch.png`}
           width="w500"
            onClick={() => handleListening(searchid)}
         />

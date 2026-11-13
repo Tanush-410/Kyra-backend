@@ -1,12 +1,13 @@
+/* Figma "Rectangle 26": #313131 at 66% over the camera, 4px below the top edge. */
 .camera-guide__overlay {
   position: absolute;
   left: 0;
   top: 4px;
   width: 100%;
   height: 3836px;
-  background: #303030;
+  background: #313131;
+  opacity: 0.66;
   pointer-events: none;
-  transition: opacity 0.3s ease;
 }
 
 /* live camera, mirrored, filling the portrait screen */
@@ -18,6 +19,7 @@
   object-fit: cover;
   transform: scaleX(-1);
 }
+.camera-feed--mirrored { transform: none; }
 .camera-guide__header { position: relative; z-index: 1; }
 
 /* 898 x 2585 viewfinder, 466px from the top, centred */
@@ -68,21 +70,15 @@
   line-height: var(--type-line-height);
 }
 
-/* "Hold still": green check (image) or countdown number in a matching circle */
+.camera-guide__content--top { transform: translateX(-50%); }
+
+/* "Hold still": the green check in its grey circle (Figma "Frame 210", 2043:18566). */
 .camera-guide__badge { display: block; width: 339.875px; height: 350.563px; flex: none; }
-.camera-guide__count {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 339.875px;
-  height: 350.563px;
-  flex: none;
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.14);
-  color: #a9d68f; /* light green taken from the check in the design preview */
-  font-family: var(--font-family);
-  font-weight: 700;
-  font-size: 200px;
-  line-height: 1;
-}
+
+/* The countdown: the number alone, where the title goes (Figma: hold-still "Countdown" state). */
+.camera-guide__title--count { font-size: 200px; }
+
+/* The flash when the photo is taken (Figma: hold-still "Flash" state). */
+/* .screen sets the usual background, and global.css loads after this file. */
+.screen.camera-guide--flash { background: #fff; }
+@media (prefers-reduced-motion: reduce) { .screen.camera-guide--flash { background: #d9d9d9; } }

@@ -1,0 +1,49 @@
+/* Figma: "Success" (2043:13431): a pill centred under the header, top 382px. */
+.toast {
+  position: absolute;
+  top: 382px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 10px 20px;
+  border-radius: 649px;
+  white-space: nowrap;
+  animation: toast-in 0.25s ease-out;
+}
+.toast--success { background: rgba(49, 170, 82, 0.13); }
+/* The error pill's colours follow the success pill with the header's red (#FF5757). Check against 2043:13413. */
+.toast--error { background: rgba(255, 87, 87, 0.13); }
+
+.toast__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  padding: 9px;
+  flex: none;
+  border: 1.125px solid #000;
+  border-radius: 46.41px;
+  box-shadow: 1.125px 1.125px 0 0 #000;
+}
+.toast--success .toast__icon { background: var(--colour-green-confirm); }
+.toast__tick { display: block; margin: -2.25px; flex: none; }
+.toast--error .toast__icon { background: rgba(255, 87, 87, 0.8); }
+
+/* Figma: MR/Secondary/Light/P3 */
+.toast__text {
+  font-weight: 300;
+  font-size: var(--type-p3-size);
+  line-height: var(--type-line-height);
+  color: #aaa;
+}
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translate(-50%, -20px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+@media (prefers-reduced-motion: reduce) { .toast { animation: none; } }

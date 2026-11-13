@@ -1,9 +1,142 @@
 # KYRA Mirror: Onboarding (React)
 
+The kiosk screens for the KYRA mirror (1080 × 3840 portrait), connected to the KYRA backend
+([Kyra-backend](https://github.com/Tanush-410/Kyra-backend)), which owns the camera, measures the visitor and
+designs and renders their looks.
+
+Needs Node 22 or newer.
 
 ## Run
+
+**On the mirror (and the easiest way to try it):** the backend serves this app. This UI is included in
+Kyra-backend as `Kyra-UI-V1/`, so one clone has everything.
+
 ```bash
-npm install
-npm run dev
+# in Kyra-backend/
+./setup.sh                  # installs everything, including `npm ci && npm run build` here
+cd backend && npm start     # or `npm run rehearse`: a fake OpenAI, free
+npm run links               # open the "Kiosk UI" link: http://localhost:3000/Kyra-UI-V1/#token=…
 ```
 
+After changing the UI, `npm run build` here and reload the page. The backend doesn't need a restart.
+
+**While developing screens:** hot reload, with the API forwarded to the backend.
+
+```bash
+npm install
+npm run dev                 # http://localhost:5173/Kyra-UI-V1/  (the backend must be running)
+```
+
+Open it once with the token, `http://localhost:5173/Kyra-UI-V1/#token=<apiToken>`. The apiToken is in
+`Kyra-backend/backend/.runtime/secrets.json`, and `npm run links` prints it. Or put `VITE_KYRA_TOKEN=` in
+`.env.local`. See `.env.example` for all settings.
+
+**Tests:** `npm test` (Node's built-in runner, no extra packages).
+
+## How it talks to the backend
+
+| Piece | File | What it does |
+|---|---|---|
+| Settings | `src/config.js` | API address (same origin by default), camera source, the kiosk token (from the link's `#token=`, then kept in localStorage). |
+| API client | `src/api/kyraClient.js` | Every `/api/v2` call, and the event stream (`EventSource`). |
+| Visit state | `src/context/KyraSessionContext.jsx` | One event stream for the app, reopened for the visitor's session so their images arrive. Actions: `start`, `showAnother`, `like`, `keep`, `confirmProfile`, `correctUndertone`, `end`. |
+| Reducer | `src/state/sessionReducer.js` | Pure: builds the visit from events and snapshots. Every case is tested in `sessionReducer.test.js`. |
+| Choices → request | `src/lib/visitIntent.js` | `?category=tops-female&q=…` becomes `{ style: "…, built around a top", gender: "female" }`. |
+| Camera | `src/context/CameraContext.jsx`, `src/lib/mjpegStream.js` | The backend's camera preview becomes the app's video, so hand tracking and the camera screens work as before. |
+| Guidance copy | `src/lib/guidanceCopy.js` | The camera's states (`too_close`, `move_left`, `ready`…) mapped to the screen text. |
+
+### The visit
+
+1. **Splash:** a wave (the shared hand detector, `useWaveDetector`) or a click starts. Returning here ends any
+   previous visit.
+2. **Onboarding** (`src/lib/onboardingRoutes.js`, Figma "Onboarding" and its note): "How can I help you
+   today?" → I'm just browsing → "What are you looking for?" → Outfit, or Pick a piece (menswear /
+   womenswear picks); or I know what I'm looking for → the voice and picks paths. Every path reaches the
+   analysis intro through "Build your profile". The design's other second screen ("What are you looking for
+   today?") is still routed but not linked.
+3. **Analysis intro**, then **Consent** (`ConsentScreen`, Figma "Concnt"): the photo goes to OpenAI, so the
+   backend won't start a visit without consent. "Continue" starts the session. The QR code opens the privacy
+   page (the backend's `PRIVACY_URL`, or its own `/privacy`); it is left out when phones couldn't open it
+   (neither `PRIVACY_URL` nor `PUBLIC_BASE_URL` set).
+4. **Hold still:** the live camera with the backend's guidance (red brackets), then "Great, hold still!"
+   (green), then the 3, 2, 1 on its own, timed by the backend's hold time. When the camera captures: a white
+   flash, "All set! Let's find your perfect fit" for 2 s, then on (`src/lib/captureSequence.js`). There is
+   no "multiple people" message: the backend follows the nearest person.
+5. **Skin Tone Analysis** (`screens/results/SkinToneScreen`, Figma "Colour Result"): undertone, depth and
+   clarity chips, and five colours with a role each (Core, Supporting, Accent; worked out from the palette in
+   `src/lib/colourRoles.js`, as the backend sends neither). "Know more" explains the undertone and lets the
+   visitor correct it; an unsure reading asks "Does this sound like you?" first.
+6. **Fit Analysis** (`screens/results/FitAnalysisScreen`, Figma "Fit analysis" and "Guide"): the silhouette
+   (the design's woman's figure for female visitors, its outlines only otherwise), a first-time guide, the
+   outlines explaining what the camera measured (build, height), and styling levers for four goals
+   (`src/lib/fitLevers.js`; the first goal follows the profile).
+7. **Suggestions** (`screens/results/SuggestionsScreen`, Figma "Suggestion to buy"): the round's outfits,
+   one at a time, each piece as a card with its colour swatch (the backend has no product photos). Swipe
+   (drag), the arrows or the keyboard switch outfits; a first-time hint shows how. Tapping the outfit opens
+   Virtual try-on (renders it on the visitor; a look already rendered is reused, at no cost) and More like
+   this (the backend designs a new round from it and renders its first look).
+   Edit outfit opens the edit flow (`screens/results/EditLookScreen`, Figma "Edit"): what to edit (the
+   design's categories for women, neutral ones otherwise), what's on your mind (Something similar /
+   different, or say it: Suggest changes, I know what I want, with presets for visitors who'd rather not
+   speak), then "Let's find what you're looking for". The backend can't swap one piece, so the edit is
+   sent as feedback that names the rest of the outfit to keep and the change (`src/lib/editFeedback.js`:
+   under 200 characters, only characters the backend's prompt cleaner keeps). Each edit is a new set of
+   three; Suggestions opens on it ("Is this what you were looking for?") and the earlier sets stay a swipe
+   away ("Set 1 of 2"). One edit or More like this at a time.
+8. **Virtual try-on** (`screens/results/TryOnScreen`, Figma "Virtual try on"): the visitor wearing the look,
+   full height under the header. Tapping it (or "Options") offers Love it, Take it home (a QR code), Show
+   another and Back to suggestions. While it renders: the Kyra star and what is happening, with a way back.
+   If the picture can't be made, or pictures are off (text-only mode): the outfit as cards, "Please try
+   again" or the reason, and Try again / Try another look / Back to suggestions, so the visitor is never
+   stuck (`src/lib/tryOnView.js`). The look starts rendering at the photo, so it is often ready on arrival.
+   A like (from the menu, or a thumbs-up) shows "Great / You look beautiful today" or "Perfect / You look
+   gorgeous!" for 3 s (Figma "Confirmation").
+9. **Still here?** (`components/StillHereGuard`, Figma "Confirmation"), over whatever screen the visit is on,
+   with a countdown: when the camera loses the visitor (the backend's `session.leaving`; it ends the visit at
+   `endsAt` unless they come back or press Still here, `POST …/still-here`), or after 90 s without a tap,
+   pinch or gesture (this kiosk ends the visit 30 s later; any tap counts as still here). Delete Session ends
+   it now. `src/lib/stillHere.js`.
+10. **Bye** (`screens/results/ByeScreen`, Figma "End"): "Bye / Have a nice day." after any visit ends (done,
+   exit, delete, stepped away, timed out), then the start. The photo is forgotten.
+   "More like this" (Suggestions) is off while a round is being designed: one design call and picture each.
+
+### Camera source
+
+- `VITE_CAMERA_SOURCE=backend` (default): the backend's camera does everything. The UI never opens the webcam,
+  so two programs never fight over it (Windows allows only one). The preview is already mirrored.
+- `VITE_CAMERA_SOURCE=browser`: this browser's webcam, with the pose check in `useBodyScan`. The photo is
+  uploaded when the countdown ends. Use it when the UI runs on a different machine from the camera.
+
+## Notes for the team
+
+- **No secrets in the build.** The token arrives in the link's `#` part, which browsers don't send to servers.
+- **Content Security Policy:** when served by the backend, scripts may only come from this app. MediaPipe's
+  attempts to send usage logs to Google are blocked (you'll see that in the console). Hand tracking is
+  unaffected.
+- **Models are local:** `public/mediapipe/` holds the hand and pose models and the WASM files (from
+  `npm run assets`). The splash screen no longer downloads a second copy from a CDN.
+- **Hand gestures** (`src/lib/handGestures.js`, tested with landmark sequences): only the main hand counts (the
+  largest in view, palm at least 6% of the picture's height, not at its edge), so someone behind the visitor
+  can't drive the screen. A pinch clicks only when the hand is still. Swipe (Suggestions only): 25% of the
+  picture sideways in under 0.6 s, mostly straight, then 1 s of nothing; right for the next outfit, as the
+  design's hint says. Pinch and hold on the bin for 1.5 s (a ring fills; opening the pinch or moving off
+  cancels) ends the visit with no dialog. With the shop demo, pinch and drag an outfit to the cart or bin.
+  `npm run dev` adds `window.__kyraHand.swipe("left" | "right")` for checks without a camera.
+- **Spoken words** stay in memory: they travel between screens in router state, never in the address (a
+  browser keeps addresses in its history), and aren't logged. The browser's speech service (Google, in
+  Chrome) turns them into text; the backend sends the text to OpenAI to design the looks.
+- **Your results** (the profile icon, `screens/shop/AccountScreen`, Figma "Account"): a QR to a temporary page
+  of the visit's undertone, colours, fit notes and any look taken home (backend `POST …/results`). Before the
+  photo, it says the results come after it.
+- **Shop demo** (`VITE_SHOP_DEMO=true`, off by default): the friend's products, cart, filter, checkout and
+  piece edits, and the cart and filter buttons in the header. Their prices, sizes, brands and stock are
+  placeholders (`src/data/shopPlaceholders.js`), so real visitors never see them unless it is turned on.
+  The cart, checkout and filter follow the Figma Cart and Filter frames (`screens/shop/figma-shop.css`); values
+  marked EXPORT-2 there are guesses until the team's export-2 arrives.
+- **Design checks:** `npm run dev`, then `/Kyra-UI-V1/dev/<name>` shows a piece or screen on its own (header,
+  toast, dialog, consent, too-far, hold, count, flash, allset…; the list is in `src/dev/ComponentPreview.jsx`).
+  These pages are left out of the production build. The team's Figma exports go in `design/` (git ignores it).
+- **`OptionCard` has a `disabled` prop.** A pinch skips disabled buttons and anything behind an open dialog
+  (`inert`).
+- **Routes are unchanged**, plus `…/analysis/consent`. The results route is still `…/holdstill/analysisres`.
+- `npm run deploy` (GitHub Pages) still works for showing the screens, but there's no backend there.

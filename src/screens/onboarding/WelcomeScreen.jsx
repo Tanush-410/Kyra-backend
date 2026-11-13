@@ -22,7 +22,8 @@ export default function WelcomeScreen() {
   console.log("videoRef.current:", videoRef.current,
               "| <video> elements on page:", document.querySelectorAll("video").length);
 }, [videoRef]);
-  const goNext = useCallback(() => navigate("/welcome/looking-for-today"), [navigate]);
+  // Figma note: the 2nd screen is "How can I help you today?" (lib/onboardingRoutes.js).
+  const goNext = useCallback(() => navigate("/welcome/how-can-i-help"), [navigate]);
 
   const handlePinch = useCallback(
     ({ x, y }) => {

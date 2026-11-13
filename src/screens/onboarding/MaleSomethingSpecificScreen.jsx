@@ -5,15 +5,15 @@ import { useNavigate,useLocation, useSearchParams  } from "react-router-dom";
 
 // NOTE: both accessory cards are labelled "Accessories" in the Figma file.
 const OPTIONS = [
-  { id: "tops-male", label: "Tops", icon: `${import.meta.env.BASE_URL}/assets/icons/tops.png`, iconWidth: 200 },
-  { id: "bottoms-male", label: "Bottoms", icon: `${import.meta.env.BASE_URL}/assets/icons/bottoms.png`, iconWidth: 200 },
-  { id: "footwear-male", label: "Footwear", icon: `${import.meta.env.BASE_URL}/assets/icons/shoes.png`, iconWidth: 200 },
-  { id: "accessories-male", label: "Accessories", icon: `${import.meta.env.BASE_URL}/assets/icons/glasses.png`, iconWidth: 244 },
+  { id: "tops-male", label: "Tops", icon: `${import.meta.env.BASE_URL}assets/icons/tops.png`, iconWidth: 200 },
+  { id: "bottoms-male", label: "Bottoms", icon: `${import.meta.env.BASE_URL}assets/icons/bottoms.png`, iconWidth: 200 },
+  { id: "footwear-male", label: "Footwear", icon: `${import.meta.env.BASE_URL}assets/icons/shoes.png`, iconWidth: 200 },
+  { id: "accessories-male", label: "Accessories", icon: `${import.meta.env.BASE_URL}assets/icons/glasses.png`, iconWidth: 244 },
 ];
 
 
 /** Figma: Onboarding / "Male Something specific" (2043:9935) */
-const ANALYSIS="/welcome/looking-for-today/surpriseme/analysis";
+const ANALYSIS = "/welcome/looking-for-today/surpriseme/buildprofile"; // Build your profile, then the analysis intro
 const LISTENING="/welcome/looking-for-today/specificscreen/voicesearch";
 export default function MaleSomethingSpecificScreen({ onSelect }) {
    const { state } = useLocation();
