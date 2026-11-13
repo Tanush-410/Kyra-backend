@@ -13,7 +13,7 @@ const MESSAGES = {
   other: "Something went wrong with voice input. Please try again.",
   "no-speech": "I can’t hear you yet. Try speaking a little louder.",
 };
-const ANALYSIS="/welcome/looking-for-today/surpriseme/analysis";
+const ANALYSIS = "/welcome/looking-for-today/surpriseme/buildprofile"; // Build your profile, then the analysis intro
 /** Figma: Onboarding / "Catagories" (2043:13036). The Kyra mark animates while listening. */
 export default function ListeningScreen() {
     const { state } = useLocation();

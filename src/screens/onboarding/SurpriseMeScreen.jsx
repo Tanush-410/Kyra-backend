@@ -8,7 +8,7 @@ import OptionCard from "../../components/OptionCard.jsx";
 
 /** Figma: Onboarding / "Surprise me" (2043:13011) */
 
-const ANALYSIS="/welcome/looking-for-today/surpriseme/analysis";
+const ANALYSIS = "/welcome/looking-for-today/surpriseme/buildprofile"; // Build your profile, then the analysis intro
 const SHOPFOR="/welcome/looking-for-today/surpriseme/shopfor"
 export default function SurpriseMeScreen() {
   const navigate = useNavigate();

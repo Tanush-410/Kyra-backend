@@ -1,4 +1,6 @@
 import { useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { ACCOUNT_PATH } from "../lib/shopRoutes.js";
 import { usePinchHold } from "../hooks/useHandSwipe.js";
 import "./AppHeader.css";
 
@@ -31,6 +33,9 @@ export default function AppHeader({
 }) {
   const tools = Boolean(onBin || onCart || onFilter);
   const binRef = useRef(null);
+  const navigate = useNavigate();
+  // The profile icon opens "Your results" (the account screen) unless the screen says otherwise.
+  const openProfile = onProfileClick || (() => navigate(ACCOUNT_PATH));
   usePinchHold(binRef, onBinHold);
   return (
     <header className={`app-header${tools ? " app-header--tools" : ""}`} style={{ paddingInline: paddingX }}>
@@ -38,7 +43,7 @@ export default function AppHeader({
         <button type="button" className="app-header__kyra" onClick={onKyraClick} aria-label="Kyra">
           <img src={icon("kyra-star.png")} alt="" />
         </button>
-        <button type="button" className="app-header__profile" onClick={onProfileClick} aria-label="Profile">
+        <button type="button" className="app-header__profile" onClick={openProfile} aria-label="Your results">
           <img src={icon("user-profile.png")} alt="" />
         </button>
       </div>

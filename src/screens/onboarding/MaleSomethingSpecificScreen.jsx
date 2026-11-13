@@ -13,7 +13,7 @@ const OPTIONS = [
 
 
 /** Figma: Onboarding / "Male Something specific" (2043:9935) */
-const ANALYSIS="/welcome/looking-for-today/surpriseme/analysis";
+const ANALYSIS = "/welcome/looking-for-today/surpriseme/buildprofile"; // Build your profile, then the analysis intro
 const LISTENING="/welcome/looking-for-today/specificscreen/voicesearch";
 export default function MaleSomethingSpecificScreen({ onSelect }) {
    const { state } = useLocation();

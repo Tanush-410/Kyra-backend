@@ -10,6 +10,7 @@ import { useToast } from "../../hooks/useToast.js";
 import { SHOP_PATH } from "../../lib/shopRoutes.js";
 import { activeOption, DEFAULT_PRICE_RANGE, editsForLook, keyOf } from "../../state/sessionReducer.js";
 import "./shop.css";
+import "./figma-shop.css";
 
 const MAX_PRICE = DEFAULT_PRICE_RANGE.to;
 const STEP = 100;
@@ -66,11 +67,12 @@ export default function FilterScreen() {
   return (
     <div className="screen">
       <ShopHeader />
-      <main className="screen__content shop" inert={modalOpen ? "" : undefined}>
-        <h1 className="title title--h4">Filter</h1>
-        <p className="shop__lede">Set a price range. Every piece in your look stays available unless it falls outside it.</p>
-
-        <div className="filter">
+      {/* Figma "Filters" (2043:18391): a card like the dialogs, 904 wide at (88, 596). */}
+      <main className="shop shop-figma" inert={modalOpen ? "" : undefined}>
+        <div className="filter filter-figma">
+          <h1 className="dialog__title">Filters</h1>
+          <p className="filter-figma__label">Price range</p>
+          <p className="filter-figma__hint">Drag to adjust</p>
           <div className="filter__row">
             <span className="filter__label">From</span>
             <button type="button" className="filter__step" onClick={() => nudgeFrom(-STEP)} aria-label="Lower minimum price">
@@ -115,11 +117,11 @@ export default function FilterScreen() {
 
           <p className="filter__hint">Use the − and + buttons if you're shopping by hand gesture.</p>
 
-          <div className="shop__actions">
-            <button type="button" className="shop-button" onClick={apply}>
+          <div className="dialog__actions">
+            <button type="button" className="dialog__button" onClick={apply}>
               Apply
             </button>
-            <button type="button" className="shop-button shop-button--ghost" onClick={clear}>
+            <button type="button" className="dialog__button" onClick={clear}>
               Clear Filters
             </button>
           </div>
@@ -129,13 +131,14 @@ export default function FilterScreen() {
 
       {noMatches && (
         <Dialog
+          top={735}
           title="No matches found"
           actions={[
             { label: "Edit Filters", onClick: () => setNoMatches(false) },
             { label: "Clear Filters", onClick: clear },
           ]}
         >
-          No pieces match {formatPrice(from)} – {formatPrice(to)}. Try a wider range.
+          Try fewer filters to get more suggestions
         </Dialog>
       )}
     </div>

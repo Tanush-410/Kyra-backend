@@ -1,90 +1,72 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ShopHeader from "../../components/ShopHeader.jsx";
-import Toast from "../../components/Toast.jsx";
+import { kyraApi } from "../../api/kyraClient.js";
+import KyraLoader from "../../components/KyraLoader.jsx";
+import AppHeader from "../../components/AppHeader.jsx";
 import { useKyraSession } from "../../context/KyraSessionContext.jsx";
-import { useSessionGuard } from "../../hooks/useSessionGuard.js";
-import { useToast } from "../../hooks/useToast.js";
-import { RESULTS_PATH } from "../../lib/shopRoutes.js";
-import { activeRender } from "../../state/sessionReducer.js";
-import "./shop.css";
+import { phaseOf } from "../../state/sessionReducer.js";
+import "./AccountScreen.css";
 
 /**
- * Figma: "Account" — not a profile form. It reuses the existing keep() QR so the visitor can scan
- * for the skin-tone and fit analysis. The QR is created for the look on screen and nothing is stored
- * on this device.
+ * Figma: "Account" (2043:18468): "Scan the QR code to get more info". The QR opens a temporary page of
+ * this visit's results (POST /api/v2/sessions/:id/results): undertone, colours, fit notes, and a look
+ * only if the visitor took it home. Same private link and expiry as a kept look (KEEP_HOURS).
+ *
+ * view: { kind: "ready", qr } | { kind: "loading" } | { kind: "message", text }
  */
-export default function AccountScreen() {
-  const navigate = useNavigate();
-  const session = useSessionGuard();
-  const { keep, end } = useKyraSession();
-  const { toast, showToast } = useToast();
-  const [tried, setTried] = useState(false);
-
-  const render = activeRender(session);
-  const active = session?.active;
-  const kept = session?.kept;
-  const keptForLook = kept && active && kept.round === active.round && kept.option === active.option ? kept : null;
-  const ready = render?.status === "done";
-
-  useEffect(() => {
-    if (!ready || keptForLook || tried) return;
-    setTried(true);
-    keep();
-  }, [ready, keptForLook, tried, keep]);
-
-  const finish = async () => {
-    await end();
-    navigate("/", { replace: true });
-  };
-
-  if (!session) return <div className="screen" />;
-
+export function AccountView({ view, onBack, header }) {
   return (
-    <div className="screen">
-      <ShopHeader />
-      <main className="screen__content shop">
-        <h1 className="title title--h4">Account</h1>
-        <p className="shop__lede">Scan the QR code to get more info about your skin tone and fit analysis.</p>
-
-        {keptForLook ? (
-          <div className="account__qr-card">
-            <img className="account__qr" src={keptForLook.qrDataUrl} alt="QR code for this look" />
-            <p className="account__qr-caption">
-              Scan to open your look, colour palette and fit guidance. This code is temporary.
+    <div className="screen account">
+      {header}
+      <h1 className="title title--h4 account__title">Scan the QR code to get more info</h1>
+      {view.kind === "ready" && (
+        <>
+          <img className="account__qr" src={view.qr.qrDataUrl} alt="QR code: your results" width="524" height="524" />
+          <p className="account__caption">Get more information on your skin tone and fit analysis by scanning the above QR code.</p>
+          {view.qr.expiresAt && (
+            <p className="account__expiry">
+              The page is deleted on {new Date(view.qr.expiresAt).toLocaleString([], { weekday: "short", hour: "2-digit", minute: "2-digit" })}.
             </p>
-          </div>
-        ) : (
-          <div className="shop__empty">
-            <p>{ready ? "Preparing your QR code…" : "Your look is still being prepared. Please wait a moment."}</p>
-            {session.actionError && <p className="account__status">{session.actionError}</p>}
-            {ready && !session.actionError && (
-              <button type="button" className="shop-button" onClick={() => setTried(false)}>
-                Try again
-              </button>
-            )}
-          </div>
-        )}
-
-        <div className="shop__actions">
-          <button type="button" className="shop-button" onClick={() => navigate(RESULTS_PATH)}>
-            Back to your look
-          </button>
-          <button
-            type="button"
-            className="shop-button shop-button--ghost"
-            onClick={() => {
-              showToast("This QR code is only available during your visit", "error");
-            }}
-          >
-            What is this?
-          </button>
-          <button type="button" className="shop-button shop-button--ghost" onClick={finish}>
-            I'm done
-          </button>
-        </div>
-      </main>
-      <Toast toast={toast} />
+          )}
+        </>
+      )}
+      {view.kind === "loading" && <KyraLoader label="Preparing your results" />}
+      {view.kind === "message" && <p className="account__caption account__caption--message">{view.text}</p>}
+      <button type="button" className="outline-button account__back" onClick={onBack}>
+        Back
+      </button>
     </div>
   );
+}
+
+export default function AccountScreen() {
+  const navigate = useNavigate();
+  const { state } = useKyraSession();
+  const session = state.session;
+  const phase = phaseOf(session);
+  const ready = phase === "results" && Boolean(session?.profile);
+  const [qr, setQr] = useState(null);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!ready || qr) return undefined;
+    let live = true;
+    kyraApi
+      .results(session.id)
+      .then((answer) => live && setQr(answer))
+      .catch((err) => live && setError(err.message));
+    return () => {
+      live = false;
+    };
+    // a new page when a look is taken home (session.kept changes)
+  }, [ready, session?.id, session?.kept?.url]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  let view;
+  if (!session || phase === "none" || phase === "ended") view = { kind: "message", text: "Your skin tone and fit results appear here once Kyra has taken your photo." };
+  else if (!ready) view = { kind: "message", text: "Kyra is still working out your results. Try again in a moment." };
+  else if (error) view = { kind: "message", text: error };
+  else if (qr) view = { kind: "ready", qr };
+  else view = { kind: "loading" };
+
+  return <AccountView view={view} onBack={() => navigate(-1)} header={<AppHeader onProfileClick={() => {}} />} />;
 }

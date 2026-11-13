@@ -57,6 +57,8 @@ export const kyraApi = {
   /** corrections: any of { skinUndertone, skinDepth, heightCm, build } */
   correctProfile: (id, corrections) => request(`${session(id)}/profile`, { method: "POST", body: corrections }),
   endSession: (id, { keepalive = false } = {}) => request(session(id), { method: "DELETE", keepalive }),
+  /** "Your results" (profile screen): { url, qrDataUrl, expiresAt } of a temporary page of this visit. */
+  results: (id) => request(`${session(id)}/results`, { method: "POST", body: {} }),
   /** "Still here?": the visitor pressed Still here during the countdown (session.leaving). */
   stillHere: (id) => request(`${session(id)}/still-here`, { method: "POST", body: {} }),
   /** The consent screen's QR code: { url, qrDataUrl }, or { url: null } when phones can't reach a page. */

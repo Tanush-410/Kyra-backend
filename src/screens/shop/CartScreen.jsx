@@ -10,7 +10,9 @@ import { useSessionGuard } from "../../hooks/useSessionGuard.js";
 import { useToast } from "../../hooks/useToast.js";
 import { CART_PATH, CHECKOUT_PATH, EDIT_PATH, RESULTS_PATH, SHOP_PATH } from "../../lib/shopRoutes.js";
 import { cartSubtotal } from "../../state/sessionReducer.js";
+import OptionCard from "../../components/OptionCard.jsx";
 import "./shop.css";
+import "./figma-shop.css";
 
 /** Figma: "Cart" — one product at a time, drop-downs, four dialogs, and a swipeable carousel. */
 export default function CartScreen() {
@@ -62,8 +64,8 @@ export default function CartScreen() {
   return (
     <div className="screen">
       <ShopHeader onExit={() => setExitOpen(true)} onCart={() => navigate(CART_PATH)} />
-      <main className="screen__content shop" inert={modalOpen ? "" : undefined}>
-        <h1 className="title title--h4">Cart</h1>
+      {/* Figma "Cart" (2043:13494): no title; the product card at (87, 455), 905 wide. */}
+      <main className="shop shop-figma cart-figma" inert={modalOpen ? "" : undefined}>
 
         {!current ? (
           <div className="shop__empty">
@@ -85,7 +87,7 @@ export default function CartScreen() {
                 disabled={index <= 0}
                 aria-label="Previous item"
               >
-                ‹
+                <img src={`${import.meta.env.BASE_URL}assets/icons/arrow-left.svg`} alt="" width="74" height="74" />
               </button>
               <div className="cart-swipe" onPointerDown={onPointerDown} onPointerUp={onPointerUp} onPointerCancel={() => (dragStart.current = null)}>
                 <ProductCard product={current} wide />
@@ -97,7 +99,7 @@ export default function CartScreen() {
                 disabled={index >= items.length - 1}
                 aria-label="Next item"
               >
-                ›
+                <img src={`${import.meta.env.BASE_URL}assets/icons/arrow-right.svg`} alt="" width="74" height="74" />
               </button>
             </div>
 
@@ -117,13 +119,10 @@ export default function CartScreen() {
               <span className="cart-total">Total {formatPrice(cartSubtotal(state.shop))}</span>
             </div>
 
-            <div className="shop__actions">
-              <button type="button" className="shop-button" onClick={() => navigate(SHOP_PATH)}>
-                Continue Shopping
-              </button>
-              <button type="button" className="shop-button" onClick={() => navigate(CHECKOUT_PATH)}>
-                Checkout
-              </button>
+            {/* Figma: Continue Shopping / Checkout, 840 x 112, 31px apart */}
+            <div className="button-stack cart-figma__buttons">
+              <OptionCard label="Continue Shopping" width="w840" onClick={() => navigate(SHOP_PATH)} />
+              <OptionCard label="Checkout" width="w840" onClick={() => navigate(CHECKOUT_PATH)} />
             </div>
           </>
         )}
@@ -180,7 +179,7 @@ export default function CartScreen() {
             },
           ]}
         >
-          {sizeOutOfStock} is out of stock for {current.name}.
+          We are sorry to inform that the size you are looking for is out of stock.
         </Dialog>
       )}
 
@@ -199,7 +198,7 @@ export default function CartScreen() {
             },
           ]}
         >
-          {current.name} is out of stock right now.
+          We are sorry to inform that the item is out of stock.
         </Dialog>
       )}
 
@@ -211,7 +210,7 @@ export default function CartScreen() {
             { label: "Remove from Cart", onClick: remove },
           ]}
         >
-          Remove {current.name} from your cart?
+          Are you sure you want to discard this item?
         </Dialog>
       )}
 
@@ -223,7 +222,7 @@ export default function CartScreen() {
             { label: "Exit", onClick: () => navigate(RESULTS_PATH) },
           ]}
         >
-          Leave the shop and go back to your look?
+          Are you sure you want to exit?
         </Dialog>
       )}
     </div>
