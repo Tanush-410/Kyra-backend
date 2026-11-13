@@ -27,6 +27,10 @@ import SplashScreen from "./screens/onboarding/SplashScreen.jsx";
 import SurpriseMeScreen from "./screens/onboarding/SurpriseMeScreen.jsx";
 import TellUsWhatYouHaveInMindScreen from "./screens/onboarding/TellUsWhatYouHaveInMindScreen.jsx";
 import WelcomeScreen from "./screens/onboarding/WelcomeScreen.jsx";
+import BuildYourProfileScreen from "./screens/onboarding/BuildYourProfileScreen.jsx";
+import HowCanIHelpYouScreen from "./screens/onboarding/HowCanIHelpYouScreen.jsx";
+import WhatAreYouLookingForScreen from "./screens/onboarding/WhatAreYouLookingForScreen.jsx";
+import { BUILD_PROFILE, HOW_CAN_I_HELP, WHAT_ARE_YOU_LOOKING_FOR } from "./lib/onboardingRoutes.js";
 import AccountScreen from "./screens/shop/AccountScreen.jsx";
 
 // Development only: the shared components on their own, for screenshot checks (src/dev/). Not built for production.
@@ -68,6 +72,10 @@ export default function App() {
               <Routes>
                 <Route path="/" element={<SplashScreen />} />
                 <Route path="/welcome" element={<WelcomeScreen />} />
+                <Route path={HOW_CAN_I_HELP} element={<HowCanIHelpYouScreen />} />
+                <Route path={WHAT_ARE_YOU_LOOKING_FOR} element={<WhatAreYouLookingForScreen />} />
+                <Route path={BUILD_PROFILE} element={<BuildYourProfileScreen />} />
+                {/* The design's other version of the second screen (2043:8311), kept but not linked */}
                 <Route path="/welcome/looking-for-today" element={<LookingForTodayScreen />} />
                 <Route path="/welcome/looking-for-today/surpriseme" element={<SurpriseMeScreen />} />
                 <Route path="/welcome/looking-for-today/specificscreen" element={<SpecificScreen />} />

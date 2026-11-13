@@ -12,6 +12,7 @@ import { SuggestionsView } from "../screens/results/SuggestionsScreen.jsx";
 import { TryOnView } from "../screens/results/TryOnScreen.jsx";
 import { EditView } from "../screens/results/EditLookScreen.jsx";
 import EndScreen from "../components/EndScreen.jsx";
+import { AccountView } from "../screens/shop/AccountScreen.jsx";
 import LookShortcut from "../components/LookShortcut.jsx";
 import { fitNotes } from "../lib/fitLevers.js";
 
@@ -127,6 +128,8 @@ const SCREENS = {
   "edit-voice": () => <EditView step="voice" {...EDIT_ACTIONS} />,
   "edit-working": () => <EditView step="working" {...EDIT_ACTIONS} />,
   "edit-busy": () => <EditView step="intent" busy {...EDIT_ACTIONS} />,
+  account: () => <AccountView view={{ kind: "ready", qr: SAMPLE_QR }} onBack={noop} header={<AppHeader onBin={noop} />} />,
+  "account-waiting": () => <AccountView view={{ kind: "message", text: "Your skin tone and fit results appear here once Kyra has taken your photo." }} onBack={noop} header={<AppHeader onBin={noop} />} />,
   great: () => <EndScreen title="Great" text="You look beautiful today" onTap={noop} />,
   perfect: () => <EndScreen title="Perfect" text="You look gorgeous!" onTap={noop} />,
   bye: () => <EndScreen title="Bye" text="Have a nice day." />,

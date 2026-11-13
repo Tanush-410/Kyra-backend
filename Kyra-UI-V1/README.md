@@ -49,7 +49,11 @@ Open it once with the token, `http://localhost:5173/Kyra-UI-V1/#token=<apiToken>
 
 1. **Splash:** a wave (the shared hand detector, `useWaveDetector`) or a click starts. Returning here ends any
    previous visit.
-2. **Onboarding picks**, unchanged.
+2. **Onboarding** (`src/lib/onboardingRoutes.js`, Figma "Onboarding" and its note): "How can I help you
+   today?" → I'm just browsing → "What are you looking for?" → Outfit, or Pick a piece (menswear /
+   womenswear picks); or I know what I'm looking for → the voice and picks paths. Every path reaches the
+   analysis intro through "Build your profile". The design's other second screen ("What are you looking for
+   today?") is still routed but not linked.
 3. **Analysis intro**, then **Consent** (`ConsentScreen`, Figma "Concnt"): the photo goes to OpenAI, so the
    backend won't start a visit without consent. "Continue" starts the session. The QR code opens the privacy
    page (the backend's `PRIVACY_URL`, or its own `/privacy`); it is left out when phones couldn't open it
@@ -121,9 +125,14 @@ Open it once with the token, `http://localhost:5173/Kyra-UI-V1/#token=<apiToken>
 - **Spoken words** stay in memory: they travel between screens in router state, never in the address (a
   browser keeps addresses in its history), and aren't logged. The browser's speech service (Google, in
   Chrome) turns them into text; the backend sends the text to OpenAI to design the looks.
+- **Your results** (the profile icon, `screens/shop/AccountScreen`, Figma "Account"): a QR to a temporary page
+  of the visit's undertone, colours, fit notes and any look taken home (backend `POST …/results`). Before the
+  photo, it says the results come after it.
 - **Shop demo** (`VITE_SHOP_DEMO=true`, off by default): the friend's products, cart, filter, checkout and
   piece edits, and the cart and filter buttons in the header. Their prices, sizes, brands and stock are
   placeholders (`src/data/shopPlaceholders.js`), so real visitors never see them unless it is turned on.
+  The cart, checkout and filter follow the Figma Cart and Filter frames (`screens/shop/figma-shop.css`); values
+  marked EXPORT-2 there are guesses until the team's export-2 arrives.
 - **Design checks:** `npm run dev`, then `/Kyra-UI-V1/dev/<name>` shows a piece or screen on its own (header,
   toast, dialog, consent, too-far, hold, count, flash, allset…; the list is in `src/dev/ComponentPreview.jsx`).
   These pages are left out of the production build. The team's Figma exports go in `design/` (git ignores it).

@@ -12,6 +12,9 @@ export function createLookStore({ dir, keepHours, publicBaseUrl }) {
 
   const fileFor = (token) => path.join(dir, `${token}.png`);
   const metaFor = (token) => path.join(dir, `${token}.json`);
+  // "Your results" (the profile screen's QR): the visit's undertone, palette and fit notes, as data only.
+  // Same rules as a kept look: unguessable link, deleted after keepHours; swept with them ("<token>.results").
+  const resultsFor = (token) => path.join(dir, `${token}.results.json`);
 
   return {
     enabled: keepHours > 0,
@@ -27,6 +30,30 @@ export function createLookStore({ dir, keepHours, publicBaseUrl }) {
       writeFileSync(metaFor(token), JSON.stringify({ token, expiresAt }));
       const url = `${publicBaseUrl.replace(/\/$/, '')}/looks/${token}`;
       return { token, url, expiresAt, qrDataUrl: await QRCode.toDataURL(url, { margin: 1, width: 320 }) };
+    },
+
+    async keepResults(results) {
+      if (!(keepHours > 0)) {
+        throw new Error('Keeping looks is disabled (KEEP_HOURS=0).');
+      }
+      mkdirSync(dir, { recursive: true });
+      const token = randomBytes(16).toString('hex');
+      const expiresAt = new Date(Date.now() + keepMs).toISOString();
+      writeFileSync(resultsFor(token), JSON.stringify({ ...results, token, expiresAt }));
+      const url = `${publicBaseUrl.replace(/\/$/, '')}/results/${token}`;
+      return { token, url, expiresAt, qrDataUrl: await QRCode.toDataURL(url, { margin: 1, width: 320 }) };
+    },
+
+    getResults(token) {
+      if (!TOKEN_PATTERN.test(String(token || '')) || !existsSync(resultsFor(token))) {
+        return null;
+      }
+      const results = JSON.parse(readFileSync(resultsFor(token), 'utf8'));
+      if (Date.parse(results.expiresAt) < Date.now()) {
+        rmSync(resultsFor(token), { force: true });
+        return null;
+      }
+      return results;
     },
 
     get(token) {

@@ -683,3 +683,57 @@ test('"Still here" while the camera still sees nobody: a fresh countdown, so the
   const ended = await waitFor(() => seen.find((e) => e.type === 'session.ended'), { timeoutMs: 3000 });
   assert.equal(ended.reason, 'visitor_left', 'nobody came back: it ends after the fresh grace');
 });
+
+// ---- "Your results" (13 Nov 2026) ------------------------------------------------------------------------
+
+test('your results: a private page of the visit, a photo only of a look taken home', async (t) => {
+  const sidecar = fakeSidecar({ bundle: () => bundleFor() });
+  const { app } = await mirrorApp({ openai: openaiFake(), sidecar, env: { KEEP_HOURS: '24' } });
+  const { base, seen, sessionId } = await capturedVisit(app, t, sidecar);
+  const post = () => fetch(`${base}/api/v2/sessions/${sessionId}/results`, { method: 'POST' });
+  const first = await (await post()).json();
+  assert.match(first.url, /\/results\/[0-9a-f]{32}$/);
+  assert.match(first.qrDataUrl, /^data:image\/png;base64,/);
+  const expires = Date.parse(first.expiresAt) - Date.now();
+  assert.ok(expires > 23.9 * 3600_000 && expires <= 24 * 3600_000, 'KEEP_HOURS');
+  const page = await fetch(first.url.replace(/^https?:\/\/[^/]+/, base));
+  assert.equal(page.status, 200);
+  const html = await page.text();
+  assert.match(html, /Warm undertone, medium depth/);
+  assert.match(html, /class="palette"/);
+  assert.doesNotMatch(html, /<img/, 'no picture: nothing was taken home');
+  assert.equal((await (await post()).json()).url, first.url, 'asked again: the same page');
+
+  await waitFor(() => seen.find((e) => e.type === 'session.render.done'));
+  const kept = await (await fetch(`${base}/api/v2/sessions/${sessionId}/keep`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ round: 1, option: 1 }) })).json();
+  const keptToken = kept.url.split('/').pop();
+  const second = await (await post()).json();
+  assert.notEqual(second.url, first.url, 'a look was taken home: a new page');
+  const withLook = await (await fetch(second.url.replace(/^https?:\/\/[^/]+/, base))).text();
+  assert.match(withLook, new RegExp(`<img src="/looks/${keptToken}\\.png"`), 'only the kept look');
+  assert.equal((withLook.match(/<img/g) || []).length, 1);
+  assert.equal((await fetch(`${base}/results/${'ab'.repeat(16)}`)).status, 404);
+  assert.equal((await fetch(`${base}/results/not-a-token`)).status, 404);
+});
+
+test('your results: not before the profile, and never when keeping is off or would be plain HTTP', async (t) => {
+  const sidecar = fakeSidecar({ bundle: () => bundleFor() });
+  const { app } = await mirrorApp({ openai: openaiFake(), sidecar, env: { KEEP_HOURS: '0' } });
+  const { base, sessionId } = await capturedVisit(app, t, sidecar);
+  const off = await fetch(`${base}/api/v2/sessions/${sessionId}/results`, { method: 'POST' });
+  assert.equal(off.status, 409);
+  assert.equal((await off.json()).code, 'keeping_disabled');
+
+  const insecureSidecar = fakeSidecar({ bundle: () => bundleFor() });
+  const { app: insecure } = await mirrorApp({ openai: openaiFake(), sidecar: insecureSidecar, env: { KEEP_HOURS: '24', PUBLIC_BASE_URL: 'http://192.168.1.20:3000', ALLOWED_HOSTS: '127.0.0.1' } });
+  const second = await capturedVisit(insecure, t, insecureSidecar);
+  assert.equal((await fetch(`${second.base}/api/v2/sessions/${second.sessionId}/results`, { method: 'POST' })).status, 409, 'plain HTTP on a network: refused, like kept looks');
+
+  const early = fakeSidecar({ bundle: () => bundleFor() });
+  const { app: app3 } = await mirrorApp({ openai: openaiFake(), sidecar: early, env: { KEEP_HOURS: '24' } });
+  const { base: base3 } = await listenWithEvents(app3, t);
+  await waitFor(() => early.connected());
+  const { sessionId: waiting } = await (await fetch(`${base3}/api/v2/sessions`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ style: 'office', consent: true }) })).json();
+  const notYet = await fetch(`${base3}/api/v2/sessions/${waiting}/results`, { method: 'POST' });
+  assert.equal(notYet.status, 409, 'no photo yet: no results');
+});

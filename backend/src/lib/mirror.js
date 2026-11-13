@@ -906,7 +906,36 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
       throw new MirrorError('That look has not finished rendering.', 409);
     }
     const kept = await looks.keep(dataUrlToBuffer(entry.imageDataUrl).buffer);
+    // Remembered for "Your results": a kept look is the only picture that page may show.
+    const title = session.rounds[round - 1]?.options[option - 1]?.title || '';
+    session.keptLooks = [...(session.keptLooks || []).filter((k) => k.key !== entry.key), { key: entry.key, token: kept.token, title, expiresAt: kept.expiresAt }];
+    session.results = null; // the results page changes: make a new one next time
     publish(session, 'session.kept', { round, option, url: kept.url, expiresAt: kept.expiresAt, qrDataUrl: kept.qrDataUrl });
+    return kept;
+  }
+
+  // "Your results" (the profile screen's QR): undertone, palette, fit notes, and only the looks the
+  // visitor chose to take home (no photo otherwise). Kept like a look: private link, KEEP_HOURS.
+  async function results(sessionId) {
+    const session = get(sessionId);
+    if (!session.profile) {
+      throw new MirrorError('Your results aren’t ready yet.', 409);
+    }
+    if (session.results && Date.parse(session.results.expiresAt) > Date.now()) {
+      return session.results;
+    }
+    const profile = session.profile;
+    const kept = await looks.keepResults({
+      undertone: profile.skinUndertoneSource === 'fallback' ? null : profile.skinUndertone || null,
+      olive: Boolean(profile.olive),
+      depth: profile.skinDepth || null,
+      build: profile.build || null,
+      heightImpression: profile.heightImpression || null,
+      palette: (session.palette?.palette || []).map(({ name, hex }) => ({ name, hex })),
+      fitLines: session.fitLines || [],
+      looks: (session.keptLooks || []).filter((k) => Date.parse(k.expiresAt) > Date.now()).map(({ token, title }) => ({ token, title }))
+    });
+    session.results = kept;
     return kept;
   }
 
@@ -1097,6 +1126,7 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
   return {
     start,
     stillHere,
+    results,
     get: (sessionId) => snapshot(get(sessionId)),
     redesign,
     render: (sessionId, round, option) => {

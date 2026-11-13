@@ -143,7 +143,7 @@ The React UI already implements the whole flow below. Its README has the details
 | **Served by** | This backend, at `/Kyra-UI-V1/` (`FRONTEND_DIR`, default `Kyra-UI-V1/dist`). One origin: no CORS, and the token never sits in the build. |
 | **Token** | The kiosk link's `#token=…` (from `npm run links`) is stored once in the browser and removed from the address bar. |
 | **Camera** | The backend owns it. The UI turns `/api/v2/preview.mjpg` into the video its hand tracking and camera screens use, so pinch, wave and the hold-still view work unchanged. |
-| **Flow** | Splash (wave) → onboarding picks → analysis intro → **consent** (starts the session; QR to the privacy page) → hold still (the camera's guidance, a 3-2-1 from `holdMs`, flash, All set) → **Skin Tone Analysis** → **Fit Analysis** → **Suggestions** (swipe the outfits of every set; Virtual try-on, Edit outfit and More like this, both via `…/redesign`, one at a time) → **virtual try-on** (tap for Love it / Take it home / Show another / Back to suggestions; a failed or text-only look shows the outfit in words with Try again / Try another look). The look renders in the background meanwhile; both analysis screens can skip to it. |
+| **Flow** | Splash (wave) → How can I help you today? → (just browsing → What are you looking for? → Outfit, or pick a piece; or the voice path) → Build your profile → analysis intro → **consent** (starts the session; QR to the privacy page) → hold still (the camera's guidance, a 3-2-1 from `holdMs`, flash, All set) → **Skin Tone Analysis** → **Fit Analysis** → **Suggestions** (swipe the outfits of every set; Virtual try-on, Edit outfit and More like this, both via `…/redesign`, one at a time) → **virtual try-on** (tap for Love it / Take it home / Show another / Back to suggestions; a failed or text-only look shows the outfit in words with Try again / Try another look). The look renders in the background meanwhile; both analysis screens can skip to it. |
 | **Choices** | The picks and voice text become the session's `style` and `gender` (`src/lib/visitIntent.js`): "tops-female" becomes gender female, "…built around a top". |
 | **State** | `src/context/KyraSessionContext.jsx` (one event stream, scoped to the session) and the pure reducer `src/state/sessionReducer.js` (unit-tested). |
 | **Develop** | `npm run dev` in `Kyra-UI-V1/` forwards `/api` to this backend. `VITE_CAMERA_SOURCE=browser` uses the browser's webcam and uploads the photo instead (a UI on another machine). |
@@ -182,6 +182,7 @@ events carry `holdMs` (how long to hold) next to `heldMs` (held so far).
    - `POST …/next` (another look), `…/rate {round, option, rating}`, `…/keep {round, option}` (returns a QR code
      and link), `…/redesign {feedback?}`, `…/profile {skinUndertone?…}` (correct the profile),
      `…/profile/confirm`, `DELETE …` (done, forget me).
+   - `POST …/results` ("Your results": a QR to a temporary page of the visit's undertone, colours, fit notes and any look taken home; like `keep`, private link, `KEEP_HOURS`).
    - Gestures (thumbs up, thumbs down, victory) are handled by the backend and also arrive as events.
 
 Minimal version:

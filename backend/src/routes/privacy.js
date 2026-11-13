@@ -29,6 +29,10 @@ export function privacyTarget(config) {
 export function privacyPage(config) {
   const hours = Number(config.keepHours) || 0;
   // Out of view for ABSENT_AFTER_MS (the camera), then the kiosk's "Still here?" for LEAVE_GRACE_MS.
+  const results =
+    hours > 0
+      ? `If you scan the QR code on the profile screen, a page with your results (undertone, colours, fit notes, and any look you took home) is kept behind a private link and deleted after ${escapeHtml(hours)} hour${hours === 1 ? '' : 's'}. It holds no photo of you unless you took a look home.`
+      : 'Your results cannot be taken home on this mirror.';
   const seconds = Math.round(((Number(config.absentAfterMs) || 0) + (Number(config.leaveGraceMs) || 0)) / 1000);
   const away = seconds >= 120 && seconds % 60 === 0 ? `${seconds / 60} minutes` : `${seconds} seconds`;
   const keep =
@@ -48,7 +52,8 @@ h1{font-size:26px;line-height:1.25;margin:0 0 20px}h2{font-size:18px;margin:28px
 <h2>How long it is kept</h2>
 <ul><li>During your visit your photo and results are held in the mirror's memory only.</li>
 <li>When you finish, or about ${escapeHtml(away)} after you step away from the mirror, they are forgotten.</li>
-<li>${keep}</li></ul>
+<li>${keep}</li>
+<li>${results}</li></ul>
 <h2>What the mirror learns</h2>
 <p>When you like or dislike a look, or correct your skin tone, the mirror notes the colours and the undertone, to suggest better colours to future visitors. These notes contain no photo, name or anything that identifies you.</p>
 <h2>Questions</h2>

@@ -225,6 +225,8 @@ disable). Photos are sent to OpenAI, so the UI must ask first.
 | `GET` / `DELETE /api/v2/calibration`, `POST /api/v2/calibrate/height {heightCm}`, `POST /api/v2/calibrate/white-balance {roi}`, `POST /api/v2/calibrate/undertone {save?}` | Calibration (see sidecar README). The undertone fit uses the logged confirmations and corrections |
 | `GET /api/v2/metrics` | Today's spend, queue, per-step timings (avg, p50, p90), counters, and `insights`: approval per undertone and measured hue angle by corrected undertone |
 | `GET /looks/:token` | Public page for a kept look (the token is the access control), plus `/looks/:token.png` |
+| `POST /api/v2/sessions/:id/results` | "Your results" (the kiosk's profile screen): a temporary page of the visit's undertone, colours, fit notes and any look taken home. Returns `{ url, qrDataUrl, expiresAt }`. Same rules as kept looks: private link, `KEEP_HOURS`, refused (409) over plain HTTP on a network |
+| `GET /results/:token` | Public page for those results (the token is the access control). No photo unless a look was taken home |
 | `POST /api/v2/sessions/:id/still-here` | The visitor pressed "Still here" during the countdown (`session.leaving`): the visit carries on (`session.stayed`). Returns `{ stayed }` |
 | `GET /api/v2/privacy` | The consent screen's QR code: `{ url, qrDataUrl }` for `PRIVACY_URL`, or for this backend's `/privacy` when `PUBLIC_BASE_URL` is set; `{ url: null }` otherwise (a phone couldn't open `localhost`) |
 | `GET /privacy` | Public page: what the mirror does with a visitor's photo, in plain words (the kept-look hours come from `KEEP_HOURS`) |

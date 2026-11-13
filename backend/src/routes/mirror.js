@@ -2,6 +2,7 @@ import { Readable } from 'node:stream';
 import { MirrorError, VISITOR_MESSAGES } from '../lib/mirror.js';
 import { normalizeGender, normalizeHeight, normalizePreferences, normalizeString, pickEnum, promptText } from '../lib/normalize.js';
 import { SidecarError } from '../lib/sidecar.js';
+import { resultsPage } from '../lib/results-page.js';
 
 // v2: the camera-first mirror pipeline. The UI opens GET /api/v2/events once and reacts to events;
 // these endpoints only start things.
@@ -153,6 +154,18 @@ export default async function mirrorRoutes(app, { config, mirror, sidecar, event
     }
   });
 
+  // "Your results" (the profile screen): a temporary page of this visit's results, and its QR code.
+  app.post('/api/v2/sessions/:sessionId/results', async (request, reply) => {
+    try {
+      return await mirror.results(request.params.sessionId);
+    } catch (error) {
+      if (!(error instanceof MirrorError) && /disabled/.test(error.message)) {
+        return reply.code(409).send({ error: 'Results can’t be taken home on this mirror.', code: 'keeping_disabled' });
+      }
+      return fail(reply, error);
+    }
+  });
+
   // "Still here?": the visitor pressed Still here while the visit was about to end (session.leaving).
   app.post('/api/v2/sessions/:sessionId/still-here', async (request, reply) => {
     try {
@@ -215,6 +228,15 @@ export default async function mirrorRoutes(app, { config, mirror, sidecar, event
     usage: usageLog.summary(),
     ...metrics.summary()
   }));
+
+  // "Your results", public like a kept look: the unguessable token is the access control.
+  app.get('/results/:token', async (request, reply) => {
+    const results = looks.getResults(request.params.token);
+    if (!results) {
+      return reply.code(404).type('text/html').send('<!doctype html><meta charset="utf-8"><title>KYRA</title><p>These results have expired.</p>');
+    }
+    return reply.type('text/html; charset=utf-8').header('cache-control', 'private, no-store').send(resultsPage(results));
+  });
 
   // Public by design: the unguessable token is the access control, so phones can open the QR link.
   app.get('/looks/:token', async (request, reply) => {
