@@ -225,6 +225,7 @@ disable). Photos are sent to OpenAI, so the UI must ask first.
 | `GET` / `DELETE /api/v2/calibration`, `POST /api/v2/calibrate/height {heightCm}`, `POST /api/v2/calibrate/white-balance {roi}`, `POST /api/v2/calibrate/undertone {save?}` | Calibration (see sidecar README). The undertone fit uses the logged confirmations and corrections |
 | `GET /api/v2/metrics` | Today's spend, queue, per-step timings (avg, p50, p90), counters, and `insights`: approval per undertone and measured hue angle by corrected undertone |
 | `GET /looks/:token` | Public page for a kept look (the token is the access control), plus `/looks/:token.png` |
+| `POST /api/v2/sessions/:id/still-here` | The visitor pressed "Still here" during the countdown (`session.leaving`): the visit carries on (`session.stayed`). Returns `{ stayed }` |
 | `GET /api/v2/privacy` | The consent screen's QR code: `{ url, qrDataUrl }` for `PRIVACY_URL`, or for this backend's `/privacy` when `PUBLIC_BASE_URL` is set; `{ url: null }` otherwise (a phone couldn't open `localhost`) |
 | `GET /privacy` | Public page: what the mirror does with a visitor's photo, in plain words (the kept-look hours come from `KEEP_HOURS`) |
 | `GET /health` | Always `200` while the process is up, with sidecar, budget and session details |
@@ -236,7 +237,7 @@ Visitor-facing error text is always plain (`VISITOR_MESSAGES` in `lib/mirror.js`
 ## Privacy
 
 - In the v2 flow, visitor photos and measurements live **in memory only**. They are dropped when the
-  visitor walks away (`AUTO_END_ON_LEAVE`), presses done, or is idle for `SESSION_TTL_MINUTES`.
+  visitor walks away (`AUTO_END_ON_LEAVE`: `session.leaving` with `endsAt`, then the end after `LEAVE_GRACE_MS` unless they come back or press "Still here"), presses done, or is idle for `SESSION_TTL_MINUTES`.
 - The only thing ever written to disk is a look the visitor explicitly keeps. It's one PNG behind a random
   32-hex-character link, deleted after `KEEP_HOURS`.
 - v1 debug copies (`RETENTION_HOURS`) are off by default.

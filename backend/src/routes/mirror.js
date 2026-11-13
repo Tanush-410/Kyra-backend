@@ -153,6 +153,15 @@ export default async function mirrorRoutes(app, { config, mirror, sidecar, event
     }
   });
 
+  // "Still here?": the visitor pressed Still here while the visit was about to end (session.leaving).
+  app.post('/api/v2/sessions/:sessionId/still-here', async (request, reply) => {
+    try {
+      return mirror.stillHere(request.params.sessionId);
+    } catch (error) {
+      return fail(reply, error);
+    }
+  });
+
   app.delete('/api/v2/sessions/:sessionId', async (request, reply) => {
     try {
       mirror.end(request.params.sessionId);

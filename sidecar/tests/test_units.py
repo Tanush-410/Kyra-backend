@@ -144,11 +144,11 @@ def test_silhouette_matching_survives_a_noisy_webcam_outline():
     assert 100 <= np.median(right - left) <= 113, "matched to the visitor's width, garment up to 12% looser"
 
 
-def test_a_visitor_counts_as_gone_after_30_seconds_out_of_view(monkeypatch):
-    # 12 Nov 2026: the kiosk design asks "Still here? We'll delete your session in 30 seconds."
+def test_a_visitor_counts_as_gone_after_10_seconds_out_of_view(monkeypatch):
+    # 13 Nov 2026: then the backend gives them LEAVE_GRACE_MS (30 s) of "Still here?" before the visit ends.
     from kyra_sidecar.config import Config
 
     monkeypatch.delenv("ABSENT_AFTER_MS", raising=False)
-    assert Config().absent_after_ms == 30000
+    assert Config().absent_after_ms == 10000
     monkeypatch.setenv("ABSENT_AFTER_MS", "12000")
     assert Config().absent_after_ms == 12000

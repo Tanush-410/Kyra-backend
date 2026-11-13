@@ -103,7 +103,7 @@ app that launches it (Terminal, VS Code or the Tauri app) needs camera permissio
 | `ANALYSIS_WIDTH`, `TARGET_FPS` | `960`, `15` | Analysis resolution and frame rate. Captures use full resolution. |
 | `READY_HOLD_MS` | `3000` | How long a ready pose must be held before auto-capture (the kiosk UI counts 3, 2, 1). |
 | `SKIN_FRAMES` | `15` | Frames averaged for skin tone. |
-| `ABSENT_AFTER_MS` | `30000` | How long nobody (no body and no face) can be in frame before the visitor counts as gone and the visit ends. 30 s matches the kiosk design's "Still here? We'll delete your session in 30 seconds." |
+| `ABSENT_AFTER_MS` | `10000` | How long nobody (no body and no face) can be in frame before the camera reports the visitor gone (`presence: false`). The kiosk then asks "Still here?" for the backend's `LEAVE_GRACE_MS` (30 s) before the visit ends, so a visit is forgotten about 40 s after the visitor steps away. |
 | `GESTURES`, `GESTURE_HOLD_MS`, `GESTURE_COOLDOWN_MS` | `true`, `600`, `2000` | Hands-free control. |
 | `FREEZE_AFTER_S` | `5` | Byte-identical frames for this long count as a frozen camera, which is then reopened. |
 

@@ -329,7 +329,7 @@ test('keep: only a requested look is saved, behind an unguessable link with a QR
 test('camera flow over live events: arm → capture event → options → partial previews → done → visitor leaves', async (t) => {
   const sidecar = fakeSidecar({ bundle: () => bundleFor({ heightCm: 172 }) });
   const openai = mirrorOpenAI({ stream: true, streamText: true });
-  const { app } = await mirrorApp({ openai, sidecar, env: { PARTIAL_IMAGES: '2' } });
+  const { app } = await mirrorApp({ openai, sidecar, env: { PARTIAL_IMAGES: '2', LEAVE_GRACE_MS: '50' } });
   const controller = new AbortController();
   t.after(async () => {
     controller.abort();
@@ -381,6 +381,7 @@ test('camera flow over live events: arm → capture event → options → partia
   assert.equal(sidecar.callsTo('/captures/cap123').filter((c) => c.method === 'DELETE').length, 1, 'capture deleted from the sidecar once fetched');
 
   sidecar.emit({ type: 'presence', present: false });
+  await waitFor(() => seen.find((e) => e.type === 'session.leaving'));
   const ended = await waitFor(() => seen.find((e) => e.type === 'session.ended'));
   assert.equal(ended.reason, 'visitor_left');
   assert.equal((await fetch(`${base}/api/v2/sessions/${sessionId}`)).status, 404);

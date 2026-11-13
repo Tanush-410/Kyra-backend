@@ -28,7 +28,8 @@ export function privacyTarget(config) {
 
 export function privacyPage(config) {
   const hours = Number(config.keepHours) || 0;
-  const seconds = Math.round((Number(config.absentAfterMs) || 30_000) / 1000);
+  // Out of view for ABSENT_AFTER_MS (the camera), then the kiosk's "Still here?" for LEAVE_GRACE_MS.
+  const seconds = Math.round(((Number(config.absentAfterMs) || 0) + (Number(config.leaveGraceMs) || 0)) / 1000);
   const away = seconds >= 120 && seconds % 60 === 0 ? `${seconds / 60} minutes` : `${seconds} seconds`;
   const keep =
     hours > 0

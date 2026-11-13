@@ -116,6 +116,9 @@ export function loadConfig(env = process.env) {
     sidecarSpawn: ['true', 'false'].includes(String(env.SIDECAR_SPAWN)) ? String(env.SIDECAR_SPAWN) : 'auto',
     sidecarDir: path.resolve(projectRoot, env.SIDECAR_DIR || 'sidecar'),
     autoEndOnLeave: booleanFrom(env.AUTO_END_ON_LEAVE, true),
+    // After the camera reports the visitor gone (the sidecar's ABSENT_AFTER_MS), the kiosk asks "Still here?"
+    // for this long before the visit ends. 0 ends it at once.
+    leaveGraceMs: Math.max(0, numberFrom(env.LEAVE_GRACE_MS, 30_000)),
     renderConcurrency: Math.max(1, numberFrom(env.RENDER_CONCURRENCY, 2)),
     // Streamed previews while an image renders: each adds ~100 output tokens. 0 by default (token saving).
     partialImages: Math.max(0, Math.min(3, numberFrom(env.PARTIAL_IMAGES, 0))),
@@ -182,7 +185,7 @@ export function loadConfig(env = process.env) {
 
     keepHours: numberFrom(env.KEEP_HOURS, 24),
     // The sidecar's setting (passed on to it): how long out of view before a visit ends. Read here for /privacy.
-    absentAfterMs: numberFrom(env.ABSENT_AFTER_MS, 30_000),
+    absentAfterMs: numberFrom(env.ABSENT_AFTER_MS, 10_000),
     publicBaseUrl: env.PUBLIC_BASE_URL || '',
     // Where the consent screen's QR code leads: the venue's own privacy notice. Empty: this backend's
     // /privacy page, when PUBLIC_BASE_URL says how phones reach it; otherwise the screen shows no QR.

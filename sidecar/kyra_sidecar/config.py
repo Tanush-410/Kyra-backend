@@ -50,7 +50,7 @@ class Config:
     # (the original single cheek/forehead patch).
     undertone_engine: str = field(default_factory=lambda: os.environ.get("UNDERTONE_ENGINE", "detector").strip().lower())
     # Visitor counts as gone after this long with nobody in frame.
-    absent_after_ms: int = field(default_factory=lambda: int(_number("ABSENT_AFTER_MS", 30000)))
+    absent_after_ms: int = field(default_factory=lambda: int(_number("ABSENT_AFTER_MS", 10000)))
     capture_ttl_s: int = field(default_factory=lambda: int(_number("CAPTURE_TTL_S", 300)))
 
     # Hands-free control: a gesture must be held this long, then is ignored for the cooldown.

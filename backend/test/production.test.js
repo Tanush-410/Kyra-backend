@@ -586,3 +586,71 @@ test('a clearer face seen after the photo is put onto the finished look, for fre
   assert.equal(session.renders[0].imageDataUrl, 'data:image/png;base64,Q0xFQVJGQUNF');
   assert.equal(sidecar.callsTo('/compose').length, imagesBefore, 'no new render or compose: just the face');
 });
+
+// ---- "Still here?" (13 Nov 2026) -------------------------------------------------------------------------
+// The camera reports the visitor gone after ABSENT_AFTER_MS; the visit then waits LEAVE_GRACE_MS for them.
+
+async function capturedVisit(app, t, sidecar) {
+  const { base, seen } = await listenWithEvents(app, t);
+  await waitFor(() => sidecar.connected());
+  const { sessionId } = await (await fetch(`${base}/api/v2/sessions`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ style: 'office', consent: true }) })).json();
+  sidecar.emit({ type: 'capture', sessionId, captureId: 'cap123' });
+  await waitFor(() => seen.find((e) => e.type === 'session.profile'));
+  return { base, seen, sessionId };
+}
+
+test('visitor out of view: the kiosk gets a countdown, then the visit ends', async (t) => {
+  const sidecar = fakeSidecar({ bundle: () => bundleFor() });
+  const { app } = await mirrorApp({ openai: openaiFake(), sidecar, env: { LEAVE_GRACE_MS: '400' } });
+  const { base, seen, sessionId } = await capturedVisit(app, t, sidecar);
+  const before = Date.now();
+  sidecar.emit({ type: 'presence', present: false });
+  const leaving = await waitFor(() => seen.find((e) => e.type === 'session.leaving'));
+  assert.equal(leaving.sessionId, sessionId);
+  assert.ok(leaving.endsAt >= before + 350 && leaving.endsAt <= Date.now() + 400, 'endsAt: now + LEAVE_GRACE_MS');
+  const during = await fetch(`${base}/api/v2/sessions/${sessionId}`);
+  assert.equal(during.status, 200, 'still there during the grace');
+  assert.equal((await during.json()).leavingEndsAt, leaving.endsAt, 'a reconnecting kiosk can show the countdown');
+  assert.ok(!seen.some((e) => e.type === 'session.ended'));
+  const ended = await waitFor(() => seen.find((e) => e.type === 'session.ended'), { timeoutMs: 3000 });
+  assert.equal(ended.reason, 'visitor_left');
+  assert.ok(Date.now() - before >= 380, 'not before the grace ran out');
+  assert.equal((await fetch(`${base}/api/v2/sessions/${sessionId}`)).status, 404, 'forgotten');
+});
+
+test('back in view during the grace: the visit carries on', async (t) => {
+  const sidecar = fakeSidecar({ bundle: () => bundleFor() });
+  const { app } = await mirrorApp({ openai: openaiFake(), sidecar, env: { LEAVE_GRACE_MS: '300' } });
+  const { base, seen, sessionId } = await capturedVisit(app, t, sidecar);
+  sidecar.emit({ type: 'presence', present: false });
+  await waitFor(() => seen.find((e) => e.type === 'session.leaving'));
+  sidecar.emit({ type: 'presence', present: true });
+  const stayed = await waitFor(() => seen.find((e) => e.type === 'session.stayed'));
+  assert.equal(stayed.reason, 'present');
+  await new Promise((resolve) => setTimeout(resolve, 500));
+  assert.ok(!seen.some((e) => e.type === 'session.ended'), 'the timer was cancelled');
+  const after = await (await fetch(`${base}/api/v2/sessions/${sessionId}`)).json();
+  assert.equal(after.leavingEndsAt, null);
+});
+
+test('"Still here" pressed during the grace keeps the visit; LEAVE_GRACE_MS=0 ends at once', async (t) => {
+  const sidecar = fakeSidecar({ bundle: () => bundleFor() });
+  const { app } = await mirrorApp({ openai: openaiFake(), sidecar, env: { LEAVE_GRACE_MS: '300' } });
+  const { base, seen, sessionId } = await capturedVisit(app, t, sidecar);
+  const stillHere = (id) => fetch(`${base}/api/v2/sessions/${id}/still-here`, { method: 'POST' });
+  assert.deepEqual(await (await stillHere(sessionId)).json(), { stayed: false }, 'nothing to cancel yet');
+  sidecar.emit({ type: 'presence', present: false });
+  await waitFor(() => seen.find((e) => e.type === 'session.leaving'));
+  assert.deepEqual(await (await stillHere(sessionId)).json(), { stayed: true });
+  assert.equal((await waitFor(() => seen.find((e) => e.type === 'session.stayed'))).reason, 'visitor');
+  await new Promise((resolve) => setTimeout(resolve, 450));
+  assert.ok(!seen.some((e) => e.type === 'session.ended'));
+  assert.equal((await stillHere('no-such-visit')).status, 404);
+
+  const quick = fakeSidecar({ bundle: () => bundleFor() });
+  const { app: app2 } = await mirrorApp({ openai: openaiFake(), sidecar: quick, env: { LEAVE_GRACE_MS: '0' } });
+  const second = await capturedVisit(app2, t, quick);
+  quick.emit({ type: 'presence', present: false });
+  assert.equal((await waitFor(() => second.seen.find((e) => e.type === 'session.ended'))).reason, 'visitor_left');
+  assert.ok(!second.seen.some((e) => e.type === 'session.leaving'), 'no grace: no countdown');
+});

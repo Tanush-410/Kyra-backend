@@ -175,6 +175,7 @@ events carry `holdMs` (how long to hold) next to `heldMs` (held so far).
 | `session.render.partial` / `.done` | Preview (none by default) and final image (`imageDataUrl`). `.done` can come again for the same look with `upgraded: true` when a clearer face was placed on it: replace the image. |
 | `session.degraded` / `session.recovered` | Text-only mode: images are unavailable for now, or the budget is spent. Show `message`. |
 | `session.error`, `session.render.failed` | `error` is visitor-ready text. |
+| `session.leaving` / `session.stayed` | The camera lost the visitor: show "Still here?" counting down to `endsAt`; `stayed` (back in view, or `…/still-here`) hides it. |
 | `session.ended` | `reason`: `visitor_left`, `ended_by_visitor`, `timeout` or `replaced`. Return to the start screen. |
 
 6. **Visitor actions:**
@@ -212,8 +213,10 @@ listen(sessionId);                              // now this visitor's images arr
 
 **Visitor behaviour the frontend can rely on:**
 - A visitor walking up to the screen to look at their result keeps it.
-- The session ends after 30 seconds with no body *and* no face in view (`ABSENT_AFTER_MS`, set on the
-  sidecar), or when they press done.
+- With no body *and* no face in view for 10 s (`ABSENT_AFTER_MS`, on the sidecar), the camera reports the
+  visitor gone: `session.leaving` with `endsAt` (now + `LEAVE_GRACE_MS`, 30 s). The kiosk shows "Still
+  here?" with the countdown. Back in view, or `POST …/still-here`, cancels it (`session.stayed`); otherwise
+  the session ends (`visitor_left`). Pressing done ends it at once.
 
 ## 5. If the old backend stays (path B)
 
@@ -356,4 +359,4 @@ see in the left column.
 | Renders fail with an OpenAI **401/403** | The key is wrong, or its organisation can't use the image model (OpenAI has required organisation verification for its image models). | Check the key, and the organisation's verification and model access, in the OpenAI dashboard. |
 | A change in `.env` has no effect | The backend reads `.env` only at start, and a value given on the command line wins. | Restart. Check you aren't also setting it on the command line or in your shell profile. |
 | `npm ci` fails, or Node says a feature is missing | Node is older than 22. | Install Node 24 LTS (`nvm install 24`, or nodejs.org). |
-| The visitor's look disappears | They were out of view (no body and no face) for 30 s, or pressed done. | Expected. Raise `ABSENT_AFTER_MS` (sidecar setting) for a slower kiosk flow. |
+| The visitor's look disappears | They were out of view (no body and no face) for about 40 s (`ABSENT_AFTER_MS` 10 s, then the "Still here?" countdown, `LEAVE_GRACE_MS` 30 s), or pressed done. | Expected. Raise `LEAVE_GRACE_MS` (backend) for a slower kiosk flow. |

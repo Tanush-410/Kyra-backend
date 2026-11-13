@@ -910,10 +910,46 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
     return kept;
   }
 
+  // The camera reports the visitor gone: the kiosk asks "Still here?" until endsAt, then the visit ends.
+  function leave(session) {
+    if (session.leaving) {
+      return;
+    }
+    if (!(config.leaveGraceMs > 0)) {
+      end(session, 'visitor_left');
+      return;
+    }
+    const endsAt = Date.now() + config.leaveGraceMs;
+    const timer = setTimeout(() => end(session, 'visitor_left'), config.leaveGraceMs);
+    timer.unref?.();
+    session.leaving = { endsAt, timer };
+    publish(session, 'session.leaving', { endsAt });
+  }
+
+  // Back in view, or "Still here" pressed: the visit carries on.
+  function stay(session, reason) {
+    if (!session.leaving) {
+      return false;
+    }
+    clearTimeout(session.leaving.timer);
+    session.leaving = null;
+    session.lastActivity = Date.now();
+    publish(session, 'session.stayed', { reason });
+    return true;
+  }
+
+  function stillHere(sessionId) {
+    const session = get(sessionId);
+    session.lastActivity = Date.now();
+    return { stayed: stay(session, 'visitor') };
+  }
+
   function end(session, reason) {
     if (!sessions.has(session.sessionId)) {
       return;
     }
+    clearTimeout(session.leaving?.timer);
+    session.leaving = null;
     sessions.delete(session.sessionId);
     clearTimeout(session.dwellTimer);
     session.status = 'ended';
@@ -1016,6 +1052,7 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
       rounds: session.rounds.map(({ round, style, feedback, source, options, order }) => ({ round, style, feedback, source, options, order })),
       renders: [...session.renders.values()].map(({ key, round, option, status, faceCheck, imageDataUrl, error, prefetch, tokens }) => ({ key, round, option, status, faceCheck, imageDataUrl, error, prefetch, tokens })),
       activeKey: session.activeKey,
+      leavingEndsAt: session.leaving?.endsAt || null,
       experiment: { finalQuality: session.variant?.finalQuality || config.finalQuality },
       degraded: session.degraded
     };
@@ -1029,11 +1066,11 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
     } else if (event.type === 'presence') {
       visitorPresent = Boolean(event.present);
       events.publish({ type: 'presence', present: event.present });
-      if (!event.present && config.autoEndOnLeave) {
-        for (const session of [...sessions.values()]) {
-          if (session.source === 'camera' && session.status !== 'waiting_for_capture') {
-            end(session, 'visitor_left');
-          }
+      for (const session of [...sessions.values()]) {
+        if (event.present) {
+          stay(session, 'present');
+        } else if (config.autoEndOnLeave && session.source === 'camera' && session.status !== 'waiting_for_capture') {
+          leave(session);
         }
       }
     } else if (event.type === 'face' && event.better) {
@@ -1053,6 +1090,7 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
 
   return {
     start,
+    stillHere,
     get: (sessionId) => snapshot(get(sessionId)),
     redesign,
     render: (sessionId, round, option) => {
