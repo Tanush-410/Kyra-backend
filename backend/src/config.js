@@ -52,6 +52,11 @@ function booleanFrom(value, fallback) {
   return !['0', 'false', 'no', 'off'].includes(String(value).trim().toLowerCase());
 }
 
+function pickFrom(value, allowed, fallback) {
+  const text = String(value || '').trim().toLowerCase();
+  return allowed.includes(text) ? text : fallback;
+}
+
 function corsOriginsFrom(value) {
   const raw = String(value || '').trim();
   if (!raw) {
@@ -169,7 +174,10 @@ export function loadConfig(env = process.env) {
     costs: {
       text: numberFrom(env.COST_TEXT_CALL_USD, 0.02),
       image: numberFrom(env.COST_IMAGE_USD, 0.065),
-      draft: numberFrom(env.COST_DRAFT_IMAGE_USD, 0.02)
+      draft: numberFrom(env.COST_DRAFT_IMAGE_USD, 0.02),
+      // A product photo of one piece (low quality, square): an estimate reserved before the call; the real
+      // cost from the response's usage is what is recorded.
+      photo: numberFrom(env.COST_PRODUCT_PHOTO_USD, 0.015)
     },
     prices: env.PRICES_JSON ? JSON.parse(env.PRICES_JSON) : null,
     budgetWarnFraction: numberFrom(env.BUDGET_WARN_FRACTION, 0.8),
@@ -194,6 +202,18 @@ export function loadConfig(env = process.env) {
     // The team's kiosk UI (Kyra-UI-V1), built with `npm run build`, served at FRONTEND_PATH. FRONTEND_DIR=''
     // turns it off (for example when the UI is served some other way).
     frontendDir: env.FRONTEND_DIR === '' ? '' : path.resolve(projectRoot, env.FRONTEND_DIR || 'Kyra-UI-V1/dist'),
-    frontendPath: env.FRONTEND_PATH || '/Kyra-UI-V1/'
+    frontendPath: env.FRONTEND_PATH || '/Kyra-UI-V1/',
+
+    // Product photos: a studio photo of each designed piece (no person in it), for the kiosk's Suggestions
+    // and cart. Made the first time a piece is shown, then kept and reused for the same piece.
+    productPhotos: booleanFrom(env.PRODUCT_PHOTOS, true),
+    // The venue's location for the weather shown on Rate and changes (Open-Meteo, no key, no visitor data).
+    // Empty: no weather.
+    venueLat: Number.isFinite(Number.parseFloat(env.VENUE_LAT)) ? Number.parseFloat(env.VENUE_LAT) : null,
+    venueLon: Number.isFinite(Number.parseFloat(env.VENUE_LON)) ? Number.parseFloat(env.VENUE_LON) : null,
+    productPhotoQuality: pickFrom(env.PRODUCT_PHOTO_QUALITY, ['low', 'medium', 'high'], 'low'),
+    productPhotoDir: env.PRODUCT_PHOTO_DIR
+      ? path.resolve(backendRoot, env.PRODUCT_PHOTO_DIR)
+      : path.join(path.resolve(backendRoot, env.RUNTIME_DIR || '.runtime'), 'product-photos')
   };
 }

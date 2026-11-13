@@ -120,16 +120,17 @@ export function KyraSessionProvider({ children }) {
        * (VITE_CAMERA_SOURCE=browser); otherwise the backend camera captures when the visitor holds still.
        * Only call after the visitor agreed (the consent screen). Throws KyraApiError.
        */
-      start: async ({ style, gender }, { imageDataUrl } = {}) => {
+      start: async ({ style, gender, mode }, { imageDataUrl } = {}) => {
         const previous = sessionRef.current;
         if (previous && !previous.ended) kyraApi.endSession(previous.id).catch(() => {});
         const created = await kyraApi.startSession({
           style,
           ...(gender ? { gender } : {}),
           ...(imageDataUrl ? { imageDataUrl } : {}),
+          ...(mode === "rate" ? { mode: "rate" } : {}),
           consent: true,
         });
-        dispatch({ type: "session/started", sessionId: created.sessionId, status: created.status, gender: gender || null });
+        dispatch({ type: "session/started", sessionId: created.sessionId, status: created.status, gender: gender || null, mode });
         return created;
       },
       next: () => act((s) => kyraApi.next(s.id)),

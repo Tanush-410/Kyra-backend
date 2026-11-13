@@ -25,3 +25,6 @@ __pycache__/
 backend/.runtime/
 
 # Kyra-UI-V1/ (the kiosk UI) is part of this repo; its node_modules/ and dist/ are ignored above.
+
+# Figma exports dropped in for reference (the same files live in Kyra-UI-V1/design/, also ignored)
+KYRA Mirror/

@@ -26,6 +26,9 @@ import handheldRoutes from './routes/handheld.js';
 import jobRoutes from './routes/jobs.js';
 import mirrorRoutes from './routes/mirror.js';
 import privacyRoutes from './routes/privacy.js';
+import productPhotoRoutes from './routes/product-photos.js';
+import contextRoutes from './routes/context.js';
+import { createProductPhotos } from './lib/productPhotos.js';
 import reviewRoutes from './routes/review.js';
 import styleMeRoutes from './routes/style-me.js';
 import suggestionRoutes from './routes/suggestion.js';
@@ -77,7 +80,7 @@ function loggerOptions(logger, config) {
   return { ...base, serializers: { req: requestSerializer, ...(base.serializers || {}) }, ...(stream ? { stream } : {}) };
 }
 
-export async function buildApp(config, { logger = true, fetchImpl, sidecarFetch, alertFetch, spawnSidecar = true } = {}) {
+export async function buildApp(config, { logger = true, fetchImpl, sidecarFetch, alertFetch, weatherFetch, spawnSidecar = true } = {}) {
   const https = config.tls ? { cert: readFileSync(config.tls.certFile), key: readFileSync(config.tls.keyFile) } : null;
   const app = Fastify({ logger: loggerOptions(logger, config), bodyLimit: 10 * 1024 * 1024, ...(https ? { https } : {}) });
   const alerts = createAlerts({ webhookUrl: config.alertWebhookUrl, cooldownMs: config.alertCooldownMs, name: config.alertName, fetchImpl: alertFetch, log: app.log });
@@ -131,6 +134,7 @@ export async function buildApp(config, { logger = true, fetchImpl, sidecarFetch,
     publicBaseUrl: lookBaseUrl
   });
   const mirror = createMirror({ config, openai, sidecar, events, metrics, limiter, looks, budget, insights, alerts, log: app.log });
+  const productPhotos = createProductPhotos({ dir: config.productPhotoDir, openai, events, log: app.log, quality: config.productPhotoQuality, enabled: config.productPhotos });
 
   // Session routes are limited per visitor session, everything else per client address. A kiosk sends
   // every visitor's requests from one address, so a per-address limit would make visitors share it.
@@ -236,7 +240,7 @@ export async function buildApp(config, { logger = true, fetchImpl, sidecarFetch,
   });
 
   const rateLimit = config.rateLimitMax > 0 ? { max: config.rateLimitMax, timeWindow: config.rateLimitWindowMs, keyGenerator: rateLimitKey } : false;
-  const deps = { config, openai, storage, jobs, sessions, catalogue, rateLimit, mirror, sidecar, events, metrics, budget, limiter, looks, insights, usageLog };
+  const deps = { config, openai, storage, jobs, sessions, catalogue, rateLimit, mirror, sidecar, events, metrics, budget, limiter, looks, insights, usageLog, productPhotos };
   await app.register(reviewRoutes, deps);
   await app.register(suggestionRoutes, deps);
   await app.register(handheldRoutes, deps);
@@ -244,6 +248,8 @@ export async function buildApp(config, { logger = true, fetchImpl, sidecarFetch,
   await app.register(jobRoutes, deps);
   await app.register(mirrorRoutes, deps);
   await app.register(privacyRoutes, deps);
+  await app.register(productPhotoRoutes, deps);
+  await app.register(contextRoutes, { ...deps, ...(weatherFetch ? { fetchWeather: weatherFetch } : {}) });
 
   const sweepDisk = () => {
     const deleted = storage.sweepExpired() + looks.sweep();

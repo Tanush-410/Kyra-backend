@@ -1,0 +1,94 @@
+/* Figma "Rate and changes" (design: ~/Downloads/Rate and changes.png). Positions in px on the 1080 x 3840
+   screen: greeting at 95, date/time/weather right, star at 251, score at 353 (100px), the lede at 448,
+   round icons (100px) at 70 x 680/815/951, the change card 762 wide at x 180, its photo above or below. */
+.rate-wrap { position: relative; width: 1080px; height: 3840px; overflow: hidden; }
+.rate { color: #fff; background: #2a2a2a; }
+.rate .camera-feed, .rate__look { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.rate__look { object-fit: contain; object-position: center 70%; background: #000; }
+.rate__shade { position: absolute; inset: 0; background: rgba(32, 32, 32, 0.35); transition: background 0.3s ease, backdrop-filter 0.3s ease; }
+.rate__shade--blur { background: rgba(32, 32, 32, 0.6); -webkit-backdrop-filter: blur(22px); backdrop-filter: blur(22px); }
+
+.rate__head { position: absolute; top: 72px; left: 89px; right: 77px; height: 260px; }
+.rate__hello { position: absolute; top: 0; left: 0; margin: 0; font-weight: 600; font-size: 54px; line-height: 1.2; }
+.rate__when { position: absolute; top: 4px; right: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 22px; font-weight: 600; font-size: 36px; }
+.rate__weather { display: flex; align-items: center; gap: 12px; }
+.rate__weather svg { width: 60px; height: 42px; }
+.rate__star { position: absolute; top: 178px; left: 16px; width: 64px; height: 64px; opacity: 0.8; }
+
+.rate__score { position: absolute; top: 330px; left: 0; width: 100%; margin: 0; text-align: center; font-weight: 700; font-size: 100px; line-height: 1.2; text-shadow: 0 4px 18px rgba(0, 0, 0, 0.45); }
+.rate__lede { position: absolute; top: 460px; left: 212px; width: 656px; margin: 0; text-align: center; font-size: 44px; line-height: 1.3; text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5); white-space: pre-line; }
+.rate__middle { position: absolute; top: 1300px; left: 0; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 60px; }
+.rate__middle .rate__lede { position: static; }
+.rate__middle--low { top: 1500px; }
+
+.rate__icons { position: absolute; top: 680px; left: 70px; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 35px; z-index: 2; }
+.rate__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  padding: 0;
+  border: 5px solid #fff;
+  border-radius: 50%;
+  background: rgba(30, 30, 30, 0.55);
+  color: #fff;
+  cursor: pointer;
+}
+.rate__icon img, .rate__icon svg { width: 54px; height: 54px; object-fit: contain; }
+.rate__icon:hover, .rate__icon[data-hand-hovered="true"] { outline: 5px solid #e74787; outline-offset: 4px; }
+
+/* A change: the card and its photo, stacked (card first for shoes; photo first for jewellery, hair, tops) */
+.rate__change { position: absolute; top: 1220px; left: 0; width: 1080px; display: flex; flex-direction: column; align-items: center; gap: 110px; z-index: 1; }
+.rate__change--photo-first { flex-direction: column-reverse; top: 1180px; gap: 110px; }
+.rate__card {
+  position: relative;
+  width: 762px;
+  padding: 34px 40px 32px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(90, 90, 90, 0.72);
+  -webkit-backdrop-filter: blur(25px);
+  backdrop-filter: blur(25px);
+}
+.rate__brand { display: block; font-size: 22px; opacity: 0.85; }
+.rate__name { margin: 8px 120px 22px 0; font-weight: 500; font-size: 50px; line-height: 1.15; }
+.rate__points {
+  position: absolute;
+  top: 32px;
+  right: 34px;
+  width: 92px;
+  height: 92px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  font-size: 30px;
+  line-height: 1;
+}
+.rate__points small { font-size: 18px; margin-top: 4px; }
+.rate__tags { display: flex; flex-wrap: wrap; gap: 14px; margin: 0 0 24px; padding: 0 0 24px; list-style: none; border-bottom: 1px solid rgba(255, 255, 255, 0.25); }
+.rate__tags li { padding: 10px 22px; border: 1.5px solid rgba(255, 255, 255, 0.7); border-radius: 30px; font-size: 22px; }
+.rate__why { margin: 0; padding: 14px 22px; border-left: 5px solid #bdbdbd; background: rgba(40, 40, 40, 0.45); font-size: 26px; line-height: 1.35; white-space: pre-line; }
+.rate__photo { width: 600px; height: 560px; display: flex; align-items: center; justify-content: center; }
+.rate__photo img { width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 14px 22px rgba(0, 0, 0, 0.5)); }
+.rate__photo-tile { width: 360px; height: 360px; display: flex; align-items: center; justify-content: center; border-radius: 50%; border: 3px solid rgba(255, 255, 255, 0.4); color: #fff; }
+.rate__photo-tile svg, .rate__photo-tile img { width: 170px; height: 170px; }
+
+/* Not in the frames: the ways on, for mouse and touch (the design's flow is gestures and the icons) */
+.rate__buttons { position: absolute; top: 3300px; left: 120px; display: flex; flex-direction: column; gap: 31px; z-index: 2; }
+.rate__qr {
+  position: absolute;
+  top: 1300px;
+  left: 240px;
+  width: 600px;
+  padding: 40px;
+  border-radius: 30px;
+  background: rgba(30, 30, 30, 0.88);
+  text-align: center;
+  font-size: 40px;
+  z-index: 3;
+}
+.rate__qr img { width: 420px; height: 420px; background: #fff; image-rendering: pixelated; }

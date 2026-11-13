@@ -699,7 +699,9 @@ test('your results: a private page of the visit, a photo only of a look taken ho
   const page = await fetch(first.url.replace(/^https?:\/\/[^/]+/, base));
   assert.equal(page.status, 200);
   const html = await page.text();
-  assert.match(html, /Warm undertone, medium depth/);
+  assert.match(html, /<\/i>Warm<\/li>/, 'the undertone chip');
+  assert.match(html, /<\/i>Medium depth<\/li>/, 'the depth chip');
+  assert.match(html, /class="role role--(core|supporting|accent)"/, 'each colour has its role');
   assert.match(html, /class="palette"/);
   assert.doesNotMatch(html, /<img/, 'no picture: nothing was taken home');
   assert.equal((await (await post()).json()).url, first.url, 'asked again: the same page');

@@ -220,3 +220,25 @@ test("Still here?: when the camera lost the visitor, or after 90 s without a tap
   assert.equal(stillHereText(30), "We’ll delete your session in 30 seconds.");
   assert.equal(stillHereText(1), "We’ll delete your session in 1 second.");
 });
+
+test("the flat lay puts each piece in its Figma place", async () => {
+  const { flatLay, SLOTS } = await import("./flatLay.js");
+  const piece = (category, name = category) => ({ category, name });
+  const outfit = flatLay([piece("top"), piece("bottom"), piece("shoes"), piece("accessory", "bag"), piece("accessory", "bracelet")]);
+  assert.deepEqual(outfit.map((p) => p.slot), ["bottom", "shoes", "sideBig", "top", "sideSmall"], "drawn bottom-up, the top over the trousers");
+  assert.equal(outfit.find((p) => p.slot === "top").box, SLOTS.top);
+  assert.equal(outfit.find((p) => p.item.name === "bag").slot, "sideBig");
+  // A dress takes the top's and the trousers' places; a coat gets the bigger side place before an accessory.
+  const dress = flatLay([piece("accessory", "belt"), piece("onepiece"), piece("outerwear"), piece("shoes"), piece("top")]);
+  assert.deepEqual(dress.map((p) => [p.slot, p.item.name]), [["onepiece", "onepiece"], ["shoes", "shoes"], ["sideBig", "outerwear"], ["sideSmall", "belt"]]);
+  // More accessories than places: the extra one isn't drawn; indexes point back to the outfit's items.
+  const many = flatLay([piece("accessory", "a"), piece("accessory", "b"), piece("accessory", "c")]);
+  assert.deepEqual(many.map((p) => p.index), [0, 1]);
+  assert.deepEqual(flatLay([]), []);
+});
+
+test("Rate my outfit starts a rate visit", async () => {
+  const { visitIntent } = await import("./visitIntent.js");
+  assert.deepEqual(visitIntent({ category: "rate" }), { style: "Rate my outfit", gender: null, piece: null, mode: "rate" });
+  assert.equal(visitIntent({ category: "tops-male" }).mode, undefined);
+});

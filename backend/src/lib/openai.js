@@ -300,7 +300,27 @@ export function createOpenAI({
     return base64;
   }
 
-  return { isConfigured: Boolean(apiKey), respond, respondStream, respondJson, editImage };
+  // A new picture from text alone (product photos of single pieces). background: transparent | opaque | auto.
+  function generateImage(options) {
+    return paid(options.budgetKind || 'photo', () => generateImageUnchecked(options));
+  }
+
+  async function generateImageUnchecked({ prompt, size = '1024x1024', quality = 'low', background = 'transparent', budgetKind = 'photo', usageKind = budgetKind, onUsage }) {
+    const body = { model: imageModel, prompt, size, n: 1, ...(quality ? { quality } : {}), ...(background ? { background } : {}) };
+    const json = await request('/images/generations', () => ({
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(body)
+    }));
+    const base64 = extractOutputImageBase64(json);
+    if (!base64) {
+      throw new OpenAIError('Model returned no generated image payload.');
+    }
+    account('images', usageKind, json?.usage || null, budgetKind, onUsage);
+    return base64;
+  }
+
+  return { isConfigured: Boolean(apiKey), respond, respondStream, respondJson, editImage, generateImage };
 }
 
 async function* readSse(response) {

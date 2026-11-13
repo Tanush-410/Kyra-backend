@@ -63,6 +63,11 @@ export const kyraApi = {
   stillHere: (id) => request(`${session(id)}/still-here`, { method: "POST", body: {} }),
   /** The consent screen's QR code: { url, qrDataUrl }, or { url: null } when phones can't reach a page. */
   privacy: () => request("/api/v2/privacy"),
+  /** The venue's weather for the Rate and changes greeting: { weather: { temperatureC, kind } | null }. */
+  context: () => request("/api/v2/context"),
+  /** Product photos of an outfit's pieces: { enabled, photos: [{ index, key, ready, url }] }; the missing ones
+   *  are made in the background and announced by 'product.photo' events. */
+  productPhotos: (id, round, option) => request(`${session(id)}/product-photos`, { method: "POST", body: { round, option } }),
   /** 401 means the kiosk token is missing or wrong (an EventSource can't tell us that itself). */
   tokenAccepted: async () => {
     try {
@@ -83,6 +88,9 @@ function withToken(path, params = {}) {
 
 /** The backend camera's live preview (MJPEG), already mirrored like a real mirror. */
 export const previewUrl = () => withToken("/api/v2/preview.mjpg");
+
+/** A product photo (no personal data, so a plain public address that <img> can load). */
+export const productPhotoUrl = (key) => `${API_BASE}/product-photos/${key}.png`;
 
 export const EVENT_TYPES = [
   "hello",
@@ -111,6 +119,8 @@ export const EVENT_TYPES = [
   "session.error",
   "session.ended",
   "session.subject",
+  "session.ratelook",
+  "product.photo",
   "session.leaving",
   "session.stayed",
 ];

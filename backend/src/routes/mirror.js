@@ -44,6 +44,9 @@ export default async function mirrorRoutes(app, { config, mirror, sidecar, event
     if (body.gender !== undefined && body.gender !== '' && !gender) {
       return reply.code(400).send({ error: 'gender must be "male" or "female" when provided.' });
     }
+    if (body.mode !== undefined && !['style', 'rate'].includes(body.mode)) {
+      return reply.code(400).send({ error: 'mode must be "style" or "rate" when provided.' });
+    }
     if (body.imageDataUrl !== undefined && typeof body.imageDataUrl !== 'string') {
       return reply.code(400).send({ error: 'imageDataUrl must be a data URL string.' });
     }
@@ -59,7 +62,8 @@ export default async function mirrorRoutes(app, { config, mirror, sidecar, event
           heightCm: normalizeHeight(body.heightCm),
           preferences: normalizePreferences(body.preferences),
           imageDataUrl: body.imageDataUrl || null,
-          consent: body.consent === true
+          consent: body.consent === true,
+          mode: body.mode === 'rate' ? 'rate' : 'style'
         })
       );
     } catch (error) {

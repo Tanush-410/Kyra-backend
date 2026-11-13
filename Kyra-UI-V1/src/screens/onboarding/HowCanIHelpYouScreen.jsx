@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import AppHeader from "../../components/AppHeader.jsx";
-import { SPECIFIC_SCREEN, WHAT_ARE_YOU_LOOKING_FOR } from "../../lib/onboardingRoutes.js";
+import { BUILD_PROFILE, SPECIFIC_SCREEN, WHAT_ARE_YOU_LOOKING_FOR } from "../../lib/onboardingRoutes.js";
 import OptionCard from "../../components/OptionCard.jsx";
 
 /** Figma: Onboarding / "How can i help you" (variant B, 2043:8322) */
@@ -16,6 +16,8 @@ export default function HowCanIHelpYouScreen({ onJustBrowsing, onKnowWhatIWant }
         <div className="button-stack">
           <OptionCard label="I’m just browsing" width="auto" onClick={browse} />
           <OptionCard label="I know what I’m looking for" width="auto" onClick={specific} />
+          {/* Not in the Figma frame: the way into "Rate and changes" (rate what you're wearing). */}
+          <OptionCard label="Rate my outfit" width="auto" onClick={() => navigate(`${BUILD_PROFILE}?category=rate`, { state: { id: "rate" } })} />
         </div>
       </div>
     </div>

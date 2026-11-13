@@ -7,6 +7,7 @@ import { SidecarError } from './sidecar.js';
 import { bufferToDataUrl, dataUrlToBuffer, HEX_COLOR, promptText } from './normalize.js';
 import { designOptions, enforceDesign, fallbackOptions } from './outfit-design.js';
 import { buildPalette, fitGuidance, learnedHints, optionScore } from './palette.js';
+import { changesAsOption, normalizeRating, RATE_SCHEMA, ratePrompt } from './rate-look.js';
 
 const MAX_ALIGN_SHIFT = 0.03;
 const ALIGN_SCALE_RANGE = [0.9, 1.1];
@@ -76,12 +77,16 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
     return session;
   }
 
-  async function start({ style, gender, heightCm, preferences, imageDataUrl, consent = false }) {
+  // mode 'rate': rate the outfit the visitor is wearing and suggest three changes (Figma "Rate and changes")
+  // instead of designing new outfits.
+  async function start({ style, gender, heightCm, preferences, imageDataUrl, consent = false, mode = 'style' }) {
     const session = {
       sessionId: randomUUID(),
       createdAt: Date.now(),
       lastActivity: Date.now(),
       status: 'created',
+      mode: mode === 'rate' ? 'rate' : 'style',
+      rateLook: null,
       source: imageDataUrl ? 'upload' : 'camera',
       style,
       gender,
@@ -229,8 +234,12 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
     const started = Date.now();
     session.captureAt = started;
     session.capture = bundle;
-    setStatus(session, 'designing', 'Designing your looks…');
+    setStatus(session, session.mode === 'rate' ? 'rating' : 'designing', session.mode === 'rate' ? 'Rating your look…' : 'Designing your looks…');
     applyContext(session, designContext(session, profileFrom(session, bundle.profile)));
+    if (session.mode === 'rate') {
+      await rateLook(session);
+      return;
+    }
 
     // Outfits designed from the early profile are reused when the capture confirms the same profile.
     const early = session.speculative;
@@ -284,7 +293,7 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
       skinMeasurement: early.skinMeasurement,
       palette: buildPalette(early).palette
     });
-    if (!config.earlyDesign) {
+    if (!config.earlyDesign || session.mode === 'rate') {
       return;
     }
     const context = designContext(session, early);
@@ -469,6 +478,33 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
   }
 
   // Short on purpose: prompt tokens count against the per-look budget.
+  // Rate and changes: one AI call reads the photo and returns a score and three changes (lib/rate-look.js).
+  // The changes then become a one-look round, rendered on the visitor's own clothes (keepOwn), so the
+  // usual render path (queue, face, identity check, upgrades, events) draws the final look.
+  async function rateLook(session) {
+    let rating;
+    try {
+      const raw = await openai.respondJson({
+        text: ratePrompt({ profile: session.profile, palette: session.palette?.palette || [], gender: session.gender }),
+        images: [session.capture.render.imageDataUrl],
+        schema: RATE_SCHEMA,
+        kind: 'rate_look'
+      });
+      rating = normalizeRating(raw);
+    } catch (error) {
+      log.warn({ error: error.message }, 'Rating the look failed');
+      throw new MirrorError('I couldn’t rate your look just now. Please try again.', 502, 'rate_failed');
+    }
+    session.rateLook = rating;
+    publish(session, 'session.ratelook', { rateLook: rating });
+    const round = newRound(session, '', sessionContext(session));
+    round.source = 'rate';
+    round.options = [changesAsOption(rating)];
+    round.order = [1];
+    round.done = true;
+    goLive(session, round); // renders the look with the changes in the background
+  }
+
   function renderPrompt(option, withFaceReference) {
     // Item text was written by the design model from visitor input: cleaned before the image model sees it.
     const lines = option.items.map((item) => {
@@ -476,6 +512,17 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
       const hex = HEX_COLOR.test(item.hex) ? ` ${item.hex}` : '';
       return `- ${promptText(item.category, 20)}: ${name}, ${colour}${hex}${fit ? `, ${fit}` : ''}${material ? `, ${material}` : ''}`;
     });
+    if (option.keepOwn) {
+      const hair = option.items.some((item) => item.category === 'hair');
+      return [
+        'Keep this person\'s own outfit exactly as it is. Apply only these changes:',
+        ...lines,
+        withFaceReference ? 'Image 2 is a close-up of the same face: keep that identity exactly.' : '',
+        `Keep pose, framing, body shape, face${hair ? '' : ', hair'} and skin tone exactly. Realistic and natural; no logos or text; plain black background.`
+      ]
+        .filter(Boolean)
+        .join('\n');
+    }
     return [
       config.renderMask ? 'Edit only the transparent mask area. Dress this person in:' : 'Dress this person in:',
       ...lines,
@@ -597,7 +644,7 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
     const request = {
       prompt,
       images: [{ dataUrl: render.imageDataUrl, filename: 'visitor.jpg' }, ...(faceReference ? [{ dataUrl: faceReference, filename: 'face.jpg' }] : [])],
-      mask: config.renderMask ? render.editMaskDataUrl : null
+      mask: config.renderMask && !option.keepOwn ? render.editMaskDataUrl : null
     };
     const finalQuality = session.variant?.finalQuality || config.finalQuality;
     const finalKind = `image:${finalQuality}`;
@@ -1089,7 +1136,9 @@ export function createMirror({ config, openai, sidecar, events, metrics, limiter
       activeKey: session.activeKey,
       leavingEndsAt: session.leaving?.endsAt || null,
       experiment: { finalQuality: session.variant?.finalQuality || config.finalQuality },
-      degraded: session.degraded
+      degraded: session.degraded,
+      mode: session.mode,
+      rateLook: session.rateLook
     };
   }
 
