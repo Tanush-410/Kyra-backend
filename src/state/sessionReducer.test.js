@@ -263,3 +263,18 @@ test("while new looks are designed, More like this waits", () => {
   assert.equal(isDesigning({ status: "ready" }), false);
   assert.equal(isDesigning(null), false);
 });
+
+test("the camera lost the visitor: a countdown until the visit ends, gone when they stay", () => {
+  let state = sessionReducer(initialState, { type: "session/started", sessionId: "s1" });
+  const ev = (event) => ({ type: "event", event: { sessionId: "s1", ...event }, now: 5000 });
+  state = sessionReducer(state, ev({ type: "session.leaving", endsAt: 35000 }));
+  assert.equal(state.session.leavingEndsAt, 35000);
+  assert.equal(sessionReducer(state, ev({ type: "session.stayed", reason: "present" })).session.leavingEndsAt, null);
+  assert.equal(sessionReducer(state, { type: "session/stayed" }).session.leavingEndsAt, null, "Still here pressed");
+  assert.equal(sessionReducer(state, ev({ type: "session.ended", reason: "visitor_left" })).session.leavingEndsAt, null);
+  const snap = (extra) => sessionReducer(state, { type: "session/snapshot", snapshot: { sessionId: "s1", ...extra } }).session.leavingEndsAt;
+  assert.equal(snap({ leavingEndsAt: 40000 }), 40000, "a reconnect brings the countdown back");
+  assert.equal(snap({ leavingEndsAt: null }), null);
+  assert.equal(snap({}), 35000, "an older backend without the field changes nothing");
+  assert.equal(sessionReducer(initialState, { type: "event", event: { type: "gesture", gesture: "thumbs_up" }, now: 777 }).lastGestureAt, 777);
+});

@@ -19,6 +19,7 @@ export const initialState = {
   camera: "unknown", // the backend camera: running | starting | disabled | error | unavailable | unknown
   perception: null, // { state, message, ready, heldMs, holdMs, armed, receivedAt }
   present: null,
+  lastGestureAt: 0, // when the camera last saw a hand gesture (thumbs up, ...): counts as the visitor being active
   session: null,
   shop: emptyShop(),
 };
@@ -46,6 +47,7 @@ function newSession(sessionId, status, gender = null) {
     degraded: null, // { message }: images are unavailable, the looks are shown as text
     error: "",
     ended: null, // reason
+    leavingEndsAt: null, // the camera lost the visitor: the visit ends at this time unless they come back
     actionError: "",
   };
 }
@@ -128,7 +130,11 @@ function sessionEvent(session, event) {
     case "session.error":
       return { ...session, status: "error", error: event.error || "" };
     case "session.ended":
-      return { ...session, ended: event.reason || "ended" };
+      return { ...session, ended: event.reason || "ended", leavingEndsAt: null };
+    case "session.leaving":
+      return { ...session, leavingEndsAt: Number(event.endsAt) || null };
+    case "session.stayed":
+      return { ...session, leavingEndsAt: null };
     default:
       return session;
   }
@@ -169,6 +175,7 @@ function mergeSnapshot(session, snapshot) {
     renders,
     active,
     degraded: snapshot.degraded ?? session.degraded,
+    leavingEndsAt: snapshot.leavingEndsAt !== undefined ? snapshot.leavingEndsAt : session.leavingEndsAt,
   };
 }
 
@@ -260,6 +267,9 @@ export function sessionReducer(state, action) {
     case "session/activeSet":
       // The visitor chose this option (try-on): it is the look on screen, rendered or not yet.
       return state.session ? { ...state, session: { ...state.session, active: { round: action.round, option: action.option } } } : state;
+    case "session/stayed":
+      // "Still here" pressed: hide the countdown now (the backend confirms with session.stayed).
+      return state.session ? { ...state, session: { ...state.session, leavingEndsAt: null } } : state;
     case "session/actionFailed":
       return state.session ? { ...state, session: { ...state.session, actionError: action.message } } : state;
     case "session/actionCleared":
@@ -310,6 +320,8 @@ function applyEvent(state, event, now) {
           receivedAt: now,
         },
       };
+    case "gesture":
+      return { ...state, lastGestureAt: now };
     case "presence":
       return { ...state, present: Boolean(event.present) };
     default:

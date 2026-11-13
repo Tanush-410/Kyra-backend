@@ -9,7 +9,7 @@ import { useKyraSession } from "../../context/KyraSessionContext.jsx";
 import { useResultsSession } from "../../hooks/useResultsSession.js";
 import { useToast } from "../../hooks/useToast.js";
 import { allOutfits, outfitCount, setStart } from "../../lib/outfits.js";
-import { EDIT_LOOK_PATH, LOOK_PATH } from "../../lib/shopRoutes.js";
+import { BYE_PATH, EDIT_LOOK_PATH, LOOK_PATH } from "../../lib/shopRoutes.js";
 import { isDesigning } from "../../state/sessionReducer.js";
 import "./SuggestionsScreen.css";
 
@@ -236,9 +236,9 @@ export default function SuggestionsScreen() {
             { label: "Keep looking", onClick: () => setExitOpen(false) },
             {
               label: "Exit",
-              onClick: async () => {
-                await end();
-                navigate("/", { replace: true });
+              onClick: () => {
+                navigate(BYE_PATH, { replace: true });
+                end();
               },
             },
           ]}

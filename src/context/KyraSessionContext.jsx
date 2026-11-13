@@ -169,6 +169,8 @@ export function KyraSessionProvider({ children }) {
         if (session && !session.ended) await kyraApi.endSession(session.id).catch(() => {});
       },
       clear: () => dispatch({ type: "session/cleared" }),
+      /** "Still here" pressed: hide the countdown now (the backend confirms with session.stayed). */
+      dispatchStayed: () => dispatch({ type: "session/stayed" }),
       addToCart: (product, { size, qty } = {}) => dispatch({ type: "shop/cartAdded", product, size, qty }),
       removeFromCart: (id) => dispatch({ type: "shop/cartRemoved", id }),
       setCartQty: (id, qty) => dispatch({ type: "shop/cartQty", id, qty }),

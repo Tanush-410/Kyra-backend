@@ -85,7 +85,15 @@ Open it once with the token, `http://localhost:5173/Kyra-UI-V1/#token=<apiToken>
    If the picture can't be made, or pictures are off (text-only mode): the outfit as cards, "Please try
    again" or the reason, and Try again / Try another look / Back to suggestions, so the visitor is never
    stuck (`src/lib/tryOnView.js`). The look starts rendering at the photo, so it is often ready on arrival.
-   The bin asks, then ends the visit; leaving the mirror ends it too, and the photo is forgotten.
+   A like (from the menu, or a thumbs-up) shows "Great / You look beautiful today" or "Perfect / You look
+   gorgeous!" for 3 s (Figma "Confirmation").
+9. **Still here?** (`components/StillHereGuard`, Figma "Confirmation"), over whatever screen the visit is on,
+   with a countdown: when the camera loses the visitor (the backend's `session.leaving`; it ends the visit at
+   `endsAt` unless they come back or press Still here, `POST …/still-here`), or after 90 s without a tap,
+   pinch or gesture (this kiosk ends the visit 30 s later; any tap counts as still here). Delete Session ends
+   it now. `src/lib/stillHere.js`.
+10. **Bye** (`screens/results/ByeScreen`, Figma "End"): "Bye / Have a nice day." after any visit ends (done,
+   exit, delete, stepped away, timed out), then the start. The photo is forgotten.
    "More like this" (Suggestions) is off while a round is being designed: one design call and picture each.
 
 ### Camera source
