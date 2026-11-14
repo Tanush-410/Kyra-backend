@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
   createSwipeDetector,
+  pinchMeansBack,
+  pinchStep,
   dragStep,
   dropTargetAt,
   dropZonesFor,
@@ -172,4 +174,25 @@ test("pick and drop: letting go needs a few open frames; a hand out of view for 
   assert.equal(dragStep(t, { hand: true, pinching: true, now: 1430 }), "continue", "back: the drag goes on");
   assert.equal(dragStep(t, { hand: false, pinching: false, now: 2000 }), "continue");
   assert.equal(dragStep(t, { hand: false, pinching: false, now: 2600 }), "cancel", "gone over 0.5 s: cancelled");
+});
+
+test("a pinch needs the fingers closed 2 frames running; one noisy frame presses nothing", () => {
+  let s = { pinching: false, closeFrames: 0 };
+  s = pinchStep(s, 0.1);
+  assert.equal(s.pinching, false, "one closed frame: not yet");
+  s = pinchStep(s, 0.5);
+  s = pinchStep(s, 0.1);
+  assert.equal(s.pinching, false, "a gap resets the count");
+  s = pinchStep(s, 0.12);
+  assert.equal(s.pinching, true, "two running: a pinch");
+  s = pinchStep(s, 0.3);
+  assert.equal(s.pinching, true, "between the thresholds: still pinched (hysteresis)");
+  s = pinchStep(s, 0.45);
+  assert.equal(s.pinching, false, "opened past 0.4: released");
+});
+
+test("a pinch on empty screen only means back from a raised hand, not one resting low in the picture", () => {
+  assert.equal(pinchMeansBack(0.4), true);
+  assert.equal(pinchMeansBack(0.7), true);
+  assert.equal(pinchMeansBack(0.85), false);
 });

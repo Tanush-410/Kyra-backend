@@ -224,7 +224,7 @@
 import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
 import { useCamera } from "./CameraContext.jsx";
-import { createSwipeDetector, dragStep, dropTargetAt, dropZonesFor, holdStep, mainHand, palmPoint, RELEASE_FRAMES, steadyForPinch } from "../lib/handGestures.js";
+import { createSwipeDetector, dragStep, dropTargetAt, dropZonesFor, holdStep, mainHand, palmPoint, pinchMeansBack, pinchStep, RELEASE_FRAMES, steadyForPinch } from "../lib/handGestures.js";
 import { PINCH_EMPTY_EVENT } from "../lib/pinchBack.js";
 
 // Files served from /public (see setup steps).
@@ -276,7 +276,7 @@ function targetAt(x, y, selector = CLICKABLE) {
  *  - anywhere else it means "back": PinchBack (components/PinchBack.jsx) goes back one screen where that's
  *    safe. A stray pinch never taps a screen that moves on when tapped anywhere (the start screen).
  */
-function clickAt(x, y) {
+function clickAt(x, y, { back = true } = {}) {
   const best = targetAt(x, y);
   if (best) {
     console.log("[hand] pinch at", Math.round(x), Math.round(y), "-> clicking", best.textContent?.trim() || best.tagName);
@@ -289,6 +289,10 @@ function clickAt(x, y) {
     // A real click event (an SVG icon has no .click()); it bubbles like a finger's tap.
     under.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, view: window }));
     return true;
+  }
+  if (!back) {
+    console.log("[hand] pinch at", Math.round(x), Math.round(y), "-> no button, hand low in the picture: ignored");
+    return false;
   }
   console.log("[hand] pinch at", Math.round(x), Math.round(y), "-> no button within", CLICK_TOLERANCE, "px: back");
   window.dispatchEvent(new CustomEvent(PINCH_EMPTY_EVENT, { detail: { x, y } }));
@@ -377,6 +381,7 @@ export function HandTrackingProvider({ children, mirror }) {
     let cancelled = false;
     let lastVideoTime = -1;
     let pinching = false;
+    let closeFrames = 0; // frames running the fingers have looked closed (pinchStep)
     let sx = null;
     let sy = null;
     let lastStatus = "";
@@ -621,8 +626,8 @@ export function HandTrackingProvider({ children, mirror }) {
           const ratio = gap / handSize;
 
           const wasPinching = pinching;
-          if (!pinching && ratio < PINCH_ON) pinching = true;
-          else if (pinching && ratio > PINCH_OFF) pinching = false;
+          // Closed for 2 frames running to start a pinch: one noisy frame can't press anything.
+          ({ pinching, closeFrames } = pinchStep({ pinching, closeFrames }, ratio, { on: PINCH_ON, off: PINCH_OFF }));
 
           const el = cursorRef.current;
           if (el) {
@@ -675,7 +680,7 @@ export function HandTrackingProvider({ children, mirror }) {
               beginDrag(target, sx, sy); // maybe a drag to the cart or bin
             } else {
               handlers.current.forEach((fn) => fn({ x: sx, y: sy }));
-              clickAt(sx, sy); // a pinch is a click: fires the element's normal onClick
+              clickAt(sx, sy, { back: pinchMeansBack(py) }); // a pinch is a click: fires the element's normal onClick
             }
           }
           if (hold) {
@@ -690,6 +695,7 @@ export function HandTrackingProvider({ children, mirror }) {
           }
         } else {
           pinching = false;
+          closeFrames = 0;
           sx = sy = null;
           endHold(false);
           // A drag survives the hand leaving the camera's view for a moment.

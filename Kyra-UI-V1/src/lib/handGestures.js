@@ -189,3 +189,23 @@ export function dragStep(state, { hand, pinching, now, releaseFrames = RELEASE_F
   state.openFrames = (state.openFrames || 0) + 1;
   return state.openFrames >= releaseFrames ? "drop" : "continue";
 }
+
+// ---- Fewer accidental pinches ----
+
+export const PINCH_FRAMES = 2; // the fingers must look closed this many camera frames running to start a pinch
+export const BACK_MAX_Y = 0.7; // a pinch on empty screen only means "back" from a hand above this (picture height)
+
+/**
+ * One camera frame of pinch detection, with hysteresis: closing past `on` for `frames` frames running starts
+ * a pinch (one noisy frame can't press anything); opening past `off` ends it.
+ * state: { pinching, closeFrames }; ratio: thumb-index gap / hand size. -> the next state.
+ */
+export function pinchStep(state, ratio, { on = 0.25, off = 0.4, frames = PINCH_FRAMES } = {}) {
+  const closeFrames = ratio < on ? state.closeFrames + 1 : 0;
+  if (!state.pinching && closeFrames >= frames) return { pinching: true, closeFrames };
+  if (state.pinching && ratio > off) return { pinching: false, closeFrames };
+  return { pinching: state.pinching, closeFrames };
+}
+
+/** Does a pinch on empty screen count as "back"? Not from a hand low in the picture (resting on a desk). */
+export const pinchMeansBack = (py, maxY = BACK_MAX_Y) => py <= maxY;
