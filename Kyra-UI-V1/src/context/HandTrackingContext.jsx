@@ -468,6 +468,15 @@ export function HandTrackingProvider({ children, mirror }) {
       });
     };
 
+    // Pinch and hold (the bin): ends the hold; fired = it filled, so the element gets "pinchhold".
+    const endHold = (fired) => {
+      if (!hold) return;
+      hold.el.removeAttribute("data-holding");
+      hold.el.style.removeProperty("--hold-progress");
+      if (fired) hold.el.dispatchEvent(new CustomEvent("pinchhold", { bubbles: true }));
+      hold = null;
+    };
+
     const beginDrag = (el, x, y) => {
       drag = { el, x, y, ghost: null, zones: [], over: null, openFrames: 0, lostAt: null };
       el.setAttribute("data-dragging", "");
